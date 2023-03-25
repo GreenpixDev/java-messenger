@@ -10,3 +10,10 @@ spring:
       ddl-auto: validate
   flyway:
     baseline-on-migrate: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+
+security:
+  password-encoder: bcrypt

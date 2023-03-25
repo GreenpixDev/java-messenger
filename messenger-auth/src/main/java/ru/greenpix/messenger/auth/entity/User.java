@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.repository.entity;
+package ru.greenpix.messenger.auth.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,12 +7,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class User {
 
     @Id
@@ -27,5 +29,11 @@ public class User {
 
     @Column(name = "hashed_password", nullable = false)
     private String hashedPassword;
+
+    @Column(name = "registration_timestamp")
+    private LocalDateTime registrationTimestamp;
+
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
 }

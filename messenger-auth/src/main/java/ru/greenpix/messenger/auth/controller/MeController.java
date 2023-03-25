@@ -1,28 +1,54 @@
 package ru.greenpix.messenger.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.auth.controller.dto.SignInRequestDto;
-import ru.greenpix.messenger.auth.controller.dto.UserResponseDto;
+import ru.greenpix.messenger.auth.dto.SignInDto;
+import ru.greenpix.messenger.auth.dto.UserRequestDto;
+import ru.greenpix.messenger.auth.dto.UserResponseDto;
+import ru.greenpix.messenger.auth.mapper.UserMapper;
+import ru.greenpix.messenger.auth.service.UserService;
 
+import javax.validation.Valid;
+
+@Tag(name = "Авторизированный пользователь")
 @RestController
-@RequestMapping("me")
+@RequestMapping("users/me")
+@RequiredArgsConstructor
 public class MeController {
 
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+    @Operation(summary = "Получить информацию о себе")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "400")
+    @ApiResponse(responseCode = "401")
     @GetMapping
     public UserResponseDto getUser(
-            @RequestBody SignInRequestDto signInRequestDto
+            @RequestParam String username,
+            @RequestParam String password
     ) {
-        throw new UnsupportedOperationException("Not implemented");
+        return userMapper.toDto(userService.getUser(new SignInDto(username, password)));
     }
 
+    @Operation(summary = "Обновить информацию о себе")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "400")
+    @ApiResponse(responseCode = "401")
     @PutMapping
-    public UserResponseDto updateUser(
-            @RequestBody SignInRequestDto signInRequestDto
+    public void updateUser(
+            @RequestParam String username,
+            @RequestParam String password,
+            @Valid @RequestBody UserRequestDto userRequestDto
     ) {
-        throw new UnsupportedOperationException("Not implemented");
+        userService.updateUser(new SignInDto(username, password), userRequestDto);
     }
 }
