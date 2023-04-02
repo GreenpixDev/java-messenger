@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "10100:5432"
+    environment:
+      POSTGRES_DB: messenger-user
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

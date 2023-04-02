@@ -17,7 +17,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>messenger-auth</module>
+        <module>messenger-user</module>
+        <module>messenger-gateway-api</module>
+        <module>messenger-friends</module>
+        <module>messenger-chat</module>
+        <module>messenger-file-storage</module>
+        <module>messenger-notifications</module>
     </modules>
 
     <properties>
