@@ -21,19 +21,61 @@ public class User {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
-
-    @Column(name = "hashed_password", nullable = false)
-    private String hashedPassword;
-
+    /**
+     * Дата регистрации
+     */
     @Column(name = "registration_timestamp")
     private LocalDateTime registrationTimestamp;
 
+    /**
+     * Логин (уникальный)
+     */
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    /**
+     * Почта (уникальная)
+     */
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    /**
+     * Пароль (не в исходном виде)
+     */
+    @Column(name = "hashed_password", nullable = false)
+    private String hashedPassword;
+
+    /**
+     * Фамилия, имя, отчество
+     */
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
+
+    /**
+     * Дата рождения
+     */
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
+
+    /**
+     * Телефон
+     * TODO уточнить, nullable ли
+     */
+    @Column(name = "phone")
+    private String phone;
+
+    /**
+     * Город
+     * TODO уточнить, nullable ли
+     */
+    @Column(name = "city")
+    private String city;
+
+    /**
+     * Город
+     * TODO уточнить, nullable ли
+     */
+    @Column(name = "avatar_id")
+    private UUID avatarId;
 
 }
