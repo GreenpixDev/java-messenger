@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="messenger-user" persistenceXmlPath="messenger-user/.jpb/persistence-units.xml">
+        <packages>
+          <package value="ru.greenpix.messenger.user" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit name="messenger-friends" persistenceXmlPath="messenger-friends/.jpb/persistence-units.xml" defaultSearchScope="Project">
+        <packages>
+          <package value="ru.greenpix.messenger.friends" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit name="Default" />
+    </persistence-units>
+  </component>
+</project>
