@@ -44,7 +44,7 @@ public class JwtAuthenticationConverter implements AuthenticationConverter {
             throw new BadCredentialsException("Invalid bearer authentication jwt token");
         }
 
-        JwtUser user = jwtService.getUser(token);
+        JwtUser user = jwtService.parseUser(token);
 
         return UsernamePasswordAuthenticationToken
                 .authenticated(user, null, Collections.emptyList());

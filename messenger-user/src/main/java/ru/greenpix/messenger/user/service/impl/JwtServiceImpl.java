@@ -5,12 +5,14 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import ru.greenpix.messenger.user.model.JwtUser;
 import ru.greenpix.messenger.user.service.JwtService;
 import ru.greenpix.messenger.user.settings.JwtSettings;
 
 import javax.crypto.SecretKey;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,16 +24,19 @@ public class JwtServiceImpl implements JwtService {
 
     private final JwtSettings jwtSettings;
 
+    private final Clock clock;
+
     private final SecretKey secretKey;
 
-    public JwtServiceImpl(JwtSettings jwtSettings) {
+    public JwtServiceImpl(JwtSettings jwtSettings, Clock clock) {
         this.jwtSettings = jwtSettings;
         secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSettings.getSecret()));
+        this.clock = clock;
     }
 
     @Override
-    public String generateToken(JwtUser user) {
-        LocalDateTime now = LocalDateTime.now();
+    public String generateToken(@NotNull JwtUser user) {
+        LocalDateTime now = LocalDateTime.now(clock);
         Instant accessExpirationInstant = now.plusMinutes(jwtSettings.getExpirationMinutes())
                 .atZone(ZoneId.systemDefault()).toInstant();
         Date expiration = Date.from(accessExpirationInstant);
@@ -44,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean validateToken(String token) {
+    public boolean validateToken(@NotNull String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -57,7 +62,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public JwtUser getUser(String token) {
+    public JwtUser parseUser(@NotNull String token) {
         Claims claims = getClaims(token);
         return new JwtUser(
                 UUID.fromString(claims.getSubject()),
