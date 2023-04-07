@@ -15,6 +15,7 @@ import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final Clock clock;
 
     @Transactional
     @Override
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toEntity(signUpDto);
         user.setHashedPassword(hashedPassword);
-        user.setRegistrationTimestamp(LocalDateTime.now());
+        user.setRegistrationTimestamp(LocalDateTime.now(clock));
 
         return userRepository.save(user);
     }
