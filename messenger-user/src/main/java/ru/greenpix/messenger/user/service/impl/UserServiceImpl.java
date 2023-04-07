@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.user.dto.SignInDto;
@@ -8,12 +9,14 @@ import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
+import ru.greenpix.messenger.user.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
+import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.repository.UserRepository;
-import ru.greenpix.messenger.user.security.PasswordEncoder;
 import ru.greenpix.messenger.user.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,29 +25,26 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Transactional
     @Override
-    public void registerUser(SignUpDto signUpDto) {
+    public User registerUser(SignUpDto signUpDto) {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
             throw new DuplicateUsernameException();
         }
 
         String hashedPassword = passwordEncoder.encode(signUpDto.getPassword());
 
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setUsername(signUpDto.getUsername());
+        User user = userMapper.toEntity(signUpDto);
         user.setHashedPassword(hashedPassword);
-        user.setFullName(signUpDto.getFullName());
-        user.setBirthDate(signUpDto.getBirthDate());
         user.setRegistrationTimestamp(LocalDateTime.now());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public User getUser(SignInDto signInDto) {
+    public User authenticateUser(SignInDto signInDto) {
         User user = userRepository.findByUsername(signInDto.getUsername())
                 .orElseThrow(WrongCredentialsException::new);
 
@@ -55,13 +55,33 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public List<User> getUsers() {
+        return null; // TODO
+    }
+
+    @Override
+    public User getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public User getUser(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
     @Transactional
     @Override
-    public void updateUser(SignInDto signInDto, UserRequestDto userRequestDto) {
-        User user = getUser(signInDto);
+    public User updateUser(UUID userId, UserRequestDto userRequestDto) {
+        User user = getUser(userId);
         user.setFullName(userRequestDto.getFullName());
         user.setBirthDate(userRequestDto.getBirthDate());
+        user.setPhone(userRequestDto.getPhone());
+        user.setCity(userRequestDto.getCity());
+        user.setAvatarId(userRequestDto.getAvatarId());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

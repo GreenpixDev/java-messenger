@@ -16,4 +16,6 @@ springdoc:
     path: /swagger
 
 security:
-  password-encoder: bcrypt
+  jwt:
+    secret: ${JWT_SECRET:VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==}
+    expiration-minutes: 28800

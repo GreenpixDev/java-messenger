@@ -13,9 +13,16 @@ public class SignUpDto {
     private final String username;
 
     @NotBlank
+    private final String email;
+
+    @NotBlank
     private final String fullName;
 
     private final LocalDate birthDate;
+
+    private final String phone;
+
+    private final String city;
 
     @Size(min = 6, max = 50)
     private final String password;

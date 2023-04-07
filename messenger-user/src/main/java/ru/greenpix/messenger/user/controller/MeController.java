@@ -4,16 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
 import ru.greenpix.messenger.user.mapper.UserMapper;
+import ru.greenpix.messenger.user.model.JwtUser;
 import ru.greenpix.messenger.user.service.UserService;
 
 import javax.validation.Valid;
@@ -33,10 +33,9 @@ public class MeController {
     @ApiResponse(responseCode = "401")
     @GetMapping
     public UserResponseDto getUser(
-            @RequestParam String username,
-            @RequestParam String password
+            @AuthenticationPrincipal JwtUser user
     ) {
-        return userMapper.toDto(userService.getUser(new SignInDto(username, password)));
+        return userMapper.toDto(userService.getUser(user.getId()));
     }
 
     @Operation(summary = "Обновить информацию о себе")
@@ -44,11 +43,10 @@ public class MeController {
     @ApiResponse(responseCode = "400")
     @ApiResponse(responseCode = "401")
     @PutMapping
-    public void updateUser(
-            @RequestParam String username,
-            @RequestParam String password,
+    public UserResponseDto updateUser(
+            @AuthenticationPrincipal JwtUser user,
             @Valid @RequestBody UserRequestDto userRequestDto
     ) {
-        userService.updateUser(new SignInDto(username, password), userRequestDto);
+        return userMapper.toDto(userService.updateUser(user.getId(), userRequestDto));
     }
 }

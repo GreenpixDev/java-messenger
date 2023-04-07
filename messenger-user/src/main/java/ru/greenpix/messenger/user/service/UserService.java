@@ -5,12 +5,21 @@ import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface UserService {
 
-    void registerUser(SignUpDto signUpDto);
+    User registerUser(SignUpDto signUpDto);
 
-    User getUser(SignInDto signInDto);
+    User authenticateUser(SignInDto signInDto);
 
-    void updateUser(SignInDto signInDto, UserRequestDto userRequestDto);
+    List<User> getUsers();
+
+    User getUser(String username);
+
+    User getUser(UUID userId);
+
+    User updateUser(UUID userId, UserRequestDto userRequestDto);
 
 }
