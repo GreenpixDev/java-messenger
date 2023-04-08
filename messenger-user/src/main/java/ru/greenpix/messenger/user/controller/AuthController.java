@@ -8,12 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.greenpix.messenger.common.service.JwtService;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.mapper.UserMapper;
-import ru.greenpix.messenger.user.service.JwtService;
 import ru.greenpix.messenger.user.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;

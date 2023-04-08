@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.security.jwt;
+package ru.greenpix.messenger.common.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;

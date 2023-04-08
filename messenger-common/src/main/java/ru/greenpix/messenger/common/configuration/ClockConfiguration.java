@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.configuration;
+package ru.greenpix.messenger.common.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

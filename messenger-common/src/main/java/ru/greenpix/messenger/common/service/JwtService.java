@@ -1,7 +1,7 @@
-package ru.greenpix.messenger.user.service;
+package ru.greenpix.messenger.common.service;
 
 import org.jetbrains.annotations.NotNull;
-import ru.greenpix.messenger.user.model.JwtUser;
+import ru.greenpix.messenger.common.model.JwtUser;
 
 public interface JwtService {
 

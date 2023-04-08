@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.service.impl;
+package ru.greenpix.messenger.common.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -7,9 +7,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import ru.greenpix.messenger.user.model.JwtUser;
-import ru.greenpix.messenger.user.service.JwtService;
-import ru.greenpix.messenger.user.settings.JwtSettings;
+import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.common.provider.JwtSettingsProvider;
+import ru.greenpix.messenger.common.service.JwtService;
 
 import javax.crypto.SecretKey;
 import java.time.Clock;
@@ -22,13 +22,13 @@ import java.util.UUID;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    private final JwtSettings jwtSettings;
+    private final JwtSettingsProvider jwtSettings;
 
     private final Clock clock;
 
     private final SecretKey secretKey;
 
-    public JwtServiceImpl(JwtSettings jwtSettings, Clock clock) {
+    public JwtServiceImpl(JwtSettingsProvider jwtSettings, Clock clock) {
         this.jwtSettings = jwtSettings;
         secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSettings.getSecret()));
         this.clock = clock;

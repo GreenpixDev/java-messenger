@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.security.jwt;
+package ru.greenpix.messenger.common.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -7,8 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import ru.greenpix.messenger.user.model.JwtUser;
-import ru.greenpix.messenger.user.service.JwtService;
+import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.common.service.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;

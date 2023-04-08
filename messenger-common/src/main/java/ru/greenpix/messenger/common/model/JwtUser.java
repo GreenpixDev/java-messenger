@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.model;
+package ru.greenpix.messenger.common.model;
 
 import lombok.Data;
 
@@ -10,6 +10,5 @@ public class JwtUser {
     private final UUID id;
 
     private final String username;
-
 
 }

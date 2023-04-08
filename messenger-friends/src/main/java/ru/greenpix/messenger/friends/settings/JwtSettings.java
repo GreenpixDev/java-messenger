@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.settings;
+package ru.greenpix.messenger.friends.settings;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

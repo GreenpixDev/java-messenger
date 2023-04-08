@@ -1,14 +1,13 @@
-package ru.greenpix.messenger.user.service;
+package ru.greenpix.messenger.common.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.greenpix.messenger.user.model.JwtUser;
-import ru.greenpix.messenger.user.service.impl.JwtServiceImpl;
-import ru.greenpix.messenger.user.settings.JwtSettings;
+import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.common.provider.JwtSettingsProvider;
+import ru.greenpix.messenger.common.service.impl.JwtServiceImpl;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -35,19 +34,24 @@ public class JwtServiceTest {
     @Mock
     Clock clock;
 
-    @Spy
-    JwtSettings jwtSettings = new JwtSettings(
-            "VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==",
-            (long) Integer.MAX_VALUE
-    );
+    @Mock
+    JwtSettingsProvider jwtSettings;
 
-    @InjectMocks
     JwtServiceImpl jwtService;
+
+    @BeforeEach
+    void beforeEach() {
+        when(jwtSettings.getSecret()).thenReturn("VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==");
+
+        jwtService = new JwtServiceImpl(jwtSettings, clock);
+    }
 
     @Test
     void generateTokenTest() {
+        when(jwtSettings.getExpirationMinutes()).thenReturn((long) Integer.MAX_VALUE);
         when(clock.instant()).thenReturn(FIXED_CLOCK.instant());
         when(clock.getZone()).thenReturn(FIXED_CLOCK.getZone());
+
         assertEquals(TEST_TOKEN, jwtService.generateToken(TEST_USER));
     }
 
