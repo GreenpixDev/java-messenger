@@ -1,6 +1,6 @@
-CREATE TABLE blacklist
+CREATE TABLE blocked_user
 (
-    blocked_full_name  VARCHAR(255)                NOT NULL,
+    blocked_user_full_name  VARCHAR(255)           NOT NULL,
     addition_timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     deletion_timestamp TIMESTAMP WITHOUT TIME ZONE,
     blocked_user_id    UUID                        NOT NULL,

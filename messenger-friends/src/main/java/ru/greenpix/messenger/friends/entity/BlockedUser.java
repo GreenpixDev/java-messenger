@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "blacklist")
-public class Blacklist {
+@Table(name = "blocked_user")
+public class BlockedUser {
 
     @EmbeddedId
     @AttributeOverrides({
@@ -23,7 +23,7 @@ public class Blacklist {
     })
     private Relationship relationship;
 
-    @Column(name = "blocked_full_name", nullable = false)
+    @Column(name = "blocked_user_full_name", nullable = false)
     private String fullName;
 
     @Column(name = "addition_timestamp", nullable = false)

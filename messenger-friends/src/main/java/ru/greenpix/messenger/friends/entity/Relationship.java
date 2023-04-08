@@ -1,14 +1,12 @@
 package ru.greenpix.messenger.friends.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Embeddable
 public class Relationship implements Serializable {
 
