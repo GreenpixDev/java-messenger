@@ -1,3 +1,6 @@
+server:
+  port: 8010
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:10100}/${DB_NAME:messenger-user}

@@ -27,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    // TODO
     @Operation(summary = "Получить список пользователей")
     @ApiResponse(responseCode = "200")
     @ApiResponse(responseCode = "400")

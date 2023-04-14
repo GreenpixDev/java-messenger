@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: users
+          uri: http://localhost:8010/
+          predicates:
+            - Path=/users/**, /signin, /signup
+        - id: friends
+          uri: http://localhost:8011/
+          predicates:
+            - Path=/users/me/friends/**, /users/me/blacklist/**
