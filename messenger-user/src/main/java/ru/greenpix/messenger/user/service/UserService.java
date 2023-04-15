@@ -61,6 +61,17 @@ public interface UserService {
     User getUser(@NotNull UUID userId);
 
     /**
+     * Получает искомого пользователя по его ID от лица пользователя, которые делает запрос
+     * @throws UserNotFoundException пользователь не найден
+     * @throws ru.greenpix.messenger.user.exception.BlacklistUserAccessRestrictionException искомый пользователь заблокировал пользователя, который делал запрос
+     * @param requesterId ID пользователя, который делает запрос
+     * @param requestedUserId ID искомого (запрашиваемого) пользователя
+     * @return модель искомого пользователя
+     */
+    @NotNull
+    User getUser(@NotNull UUID requesterId, @NotNull UUID requestedUserId);
+
+    /**
      * Обновляет профиль пользователя
      * @throws UserNotFoundException пользователь не найден
      * @param userId ID пользователя

@@ -29,3 +29,4 @@ security:
 
 integration:
   api-key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
+  friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}

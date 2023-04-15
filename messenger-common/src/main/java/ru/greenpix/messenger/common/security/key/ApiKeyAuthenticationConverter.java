@@ -5,6 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
+import ru.greenpix.messenger.common.interceptor.ApiKeyConst;
 import ru.greenpix.messenger.common.provider.ApiKeyProvider;
 import ru.greenpix.messenger.common.security.role.SystemRole;
 
@@ -18,14 +19,12 @@ import java.util.List;
 @Component
 public class ApiKeyAuthenticationConverter implements AuthenticationConverter {
 
-    private static final String API_KEY_PARAM_NAME = "api-key";
-
     private final ApiKeyProvider apiKeyProvider;
     private final SystemRole systemRole;
 
     @Override
     public UsernamePasswordAuthenticationToken convert(HttpServletRequest request) {
-        String apiKey = request.getParameter(API_KEY_PARAM_NAME);
+        String apiKey = request.getParameter(ApiKeyConst.PARAM_NAME);
 
         if (apiKey == null) {
             return null;

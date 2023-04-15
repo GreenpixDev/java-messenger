@@ -20,4 +20,7 @@ public class IntegrationSettings implements ApiKeyProvider {
     @NotBlank
     private final String apiKey;
 
+    @NotBlank
+    private final String friendsServiceUrl;
+
 }

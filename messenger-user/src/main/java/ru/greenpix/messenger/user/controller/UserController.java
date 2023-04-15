@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.greenpix.messenger.common.model.JwtUser;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
 import ru.greenpix.messenger.user.dto.UserSortCriterion;
 import ru.greenpix.messenger.user.mapper.UserMapper;
@@ -50,9 +52,10 @@ public class UserController {
     @ApiResponse(responseCode = "401")
     @GetMapping("{userId}")
     public UserResponseDto getUserProfile(
+            @AuthenticationPrincipal JwtUser jwtUser,
             @PathVariable UUID userId
     ) {
-        return userMapper.toDto(userService.getUser(userId));
+        return userMapper.toDto(userService.getUser(jwtUser.getId(), userId));
     }
 
 }

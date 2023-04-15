@@ -9,9 +9,11 @@ import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
+import ru.greenpix.messenger.user.exception.BlacklistUserAccessRestrictionException;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
+import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final Clock clock;
+    private final FriendsClient friendsClient;
 
     @Transactional
     @Override
@@ -73,6 +76,15 @@ public class UserServiceImpl implements UserService {
     public @NotNull User getUser(@NotNull UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public @NotNull User getUser(@NotNull UUID requesterId, @NotNull UUID requestedUserId) {
+        User user = getUser(requestedUserId);
+        if (friendsClient.isBlockedByUser(requesterId, requestedUserId)) {
+            throw new BlacklistUserAccessRestrictionException();
+        }
+        return user;
     }
 
     @Transactional
