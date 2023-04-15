@@ -20,4 +20,10 @@ public class IntegrationSettings implements ApiKeyProvider {
     @NotBlank
     private final String apiKey;
 
+    /**
+     * URL микросервиса "Пользователи"
+     */
+    @NotBlank
+    private final String usersServiceUrl;
+
 }

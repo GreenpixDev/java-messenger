@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @see ru.greenpix.messenger.friends.service.impl.BlacklistServiceImpl
  */
-@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "blocked user not found")
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "blocked user not found")
 public class BlockedUserNotFoundException extends RuntimeException {
 }

@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionBlockedUserException;
 import ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException;
 import ru.greenpix.messenger.friends.exception.DeletionBlockedUserException;
+import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
 import ru.greenpix.messenger.friends.repository.BlacklistRepository;
 import ru.greenpix.messenger.friends.service.BlacklistService;
 
@@ -24,6 +26,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     private final BlacklistRepository blacklistRepository;
     private final Clock clock;
+    private final UsersClient usersClient;
 
     @Override
     public @NotNull Page<BlockedUser> getBlockedUserPage(
@@ -58,9 +61,12 @@ public class BlacklistServiceImpl implements BlacklistService {
             blockedUser.setDeletionDate(null);
         }
         else {
+            String fullName = usersClient.getUserFullName(blockedUserId)
+                    .orElseThrow(UserNotFoundException::new);
+
             blockedUser = new BlockedUser();
             blockedUser.setRelationship(relationship);
-            blockedUser.setFullName("Test"); // TODO
+            blockedUser.setFullName(fullName);
         }
         blockedUser.setAdditionDate(LocalDate.now(clock));
 

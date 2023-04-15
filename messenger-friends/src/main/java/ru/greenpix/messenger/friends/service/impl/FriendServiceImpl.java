@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionFriendException;
 import ru.greenpix.messenger.friends.exception.DeletionFriendException;
 import ru.greenpix.messenger.friends.exception.FriendNotFoundException;
+import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
 import ru.greenpix.messenger.friends.repository.FriendRepository;
 import ru.greenpix.messenger.friends.service.FriendService;
 
@@ -24,6 +26,7 @@ public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final Clock clock;
+    private final UsersClient usersClient;
 
     @Override
     public @NotNull Page<Friend> getFriendPage(
@@ -58,9 +61,12 @@ public class FriendServiceImpl implements FriendService {
             friend.setDeletionDate(null);
         }
         else {
+            String fullName = usersClient.getUserFullName(friendUserId)
+                    .orElseThrow(UserNotFoundException::new);
+
             friend = new Friend();
             friend.setRelationship(relationship);
-            friend.setFullName("Test"); // TODO
+            friend.setFullName(fullName);
         }
         friend.setAdditionDate(LocalDate.now(clock));
 

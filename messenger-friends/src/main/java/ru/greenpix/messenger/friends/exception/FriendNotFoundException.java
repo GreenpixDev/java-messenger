@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @see ru.greenpix.messenger.friends.service.impl.FriendServiceImpl
  */
-@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "friend not found")
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "friend not found")
 public class FriendNotFoundException extends RuntimeException {
 }

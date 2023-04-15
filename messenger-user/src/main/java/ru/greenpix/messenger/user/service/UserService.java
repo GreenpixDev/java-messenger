@@ -1,12 +1,12 @@
 package ru.greenpix.messenger.user.service;
 
 import org.jetbrains.annotations.NotNull;
+import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
-import ru.greenpix.messenger.user.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 
 import java.util.List;
