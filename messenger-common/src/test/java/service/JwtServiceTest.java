@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.common.service;
+package service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

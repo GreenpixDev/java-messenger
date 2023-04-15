@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,10 +26,10 @@ public class BlockedUser {
     @Column(name = "blocked_user_full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "addition_timestamp", nullable = false)
-    private LocalDateTime additionTimestamp;
+    @Column(name = "addition_date", nullable = false)
+    private LocalDate additionDate;
 
-    @Column(name = "deletion_timestamp")
-    private LocalDateTime deletionTimestamp;
+    @Column(name = "deletion_date")
+    private LocalDate deletionDate;
 
 }

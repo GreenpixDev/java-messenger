@@ -4,7 +4,7 @@
     <persistence-units>
       <persistence-unit name="Default" defaultSearchScope="Project">
         <packages>
-          <package value="ru.greenpix.messenger.user" />
+          <package value="ru.greenpix.messenger.friends" />
         </packages>
       </persistence-unit>
     </persistence-units>
