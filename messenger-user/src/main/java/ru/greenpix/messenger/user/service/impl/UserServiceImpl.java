@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User registerUser(SignUpDto signUpDto) {
+    public @NotNull User registerUser(@NotNull SignUpDto signUpDto) {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
             throw new DuplicateUsernameException();
         }
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User authenticateUser(SignInDto signInDto) {
+    public @NotNull User authenticateUser(@NotNull SignInDto signInDto) {
         User user = userRepository.findByUsername(signInDto.getUsername())
                 .orElseThrow(WrongCredentialsException::new);
 
@@ -58,25 +59,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public @NotNull List<User> getUsers() {
         return null; // TODO
     }
 
     @Override
-    public User getUser(String username) {
+    public @NotNull User getUser(@NotNull String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
-    public User getUser(UUID userId) {
+    public @NotNull User getUser(@NotNull UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
     @Override
-    public User updateUser(UUID userId, UserRequestDto userRequestDto) {
+    public @NotNull User updateUser(@NotNull UUID userId, @NotNull UserRequestDto userRequestDto) {
         User user = getUser(userId);
         user.setFullName(userRequestDto.getFullName());
         user.setBirthDate(userRequestDto.getBirthDate());

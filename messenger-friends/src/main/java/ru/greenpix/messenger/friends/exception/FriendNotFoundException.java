@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Исключение, которое возвращается, когда друг не найден.
+ * Исключение, которое возвращается, когда пользователь не найден в списке друзей.
  *
  * @see ru.greenpix.messenger.friends.service.impl.FriendServiceImpl
  */

@@ -15,9 +15,15 @@ import javax.validation.constraints.PositiveOrZero;
 @Validated
 public class JwtSettings implements JwtSettingsProvider {
 
+    /**
+     * Секретный ключ для подписи JWT токена
+     */
     @NotBlank
     private final String secret;
 
+    /**
+     * Срок жизни JWT токена в минутах
+     */
     @PositiveOrZero
     private final long expirationMinutes;
 

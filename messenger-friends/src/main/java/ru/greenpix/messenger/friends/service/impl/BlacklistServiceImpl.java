@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.entity.Relationship;
-import ru.greenpix.messenger.friends.exception.AdditionFriendException;
-import ru.greenpix.messenger.friends.exception.DeletionFriendException;
-import ru.greenpix.messenger.friends.exception.FriendNotFoundException;
+import ru.greenpix.messenger.friends.exception.AdditionBlockedUserException;
+import ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException;
+import ru.greenpix.messenger.friends.exception.DeletionBlockedUserException;
 import ru.greenpix.messenger.friends.repository.BlacklistRepository;
 import ru.greenpix.messenger.friends.service.BlacklistService;
 
@@ -40,9 +40,9 @@ public class BlacklistServiceImpl implements BlacklistService {
     }
 
     @Override
-    public @NotNull BlockedUser getBlockedUser(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
-        return blacklistRepository.findById(new Relationship(targetUserId, friendUserId))
-                .orElseThrow(FriendNotFoundException::new);
+    public @NotNull BlockedUser getBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId) {
+        return blacklistRepository.findById(new Relationship(targetUserId, blockedUserId))
+                .orElseThrow(BlockedUserNotFoundException::new);
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         if (blockedUser != null) {
             if (blockedUser.getDeletionDate() == null) {
-                throw new AdditionFriendException();
+                throw new AdditionBlockedUserException();
             }
             blockedUser.setDeletionDate(null);
         }
@@ -71,10 +71,10 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public void deleteBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId) {
         BlockedUser blockedUser = blacklistRepository.findById(new Relationship(targetUserId, blockedUserId))
-                .orElseThrow(DeletionFriendException::new);
+                .orElseThrow(DeletionBlockedUserException::new);
 
         if (blockedUser.getDeletionDate() != null) {
-            throw new DeletionFriendException();
+            throw new DeletionBlockedUserException();
         }
 
         blockedUser.setDeletionDate(LocalDate.now(clock));

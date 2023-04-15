@@ -3,7 +3,6 @@ package ru.greenpix.messenger.friends.service;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
-import ru.greenpix.messenger.friends.exception.AdditionFriendException;
 
 import java.util.UUID;
 
@@ -12,24 +11,38 @@ import java.util.UUID;
  */
 public interface BlacklistService {
 
+    /**
+     * Метод получения страницы пользователей черного списка
+     * @param targetUserId ID целевого пользователя
+     * @param page номер страницы
+     * @param size размер страницы
+     * @param fullNameFilter фильтр по ФИО
+     * @return страница заблокированных пользователей
+     */
     @NotNull
     Page<BlockedUser> getBlockedUserPage(@NotNull UUID targetUserId, int page, int size, @NotNull String fullNameFilter);
 
-
+    /**
+     * Метод получения информации о пользователе в черном списке
+     * @throws ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException target пользователь уже дружит с friend пользователем
+     * @param targetUserId ID целевого пользователя
+     * @param blockedUserId ID заблокированного пользователя
+     * @return заблокированный пользователь
+     */
     @NotNull
-    BlockedUser getBlockedUser(@NotNull UUID targetUserId, @NotNull UUID friendUserId);
+    BlockedUser getBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
 
     /**
-     *
-     * @throws AdditionFriendException target пользователь уже дружит с friend пользователем
+     * Метод добавления пользователя в черный список
+     * @throws ru.greenpix.messenger.friends.exception.AdditionBlockedUserException target пользователь уже дружит с friend пользователем
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
      */
     void addBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
 
     /**
-     *
-     * @throws ru.greenpix.messenger.friends.exception.FriendNotFoundException target пользователь ещё не дружит с friend пользователем
+     * Метод удаления пользователя из черного списка
+     * @throws ru.greenpix.messenger.friends.exception.DeletionBlockedUserException target пользователь ещё не дружит с friend пользователем
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
      */

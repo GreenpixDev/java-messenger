@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
+/**
+ * Обработчик ошибок, связанный с валидацией
+ */
 @ControllerAdvice
 public class ValidationAdvice {
 
