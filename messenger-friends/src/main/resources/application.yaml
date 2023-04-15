@@ -1,6 +1,10 @@
 server:
   port: 8011
 
+logging:
+  level:
+    ru.greenpix.messenger: ${LOGGING_LEVEL:info}
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:10101}/${DB_NAME:messenger-friends}
@@ -22,3 +26,6 @@ security:
   jwt:
     secret: ${JWT_SECRET:VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==}
     expiration-minutes: ${JWT_EXPIRATION:1440}
+
+integration:
+  api-key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}

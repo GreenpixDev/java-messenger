@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @see ru.greenpix.messenger.user.service.impl.UserServiceImpl
  */
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "user not found")
 public class UserNotFoundException extends RuntimeException {
 }

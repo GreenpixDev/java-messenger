@@ -9,13 +9,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.greenpix.messenger.common.security.jwt.JwtAuthenticationFilter;
+import ru.greenpix.messenger.common.security.key.ApiKeyAuthenticationFilter;
+import ru.greenpix.messenger.common.security.role.SystemRole;
+import ru.greenpix.messenger.common.security.role.UserRole;
 
 @Configuration
 public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityWebFilterChain(HttpSecurity http,
-                                                      JwtAuthenticationFilter jwtFilter)
+                                                      JwtAuthenticationFilter jwtFilter,
+                                                      ApiKeyAuthenticationFilter apiKeyFilter)
             throws Exception {
 
         return http
@@ -41,13 +45,24 @@ public class WebSecurityConfiguration {
                                 "/webjars/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .antMatchers("/api/**").hasRole(SystemRole.NAME)
+                        .anyRequest().hasRole(UserRole.NAME)
 
                         .and()
                         .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                        .addFilterAfter(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
                 )
 
                 .build();
     }
 
+    @Bean
+    public SystemRole systemRole() {
+        return new SystemRole();
+    }
+
+    @Bean
+    public UserRole userRole() {
+        return new UserRole();
+    }
 }

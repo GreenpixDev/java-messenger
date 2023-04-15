@@ -8,10 +8,11 @@ import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.common.security.role.UserRole;
 import ru.greenpix.messenger.common.service.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Некоторый код позаимствован с {@link org.springframework.security.web.authentication.www.BasicAuthenticationConverter}
@@ -23,6 +24,7 @@ public class JwtAuthenticationConverter implements AuthenticationConverter {
     private static final String AUTHORIZATION_SCHEME_BEARER = "Bearer";
 
     private final JwtService jwtService;
+    private final UserRole userRole;
 
     @Override
     public UsernamePasswordAuthenticationToken convert(HttpServletRequest request) {
@@ -47,6 +49,6 @@ public class JwtAuthenticationConverter implements AuthenticationConverter {
         JwtUser user = jwtService.parseUser(token);
 
         return UsernamePasswordAuthenticationToken
-                .authenticated(user, null, Collections.emptyList());
+                .authenticated(user, null, List.of(userRole));
     }
 }
