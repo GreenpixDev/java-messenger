@@ -24,6 +24,7 @@
         <module>messenger-file-storage</module>
         <module>messenger-notifications</module>
         <module>messenger-common</module>
+        <module>messenger-boot-auth</module>
     </modules>
 
     <properties>

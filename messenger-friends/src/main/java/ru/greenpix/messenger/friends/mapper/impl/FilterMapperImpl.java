@@ -2,6 +2,7 @@ package ru.greenpix.messenger.friends.mapper.impl;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import ru.greenpix.messenger.common.util.SpecificationBuilder;
 import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.dto.FriendSearchDto;
@@ -11,6 +12,7 @@ import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.entity.Friend_;
 import ru.greenpix.messenger.friends.mapper.FilterMapper;
 
+@Component
 public class FilterMapperImpl implements FilterMapper {
 
     @Override

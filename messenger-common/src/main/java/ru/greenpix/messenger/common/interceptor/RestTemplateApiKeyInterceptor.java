@@ -2,6 +2,7 @@ package ru.greenpix.messenger.common.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -9,8 +10,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.greenpix.messenger.common.ApiKeyConst;
-import ru.greenpix.messenger.common.provider.ApiKeyProvider;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,7 +19,8 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class RestTemplateApiKeyInterceptor implements ClientHttpRequestInterceptor {
 
-    private final ApiKeyProvider apiKeyProvider;
+    @Value("${security.api.key}") // TODO
+    private String apiKey;
 
     @Override
     public @NotNull ClientHttpResponse intercept(
@@ -29,7 +29,7 @@ public class RestTemplateApiKeyInterceptor implements ClientHttpRequestIntercept
             @NotNull ClientHttpRequestExecution execution
     ) throws IOException {
         URI uri = UriComponentsBuilder.fromHttpRequest(request)
-                .queryParam(ApiKeyConst.PARAM_NAME, apiKeyProvider.getApiKey())
+                .queryParam("api-key", apiKey)
                 .build().toUri();
 
         HttpRequest modifiedRequest = new HttpRequestWrapper(request) {

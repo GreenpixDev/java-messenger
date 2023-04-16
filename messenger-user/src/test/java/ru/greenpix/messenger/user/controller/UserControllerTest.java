@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.greenpix.messenger.common.model.JwtUser;
-import ru.greenpix.messenger.common.service.JwtService;
+import ru.greenpix.messenger.auth.manager.JwtManager;
+import ru.greenpix.messenger.auth.model.JwtUser;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.repository.UserRepository;
 
@@ -33,7 +33,7 @@ public class UserControllerTest {
     private UserRepository userRepository;
 
     @Autowired
-    private JwtService jwtService;
+    private JwtManager jwtManager;
 
     private String token;
     private UUID uuid;
@@ -49,7 +49,7 @@ public class UserControllerTest {
         user.setRegistrationTimestamp(LocalDateTime.now());
         user = userRepository.save(user);
         uuid = user.getId();
-        token = "Bearer " + jwtService.generateToken(new JwtUser(user.getId(), user.getUsername()));
+        token = "Bearer " + jwtManager.generateToken(new JwtUser(user.getId(), user.getUsername()));
     }
 
     @DisplayName("Успешное получение списка профилей")

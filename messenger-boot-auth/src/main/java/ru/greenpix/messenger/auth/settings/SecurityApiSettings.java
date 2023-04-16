@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.user.settings;
+package ru.greenpix.messenger.auth.settings;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,15 +8,15 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@ConfigurationProperties(prefix = "integration")
+@ConfigurationProperties(prefix = "security.api")
 @ConstructorBinding
 @Validated
-public class IntegrationSettings {
+public class SecurityApiSettings {
 
     /**
-     * URL микросервиса "Друзья"
+     * API ключ для интеграционных межсерверных запросов
      */
     @NotBlank
-    private final String friendsServiceUrl;
+    private final String key;
 
 }

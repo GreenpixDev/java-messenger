@@ -6,7 +6,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.auth.model.JwtUser;
 import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;

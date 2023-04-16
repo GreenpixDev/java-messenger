@@ -8,7 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.common.service.JwtService;
+import ru.greenpix.messenger.auth.manager.JwtManager;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtService jwtService;
+    private final JwtManager jwtManager;
     private final UserMapper userMapper;
 
     @Operation(summary = "Зарегистрировать нового пользователя")
@@ -41,7 +41,7 @@ public class AuthController {
             HttpServletResponse response
     ) {
         User user = userService.registerUser(signUpDto);
-        String token = jwtService.generateToken(userMapper.toJwt(user));
+        String token = jwtManager.generateToken(userMapper.toJwt(user));
         response.addHeader(HttpHeaders.AUTHORIZATION, token);
         return userMapper.toDto(user);
     }
@@ -59,7 +59,7 @@ public class AuthController {
             HttpServletResponse response
     ) {
         User user = userService.authenticateUser(signInDto);
-        String token = jwtService.generateToken(userMapper.toJwt(user));
+        String token = jwtManager.generateToken(userMapper.toJwt(user));
         response.addHeader(HttpHeaders.AUTHORIZATION, token);
         return userMapper.toDto(user);
     }

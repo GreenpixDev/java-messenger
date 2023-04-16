@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.auth.model.JwtUser;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
 import ru.greenpix.messenger.user.mapper.UserMapper;
