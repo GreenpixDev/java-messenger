@@ -52,8 +52,8 @@ public class AuthControllerTest {
     @DisplayName("Успешная регистрация")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/signup/pass.json",
-            "/signup/pass_full.json",
+            "/request/POST/signup/pass.json",
+            "/request/POST/signup/pass_full.json",
     })
     public void signupSuccessTest(String file) throws Exception {
         mockMvc.perform(post("/signup")
@@ -76,9 +76,9 @@ public class AuthControllerTest {
     @DisplayName("Регистрация с невалидными данными")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/signup/short_password.json",
-            "/signup/invalid_email.json",
-            "/signup/future_birth_date.json",
+            "/request/POST/signup/short_password.json",
+            "/request/POST/signup/invalid_email.json",
+            "/request/POST/signup/future_birth_date.json",
     })
     public void signupBadRequestTest(String file) throws Exception {
         mockMvc.perform(post("/signup")
@@ -92,8 +92,8 @@ public class AuthControllerTest {
     @DisplayName("Регистрация существующего пользователя")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/signup/duplicate_username.json",
-            "/signup/duplicate_email.json",
+            "/request/POST/signup/duplicate_username.json",
+            "/request/POST/signup/duplicate_email.json",
     })
     public void signupDuplicateUserTest(String file) throws Exception {
         mockMvc.perform(post("/signup")
@@ -106,7 +106,7 @@ public class AuthControllerTest {
 
     @DisplayName("Успешный вход в систему")
     @ParameterizedTest
-    @ValueSource(strings = "/signin/pass.json")
+    @ValueSource(strings = "/request/POST/signin/pass.json")
     public void signinSuccessTest(String file) throws Exception {
         mockMvc.perform(post("/signin")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -128,8 +128,8 @@ public class AuthControllerTest {
     @DisplayName("Вход в систему с пустым логином или паролем")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/signin/invalid_username.json",
-            "/signin/invalid_password.json"
+            "/request/POST/signin/invalid_username.json",
+            "/request/POST/signin/invalid_password.json"
     })
     public void signinEmptyPasswordTest(String file) throws Exception {
         mockMvc.perform(post("/signin")
@@ -143,8 +143,8 @@ public class AuthControllerTest {
     @DisplayName("Вход в систему с неверным логином или паролем")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/signin/wrong_username.json",
-            "/signin/wrong_password.json",
+            "/request/POST/signin/wrong_username.json",
+            "/request/POST/signin/wrong_password.json",
     })
     public void signinWrongCredentialsTest(String file) throws Exception {
         mockMvc.perform(post("/signin")

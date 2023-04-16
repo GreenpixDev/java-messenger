@@ -79,8 +79,8 @@ public class MeControllerTest {
     @DisplayName("Успешное редактирование своего профиля")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/users/me/pass.json",
-            "/users/me/pass_full.json",
+            "/request/PUT/users/me/pass.json",
+            "/request/PUT/users/me/pass_full.json",
     })
     public void updateMyselfTest(String file) throws Exception {
         mockMvc.perform(put("/users/me")
@@ -95,8 +95,8 @@ public class MeControllerTest {
     @DisplayName("Редактирование своего профиля с невалидными данными")
     @ParameterizedTest
     @ValueSource(strings = {
-            "/users/me/empty_fullname.json",
-            "/users/me/future_birth_date.json",
+            "/request/PUT/users/me/empty_fullname.json",
+            "/request/PUT/users/me/future_birth_date.json",
     })
     public void invalidUpdateMyselfTest(String file) throws Exception {
         mockMvc.perform(put("/users/me")
