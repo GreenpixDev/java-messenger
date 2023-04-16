@@ -25,6 +25,7 @@
         <module>messenger-notifications</module>
         <module>messenger-common</module>
         <module>messenger-boot-auth</module>
+        <module>messenger-boot-integration</module>
     </modules>
 
     <properties>

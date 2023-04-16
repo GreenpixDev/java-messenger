@@ -1,26 +1,23 @@
-package ru.greenpix.messenger.common.interceptor;
+package ru.greenpix.messenger.integration.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.greenpix.messenger.integration.ApiKeyConst;
 
 import java.io.IOException;
 import java.net.URI;
 
 // https://stackoverflow.com/questions/57696932/adding-request-param-to-every-request-using-spring-resttemplate
-@Component
 @RequiredArgsConstructor
 public class RestTemplateApiKeyInterceptor implements ClientHttpRequestInterceptor {
 
-    @Value("${security.api.key}") // TODO
-    private String apiKey;
+    private final String apiKey;
 
     @Override
     public @NotNull ClientHttpResponse intercept(
@@ -29,7 +26,7 @@ public class RestTemplateApiKeyInterceptor implements ClientHttpRequestIntercept
             @NotNull ClientHttpRequestExecution execution
     ) throws IOException {
         URI uri = UriComponentsBuilder.fromHttpRequest(request)
-                .queryParam("api-key", apiKey)
+                .queryParam(ApiKeyConst.PARAM_NAME, apiKey)
                 .build().toUri();
 
         HttpRequest modifiedRequest = new HttpRequestWrapper(request) {

@@ -1,6 +1,5 @@
 package ru.greenpix.messenger.auth.autoconfigure;
 
-import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,7 +18,6 @@ import ru.greenpix.messenger.auth.security.role.SystemRole;
 import ru.greenpix.messenger.auth.security.role.UserRole;
 
 @Configuration
-@ConditionalOnDefaultWebSecurity
 @Import({JwtConfiguration.class, ApiKeyConfiguration.class})
 @EnableWebSecurity
 public class AuthAutoConfiguration {
