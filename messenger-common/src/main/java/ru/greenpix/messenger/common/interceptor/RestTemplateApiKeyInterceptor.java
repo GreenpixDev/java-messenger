@@ -9,6 +9,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.greenpix.messenger.common.ApiKeyConst;
 import ru.greenpix.messenger.common.provider.ApiKeyProvider;
 
 import java.io.IOException;

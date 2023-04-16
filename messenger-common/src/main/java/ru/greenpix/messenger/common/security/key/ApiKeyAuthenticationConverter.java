@@ -5,7 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
-import ru.greenpix.messenger.common.interceptor.ApiKeyConst;
+import ru.greenpix.messenger.common.ApiKeyConst;
 import ru.greenpix.messenger.common.provider.ApiKeyProvider;
 import ru.greenpix.messenger.common.security.role.SystemRole;
 

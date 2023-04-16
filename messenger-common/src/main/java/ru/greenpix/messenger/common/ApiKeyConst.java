@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.common.interceptor;
+package ru.greenpix.messenger.common;
 
 public class ApiKeyConst {
 

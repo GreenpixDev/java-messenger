@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public @NotNull User registerUser(@NotNull SignUpDto signUpDto) {
+        log.debug("Trying to register new user '{}'", signUpDto.getUsername());
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
+            log.debug("User '{}' already exists", signUpDto.getUsername());
             throw new DuplicateUsernameException();
         }
 
@@ -56,23 +58,29 @@ public class UserServiceImpl implements UserService {
         user.setHashedPassword(hashedPassword);
         user.setRegistrationTimestamp(LocalDateTime.now(clock));
 
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        log.info("New user '{}' with id {} has been registered", newUser.getUsername(), newUser.getId());
+        return newUser;
     }
 
     @Override
     public @NotNull User authenticateUser(@NotNull SignInDto signInDto) {
+        log.debug("Trying to authenticate user '{}'", signInDto.getUsername());
         User user = userRepository.findByUsername(signInDto.getUsername())
                 .orElseThrow(WrongCredentialsException::new);
 
         if (!passwordEncoder.matches(signInDto.getPassword(), user.getHashedPassword())) {
+            log.debug("Wrong credentials for user '{}'", signInDto.getUsername());
             throw new WrongCredentialsException();
         }
 
+        log.info("User '{}' with id {} has been authenticated", user.getUsername(), user.getId());
         return user;
     }
 
     @Override
     public @NotNull Page<User> getUsers(int page, int size, @NotNull List<UserSort> sorts, @NotNull List<UserFilter> filters) {
+        log.trace("Getting user list (page={}, size={}, sorts={}, filters={})", page, size, sorts, filters);
         List<Sort.Order> orders = sorts.stream()
                 .map(e -> new Sort.Order(
                         e.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC,
@@ -91,18 +99,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public @NotNull User getUser(@NotNull String username) {
+        log.trace("Getting user details for username '{}'", username);
         return userRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public @NotNull User getUser(@NotNull UUID userId) {
+        log.trace("Getting user details for id {}", userId);
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public @NotNull User getUser(@NotNull UUID requesterId, @NotNull UUID requestedUserId) {
+        log.trace("User {} requesting details of user {}", requesterId, requestedUserId);
         User user = getUser(requestedUserId);
         if (friendsClient.isBlockedByUser(requesterId, requestedUserId)) {
             throw new BlacklistUserAccessRestrictionException();
@@ -114,12 +125,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public @NotNull User updateUser(@NotNull UUID userId, @NotNull UserRequestDto userRequestDto) {
         User user = getUser(userId);
+        log.debug("Updating profile for user {}", userId);
         user.setFullName(userRequestDto.getFullName());
         user.setBirthDate(userRequestDto.getBirthDate());
         user.setPhone(userRequestDto.getPhone());
         user.setCity(userRequestDto.getCity());
         user.setAvatarId(userRequestDto.getAvatarId());
 
-        return userRepository.save(user);
+        User updatedUser = userRepository.save(user);
+        log.info("User '{}' with id {} has been authenticated", user.getUsername(), user.getId());
+        return updatedUser;
     }
 }

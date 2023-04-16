@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.friends.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
@@ -41,6 +43,7 @@ public class FriendServiceImpl implements FriendService {
             int size,
             @NotNull String fullNameFilter
     ) {
+        log.trace("User {} requesting friend list (page={}, size={}, fullNameFilter={})", targetUserId, page, size, fullNameFilter);
         return friendRepository.findAllByDeletionDateNullAndRelationshipTargetUserIdAndFullNameLikeIgnoreCase(
                 PageRequest.of(page, size),
                 targetUserId,
@@ -50,6 +53,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public @NotNull Friend getFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
+        log.trace("User {} requesting details of friend {}", targetUserId, friendUserId);
         return friendRepository.findById(new Relationship(targetUserId, friendUserId))
                 .orElseThrow(FriendNotFoundException::new);
     }
@@ -57,6 +61,7 @@ public class FriendServiceImpl implements FriendService {
     @Transactional
     @Override
     public void addFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
+        log.debug("User {} adding friend {}", targetUserId, friendUserId);
         Relationship relationship = new Relationship(targetUserId, friendUserId);
         Friend friend = friendRepository.findById(relationship).orElse(null);
 
@@ -77,24 +82,29 @@ public class FriendServiceImpl implements FriendService {
         friend.setAdditionDate(LocalDate.now(clock));
 
         friendRepository.save(friend);
+        log.trace("User {} has added friend {}", targetUserId, friendUserId);
     }
 
     @Transactional
     @Override
     public void deleteFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
+        log.debug("User {} removing friend {}", targetUserId, friendUserId);
         Friend friend = friendRepository.findById(new Relationship(targetUserId, friendUserId))
                 .orElseThrow(DeletionFriendException::new);
 
         if (friend.getDeletionDate() != null) {
             throw new DeletionFriendException();
         }
-
         friend.setDeletionDate(LocalDate.now(clock));
+
         friendRepository.save(friend);
+        log.trace("User {} has removed friend {}", targetUserId, friendUserId);
     }
 
     @Override
     public @NotNull Page<Friend> getFriendPage(@NotNull UUID targetUserId, int page, int size, @NotNull FriendSearchDto searchDto) {
+        log.trace("User {} searching friends (page={}, size={}, specs={})", targetUserId, page, size, searchDto);
+
         List<Specification<Friend>> specs = new ArrayList<>();
         if (searchDto.getFullName() != null) {
             specs.add(BaseSpecification.containsIgnoreCase(Friend_.fullName, searchDto.getFullName()));
