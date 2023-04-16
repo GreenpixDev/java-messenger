@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,9 @@ import ru.greenpix.messenger.user.model.UserFilter;
 import ru.greenpix.messenger.user.model.UserSort;
 import ru.greenpix.messenger.user.service.UserService;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -42,13 +47,27 @@ public class UserController {
     @ApiResponse(responseCode = "401")
     @GetMapping
     public PageDto<UserResponseDto> getUserList(
-            @RequestParam(name = "page") int pageNumber,
-            @RequestParam(name = "size") int pageSize,
-            @RequestParam(name = "sort") String[] sorts,
-            @RequestParam(name = "filter") String[] filters
+            @Positive
+            @RequestParam(name = "page")
+            int pageNumber,
+
+            @Positive
+            @Max(100)
+            @RequestParam(name = "size")
+            int pageSize,
+
+            @RequestParam(name = "sort", required = false)
+            String[] sorts,
+
+            @RequestParam(name = "filter", required = false)
+            String[] filters
     ) {
-        List<UserSort> userSorts = Stream.of(sorts).map(UserSort::of).collect(Collectors.toList());
-        List<UserFilter> userFilters = Stream.of(filters).map(UserFilter::of).collect(Collectors.toList());
+        List<UserSort> userSorts = sorts != null
+                ? Stream.of(sorts).map(UserSort::of).collect(Collectors.toList())
+                : Collections.emptyList();
+        List<UserFilter> userFilters = filters != null
+                ? Stream.of(filters).map(UserFilter::of).collect(Collectors.toList())
+                : Collections.emptyList();
         Page<User> page = userService.getUsers(pageNumber - 1, pageSize, userSorts, userFilters);
         return pageMapper.toDto(page.map(userMapper::toDto));
     }

@@ -1,5 +1,7 @@
 server:
   port: 8010
+  error:
+    include-stacktrace: never
 
 logging:
   level:

@@ -15,6 +15,7 @@ import ru.greenpix.messenger.user.dto.SignUpDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.BlacklistUserAccessRestrictionException;
+import ru.greenpix.messenger.user.exception.DuplicateEmailException;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
@@ -50,6 +51,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
             log.debug("User '{}' already exists", signUpDto.getUsername());
             throw new DuplicateUsernameException();
+        }
+        if (userRepository.existsByEmail(signUpDto.getEmail())) {
+            log.debug("Email '{}' already registered", signUpDto.getEmail());
+            throw new DuplicateEmailException();
         }
 
         String hashedPassword = passwordEncoder.encode(signUpDto.getPassword());
@@ -133,7 +138,7 @@ public class UserServiceImpl implements UserService {
         user.setAvatarId(userRequestDto.getAvatarId());
 
         User updatedUser = userRepository.save(user);
-        log.info("User '{}' with id {} has been authenticated", user.getUsername(), user.getId());
+        log.info("User '{}' with id {} has been updated", user.getUsername(), user.getId());
         return updatedUser;
     }
 }
