@@ -46,18 +46,8 @@
 
         <dependency>
             <groupId>ru.greenpix.messenger</groupId>
-            <artifactId>messenger-common</artifactId>
+            <artifactId>messenger-boot-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.greenpix.messenger.boot</groupId>
-            <artifactId>messenger-boot-auth</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.greenpix.messenger.boot</groupId>
-            <artifactId>messenger-boot-integration</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.auth.model.JwtUser;
 import ru.greenpix.messenger.common.dto.PageDto;
 import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.friends.dto.FriendDetailsDto;
@@ -25,6 +24,7 @@ import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.mapper.FriendMapper;
 import ru.greenpix.messenger.friends.service.FriendService;
+import ru.greenpix.messenger.jwt.model.JwtUser;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;

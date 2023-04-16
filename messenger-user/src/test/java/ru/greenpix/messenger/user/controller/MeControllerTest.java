@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.greenpix.messenger.auth.manager.JwtManager;
-import ru.greenpix.messenger.auth.model.JwtUser;
+import ru.greenpix.messenger.jwt.manager.JwtManager;
+import ru.greenpix.messenger.jwt.model.JwtUser;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.repository.UserRepository;
 

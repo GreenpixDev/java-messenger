@@ -23,8 +23,8 @@
         <module>messenger-chat</module>
         <module>messenger-file-storage</module>
         <module>messenger-notifications</module>
-        <module>messenger-common</module>
-        <module>messenger-boot-auth</module>
+        <module>messenger-boot-common</module>
+        <module>messenger-boot-jwt</module>
         <module>messenger-boot-integration</module>
     </modules>
 
