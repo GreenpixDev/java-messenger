@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.user.service;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -8,6 +9,8 @@ import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
+import ru.greenpix.messenger.user.model.UserFilter;
+import ru.greenpix.messenger.user.model.UserSort;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,11 +39,15 @@ public interface UserService {
     User authenticateUser(@NotNull SignInDto signInDto);
 
     /**
-     * Получает список пользователей
-     * @return список моделей пользователей
+     * Получает страницу пользователей
+     * @param page номер страницы
+     * @param size размер страницы
+     * @param sorts сортировки
+     * @param filters фильтры
+     * @return страница моделей пользователей
      */
     @NotNull
-    List<User> getUsers();
+    Page<User> getUsers(int page, int size, @NotNull List<UserSort> sorts, @NotNull List<UserFilter> filters);
 
     /**
      * Получает пользователя по его логину

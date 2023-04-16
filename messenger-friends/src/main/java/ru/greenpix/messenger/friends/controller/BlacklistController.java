@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.greenpix.messenger.common.dto.PageDto;
+import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.common.model.JwtUser;
 import ru.greenpix.messenger.friends.dto.BlockedUserDetailsDto;
 import ru.greenpix.messenger.friends.dto.BlockedUserDto;
-import ru.greenpix.messenger.friends.dto.PageDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.mapper.BlockedUserMapper;
 import ru.greenpix.messenger.friends.service.BlacklistService;
@@ -36,6 +37,7 @@ public class BlacklistController {
 
     private final BlacklistService blacklistService;
     private final BlockedUserMapper blockedUserMapper;
+    private final PageMapper pageMapper;
 
     @Operation(summary = "Получить черный список")
     @ApiResponse(responseCode = "200")
@@ -61,14 +63,7 @@ public class BlacklistController {
                 pageSize,
                 fullNameFilter
         );
-        return new PageDto<>(
-                pageNumber,
-                pageSize,
-                page.getNumberOfElements(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                page.map(blockedUserMapper::toDto).toList()
-        );
+        return pageMapper.toDto(page.map(blockedUserMapper::toDto));
     }
 
     @Operation(summary = "Получить информацию о заблокированном пользователе")

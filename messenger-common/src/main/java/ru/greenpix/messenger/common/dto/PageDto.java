@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.friends.dto;
+package ru.greenpix.messenger.common.dto;
 
 import lombok.Data;
 

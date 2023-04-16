@@ -1,7 +1,11 @@
 package ru.greenpix.messenger.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,16 +19,22 @@ import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.user.mapper.UserMapper;
+import ru.greenpix.messenger.user.model.UserAttribute;
+import ru.greenpix.messenger.user.model.UserFilter;
+import ru.greenpix.messenger.user.model.UserSort;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -62,8 +72,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public @NotNull List<User> getUsers() {
-        return null; // TODO
+    public @NotNull Page<User> getUsers(int page, int size, @NotNull List<UserSort> sorts, @NotNull List<UserFilter> filters) {
+        List<Sort.Order> orders = sorts.stream()
+                .map(e -> new Sort.Order(
+                        e.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC,
+                        e.getAttribute().getAttribute().getName()
+                ))
+                .collect(Collectors.toList());
+
+        Map<UserAttribute, Object> filterMap = filters.stream()
+                .collect(Collectors.toMap(UserFilter::getAttribute, UserFilter::getValue));
+
+        return userRepository.findAllWithFilters(
+                PageRequest.of(page, size, Sort.by(orders)),
+                filterMap
+        );
     }
 
     @Override

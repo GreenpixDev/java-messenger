@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.greenpix.messenger.common.dto.PageDto;
+import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.common.model.JwtUser;
 import ru.greenpix.messenger.friends.dto.FriendDetailsDto;
 import ru.greenpix.messenger.friends.dto.FriendDto;
-import ru.greenpix.messenger.friends.dto.PageDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.mapper.FriendMapper;
 import ru.greenpix.messenger.friends.service.FriendService;
@@ -36,6 +37,7 @@ public class FriendController {
 
     private final FriendService friendService;
     private final FriendMapper friendMapper;
+    private final PageMapper pageMapper;
 
     @Operation(summary = "Получить список друзей")
     @ApiResponse(responseCode = "200")
@@ -61,14 +63,7 @@ public class FriendController {
                 pageSize,
                 fullNameFilter
         );
-        return new PageDto<>(
-                pageNumber,
-                pageSize,
-                page.getNumberOfElements(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                page.map(friendMapper::toDto).toList()
-        );
+        return pageMapper.toDto(page.map(friendMapper::toDto));
     }
 
     @Operation(summary = "Получить информацию о друге")
