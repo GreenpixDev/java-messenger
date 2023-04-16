@@ -94,7 +94,10 @@ public class MeControllerTest {
 
     @DisplayName("Редактирование своего профиля с невалидными данными")
     @ParameterizedTest
-    @ValueSource(strings = "/users/me/empty_fullname.json")
+    @ValueSource(strings = {
+            "/users/me/empty_fullname.json",
+            "/users/me/future_birth_date.json",
+    })
     public void invalidUpdateMyselfTest(String file) throws Exception {
         mockMvc.perform(put("/users/me")
                         .contentType(MediaType.APPLICATION_JSON)

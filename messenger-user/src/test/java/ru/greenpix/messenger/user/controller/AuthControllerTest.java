@@ -78,6 +78,7 @@ public class AuthControllerTest {
     @ValueSource(strings = {
             "/signup/short_password.json",
             "/signup/invalid_email.json",
+            "/signup/future_birth_date.json",
     })
     public void signupBadRequestTest(String file) throws Exception {
         mockMvc.perform(post("/signup")
