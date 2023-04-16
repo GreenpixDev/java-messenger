@@ -6,9 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.greenpix.messenger.auth.manager.JwtManager;
 import ru.greenpix.messenger.auth.manager.impl.JwtManagerImpl;
-import ru.greenpix.messenger.auth.security.jwt.JwtAuthenticationConverter;
-import ru.greenpix.messenger.auth.security.jwt.JwtAuthenticationFilter;
-import ru.greenpix.messenger.auth.security.role.UserRole;
+import ru.greenpix.messenger.auth.role.UserRole;
+import ru.greenpix.messenger.auth.security.JwtAuthenticationConverter;
 import ru.greenpix.messenger.auth.settings.SecurityJwtSettings;
 
 import java.time.Clock;
@@ -28,12 +27,6 @@ public class JwtConfiguration {
     @ConditionalOnMissingBean
     public JwtAuthenticationConverter jwtAuthenticationConverter(JwtManager manager, UserRole userRole) {
         return new JwtAuthenticationConverter(manager, userRole);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtAuthenticationConverter converter) {
-        return new JwtAuthenticationFilter(converter);
     }
 
     @Bean

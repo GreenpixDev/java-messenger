@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.security.key;
+package ru.greenpix.messenger.integration.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
-import ru.greenpix.messenger.auth.ApiKeyConst;
+import ru.greenpix.messenger.integration.ApiKeyConst;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

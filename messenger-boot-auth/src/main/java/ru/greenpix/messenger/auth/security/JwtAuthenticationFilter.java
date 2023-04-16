@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.security.jwt;
+package ru.greenpix.messenger.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtAuthenticationConverter authenticationConverter;
+    private final RequestMatcher matcher;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -35,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (authRequest == null) {
                 logger.trace("Did not process authentication request since failed to find "
                         + "jwt token in Bearer Authorization header");
+                SecurityContextHolder.clearContext();
                 chain.doFilter(request, response);
                 return;
             }
@@ -52,5 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NotNull HttpServletRequest request) {
+        return new NegatedRequestMatcher(matcher).matches(request);
     }
 }

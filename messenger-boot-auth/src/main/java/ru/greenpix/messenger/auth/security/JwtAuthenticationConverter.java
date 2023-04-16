@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.security.jwt;
+package ru.greenpix.messenger.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

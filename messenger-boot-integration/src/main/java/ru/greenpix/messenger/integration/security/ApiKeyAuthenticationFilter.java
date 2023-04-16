@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.security.key;
+package ru.greenpix.messenger.integration.security;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private final ApiKeyAuthenticationConverter authenticationConverter;
+    private final RequestMatcher matcher;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -37,6 +40,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
             if (authRequest == null) {
                 logger.trace("Did not process authentication request since failed to find "
                         + "api key in request params");
+                SecurityContextHolder.clearContext();
                 chain.doFilter(request, response);
                 return;
             }
@@ -54,5 +58,10 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NotNull HttpServletRequest request) {
+        return new NegatedRequestMatcher(matcher).matches(request);
     }
 }

@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.auth.security.role;
+package ru.greenpix.messenger.auth.role;
 
 import org.springframework.security.core.GrantedAuthority;
 
