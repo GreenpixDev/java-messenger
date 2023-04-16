@@ -14,17 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.repository.UserRepository;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.greenpix.messenger.user.util.ResourceUtil.getResource;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -153,14 +149,5 @@ public class AuthControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
-    }
-
-    private byte[] getResource(String name) {
-        try {
-            return Files.readAllBytes(Path.of(Objects.requireNonNull(getClass().getResource(name)).toURI()));
-        }
-        catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
