@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
+import ru.greenpix.messenger.common.specification.BaseSpecification;
+import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
+import ru.greenpix.messenger.friends.entity.BlockedUser_;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionBlockedUserException;
 import ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException;
@@ -18,6 +22,8 @@ import ru.greenpix.messenger.friends.service.BlacklistService;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -85,6 +91,19 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         blockedUser.setDeletionDate(LocalDate.now(clock));
         blacklistRepository.save(blockedUser);
+    }
+
+    @Override
+    public @NotNull Page<BlockedUser> getBlockedUserPage(@NotNull UUID targetUserId, int page, int size, @NotNull BlockedUserSearchDto searchDto) {
+        List<Specification<BlockedUser>> specs = new ArrayList<>();
+        if (searchDto.getFullName() != null) {
+            specs.add(BaseSpecification.containsIgnoreCase(BlockedUser_.fullName, searchDto.getFullName()));
+        }
+        if (searchDto.getAdditionDate() != null) {
+            specs.add(BaseSpecification.equal(BlockedUser_.additionDate, searchDto.getAdditionDate()));
+        }
+
+        return blacklistRepository.findAll(BaseSpecification.all(specs), PageRequest.of(page, size));
     }
 
     @Override

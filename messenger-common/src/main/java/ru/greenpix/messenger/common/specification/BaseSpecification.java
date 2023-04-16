@@ -65,7 +65,18 @@ public class BaseSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(attribute), expression);
     }
 
+    public static @NotNull <E> Specification<E> likeIgnoreCase(@NotNull SingularAttribute<E, String> attribute, @NotNull String expression) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(
+                criteriaBuilder.upper(root.get(attribute)),
+                expression.toUpperCase()
+        );
+    }
+
     public static @NotNull <E> Specification<E> contains(@NotNull SingularAttribute<E, String> attribute, @NotNull String substring) {
         return like(attribute, "%" + substring + "%");
+    }
+
+    public static @NotNull <E> Specification<E> containsIgnoreCase(@NotNull SingularAttribute<E, String> attribute, @NotNull String substring) {
+        return likeIgnoreCase(attribute, "%" + substring + "%");
     }
 }

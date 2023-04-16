@@ -2,6 +2,7 @@ package ru.greenpix.messenger.friends.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 
 import java.util.UUID;
@@ -47,6 +48,17 @@ public interface BlacklistService {
      * @param blockedUserId ID заблокированного пользователя
      */
     void deleteBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
+
+    /**
+     * Метод поиска пользователей черного списка
+     * @param targetUserId ID целевого пользователя
+     * @param page номер страницы
+     * @param size размер страницы
+     * @param searchDto фильтр поиска
+     * @return страница заблокированных пользователей
+     */
+    @NotNull
+    Page<BlockedUser> getBlockedUserPage(@NotNull UUID targetUserId, int page, int size, @NotNull BlockedUserSearchDto searchDto);
 
     boolean isBlockedByUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
 

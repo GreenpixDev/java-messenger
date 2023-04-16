@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,7 @@ import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.common.model.JwtUser;
 import ru.greenpix.messenger.friends.dto.BlockedUserDetailsDto;
 import ru.greenpix.messenger.friends.dto.BlockedUserDto;
+import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.mapper.BlockedUserMapper;
 import ru.greenpix.messenger.friends.service.BlacklistService;
@@ -86,13 +88,13 @@ public class BlacklistController {
         blacklistService.addBlockedUser(jwtUser.getId(), userId);
     }
 
-    // TODO
     @Operation(summary = "Синхронизировать данные")
     @ApiResponse(responseCode = "200")
     @PutMapping
     public void synchronizeBlockedUser(
             @AuthenticationPrincipal JwtUser jwtUser
     ) {
+        // TODO
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -106,14 +108,32 @@ public class BlacklistController {
         blacklistService.deleteBlockedUser(jwtUser.getId(), userId);
     }
 
-    // TODO
     @Operation(summary = "Поиск пользователя в черном списке")
     @ApiResponse(responseCode = "200")
     @GetMapping("search")
-    public void searchBlockedUser(
-            @AuthenticationPrincipal JwtUser jwtUser
+    public PageDto<BlockedUserDto> searchBlockedUser(
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @Positive
+            @RequestParam(name = "page")
+            int pageNumber,
+
+            @Positive
+            @Max(100)
+            @RequestParam(name = "size")
+            int pageSize,
+
+            @ParameterObject
+            BlockedUserSearchDto searchDto
     ) {
-        throw new UnsupportedOperationException("Not implemented");
+        Page<BlockedUser> page = blacklistService.getBlockedUserPage(
+                jwtUser.getId(),
+                pageNumber - 1,
+                pageSize,
+                searchDto
+        );
+        return pageMapper.toDto(page.map(blockedUserMapper::toDto));
     }
 
     @Operation(summary = "Проверить нахождение пользователя в черном списке")

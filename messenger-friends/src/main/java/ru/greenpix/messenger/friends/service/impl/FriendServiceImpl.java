@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
+import ru.greenpix.messenger.common.specification.BaseSpecification;
+import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
+import ru.greenpix.messenger.friends.entity.Friend_;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionFriendException;
 import ru.greenpix.messenger.friends.exception.DeletionFriendException;
@@ -18,6 +22,8 @@ import ru.greenpix.messenger.friends.service.FriendService;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -85,5 +91,18 @@ public class FriendServiceImpl implements FriendService {
 
         friend.setDeletionDate(LocalDate.now(clock));
         friendRepository.save(friend);
+    }
+
+    @Override
+    public @NotNull Page<Friend> getFriendPage(@NotNull UUID targetUserId, int page, int size, @NotNull FriendSearchDto searchDto) {
+        List<Specification<Friend>> specs = new ArrayList<>();
+        if (searchDto.getFullName() != null) {
+            specs.add(BaseSpecification.containsIgnoreCase(Friend_.fullName, searchDto.getFullName()));
+        }
+        if (searchDto.getAdditionDate() != null) {
+            specs.add(BaseSpecification.equal(Friend_.additionDate, searchDto.getAdditionDate()));
+        }
+
+        return friendRepository.findAll(BaseSpecification.all(specs), PageRequest.of(page, size));
     }
 }

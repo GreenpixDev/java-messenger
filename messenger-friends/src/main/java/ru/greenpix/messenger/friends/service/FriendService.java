@@ -2,6 +2,7 @@ package ru.greenpix.messenger.friends.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.exception.AdditionFriendException;
 
@@ -48,5 +49,16 @@ public interface FriendService {
      * @param friendUserId ID пользователя друга
      */
     void deleteFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId);
+
+    /**
+     * Метод поиска друзей
+     * @param targetUserId ID целевого пользователя
+     * @param page номер страницы
+     * @param size размер страницы
+     * @param searchDto фильтры поиска
+     * @return страница друзей
+     */
+    @NotNull
+    Page<Friend> getFriendPage(@NotNull UUID targetUserId, int page, int size, @NotNull FriendSearchDto searchDto);
 
 }

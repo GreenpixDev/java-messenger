@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,7 @@ import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.common.model.JwtUser;
 import ru.greenpix.messenger.friends.dto.FriendDetailsDto;
 import ru.greenpix.messenger.friends.dto.FriendDto;
+import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.mapper.FriendMapper;
 import ru.greenpix.messenger.friends.service.FriendService;
@@ -86,13 +88,13 @@ public class FriendController {
         friendService.addFriend(jwtUser.getId(), userId);
     }
 
-    // TODO
     @Operation(summary = "Синхронизировать данные")
     @ApiResponse(responseCode = "200")
     @PutMapping
     public void synchronizeFriend(
             @AuthenticationPrincipal JwtUser jwtUser
     ) {
+        // TODO
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -106,13 +108,30 @@ public class FriendController {
         friendService.deleteFriend(jwtUser.getId(), userId);
     }
 
-    // TODO
     @Operation(summary = "Поиск друга")
     @ApiResponse(responseCode = "200")
     @GetMapping("search")
-    public void searchFriend(
-            @AuthenticationPrincipal JwtUser jwtUser
+    public PageDto<FriendDto> searchFriend(
+            @AuthenticationPrincipal JwtUser jwtUser,
+
+            @Positive
+            @RequestParam(name = "page")
+            int pageNumber,
+
+            @Positive
+            @Max(100)
+            @RequestParam(name = "size")
+            int pageSize,
+
+            @ParameterObject
+            FriendSearchDto searchDto
     ) {
-        throw new UnsupportedOperationException("Not implemented");
+        Page<Friend> page = friendService.getFriendPage(
+                jwtUser.getId(),
+                pageNumber - 1,
+                pageSize,
+                searchDto
+        );
+        return pageMapper.toDto(page.map(friendMapper::toDto));
     }
 }
