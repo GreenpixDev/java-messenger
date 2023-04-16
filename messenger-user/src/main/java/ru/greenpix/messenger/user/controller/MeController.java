@@ -33,7 +33,8 @@ public class MeController {
     @ApiResponse(responseCode = "401")
     @GetMapping
     public UserResponseDto getUser(
-            @AuthenticationPrincipal JwtUser user
+            @AuthenticationPrincipal
+            JwtUser user
     ) {
         return userMapper.toDto(userService.getUser(user.getId()));
     }
@@ -44,8 +45,12 @@ public class MeController {
     @ApiResponse(responseCode = "401")
     @PutMapping
     public UserResponseDto updateUser(
-            @AuthenticationPrincipal JwtUser user,
-            @Valid @RequestBody UserRequestDto userRequestDto
+            @AuthenticationPrincipal
+            JwtUser user,
+
+            @Valid
+            @RequestBody
+            UserRequestDto userRequestDto
     ) {
         return userMapper.toDto(userService.updateUser(user.getId(), userRequestDto));
     }

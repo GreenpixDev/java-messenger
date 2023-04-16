@@ -72,8 +72,11 @@ public class FriendController {
     @ApiResponse(responseCode = "200")
     @GetMapping("{userId}")
     public FriendDetailsDto getFriendDetails(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         return friendMapper.toDetailsDto(friendService.getFriend(jwtUser.getId(), userId));
     }
@@ -82,8 +85,11 @@ public class FriendController {
     @ApiResponse(responseCode = "200")
     @PostMapping("{userId}")
     public void addFriend(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         friendService.addFriend(jwtUser.getId(), userId);
     }
@@ -102,8 +108,11 @@ public class FriendController {
     @ApiResponse(responseCode = "200")
     @DeleteMapping("{userId}")
     public void deleteFriend(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         friendService.deleteFriend(jwtUser.getId(), userId);
     }

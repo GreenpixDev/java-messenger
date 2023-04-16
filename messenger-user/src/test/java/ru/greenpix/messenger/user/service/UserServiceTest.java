@@ -7,16 +7,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
+import ru.greenpix.messenger.user.dto.UserFilterListDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
+import ru.greenpix.messenger.user.dto.UserSortListDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.BlacklistUserAccessRestrictionException;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
+import ru.greenpix.messenger.user.mapper.FilterMapper;
+import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.impl.UserServiceImpl;
@@ -27,8 +35,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -42,6 +49,14 @@ public class UserServiceTest {
     static SignInDto SIGN_IN_DTO_TEST = new SignInDto(
             "", ""
     );
+    static UserSortListDto USER_SORT_LIST_DTO_TEST = new UserSortListDto(
+            null, null, null, null,
+            null, null, null, null, null
+    );
+    static UserFilterListDto USER_FILTER_LIST_DTO_TEST = new UserFilterListDto(
+            null, null, null,
+            null, null, null, null
+    );
     static Clock FIXED_CLOCK = Clock.fixed(
             LocalDate.EPOCH.atStartOfDay(ZoneId.systemDefault()).toInstant(),
             ZoneId.systemDefault()
@@ -53,22 +68,20 @@ public class UserServiceTest {
 
     @Mock
     Clock clock;
-
     @Mock
     PasswordEncoder passwordEncoder;
-
     @Mock
     UserRepository userRepository;
-
     @Mock
     UserMapper userMapper;
-
     @Mock
     FriendsClient friendsClient;
-
+    @Mock
+    FilterMapper filterMapper;
+    @Mock
+    SortMapper sortMapper;
     @Mock
     Logger logger;
-
     @InjectMocks
     UserServiceImpl userService;
 
@@ -171,6 +184,25 @@ public class UserServiceTest {
         assertThrows(UserNotFoundException.class, () -> userService.getUser(TEST_UUID, TEST_UUID));
     }
 
+    @DisplayName("Проверка успешного получения страницы пользователей")
+    @Test
+    void getUserPageTest() {
+        when(sortMapper.toUserSort(any())).thenReturn(Sort.unsorted());
+        when(filterMapper.toUserSpecification(any())).thenReturn(Specification.where(null));
+        when(userRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        Page<User> actual = userService.getUsers(
+                1,
+                1,
+                USER_SORT_LIST_DTO_TEST,
+                USER_FILTER_LIST_DTO_TEST
+        );
+
+        assertEquals(Page.empty(), actual);
+    }
+
+    @DisplayName("Проверка успешного обновления профиля пользователя")
     @Test
     void updateUserTest() {
         when(userRepository.findById(any())).thenReturn(Optional.of(new User()));

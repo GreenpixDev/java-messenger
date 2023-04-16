@@ -5,14 +5,13 @@ import org.springframework.data.domain.Page;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
+import ru.greenpix.messenger.user.dto.UserFilterListDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
+import ru.greenpix.messenger.user.dto.UserSortListDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
-import ru.greenpix.messenger.user.model.UserFilter;
-import ru.greenpix.messenger.user.model.UserSort;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -47,7 +46,7 @@ public interface UserService {
      * @return страница моделей пользователей
      */
     @NotNull
-    Page<User> getUsers(int page, int size, @NotNull List<UserSort> sorts, @NotNull List<UserFilter> filters);
+    Page<User> getUsers(int page, int size, @NotNull UserSortListDto sorts, @NotNull UserFilterListDto filters);
 
     /**
      * Получает пользователя по его логину

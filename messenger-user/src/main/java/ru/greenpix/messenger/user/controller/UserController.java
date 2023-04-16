@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -15,20 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.greenpix.messenger.common.dto.PageDto;
 import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.common.model.JwtUser;
+import ru.greenpix.messenger.user.dto.UserFilterListDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
+import ru.greenpix.messenger.user.dto.UserSortListDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.mapper.UserMapper;
-import ru.greenpix.messenger.user.model.UserFilter;
-import ru.greenpix.messenger.user.model.UserSort;
 import ru.greenpix.messenger.user.service.UserService;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Tag(name = "Пользователи")
 @RestController
@@ -56,19 +53,13 @@ public class UserController {
             @RequestParam(name = "size")
             int pageSize,
 
-            @RequestParam(name = "sort", required = false)
-            String[] sorts,
+            @ParameterObject
+            UserSortListDto sorts,
 
-            @RequestParam(name = "filter", required = false)
-            String[] filters
+            @ParameterObject
+            UserFilterListDto filters
     ) {
-        List<UserSort> userSorts = sorts != null
-                ? Stream.of(sorts).map(UserSort::of).collect(Collectors.toList())
-                : Collections.emptyList();
-        List<UserFilter> userFilters = filters != null
-                ? Stream.of(filters).map(UserFilter::of).collect(Collectors.toList())
-                : Collections.emptyList();
-        Page<User> page = userService.getUsers(pageNumber - 1, pageSize, userSorts, userFilters);
+        Page<User> page = userService.getUsers(pageNumber - 1, pageSize, sorts, filters);
         return pageMapper.toDto(page.map(userMapper::toDto));
     }
 
@@ -78,8 +69,11 @@ public class UserController {
     @ApiResponse(responseCode = "401")
     @GetMapping("{userId}")
     public UserResponseDto getUserProfile(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         return userMapper.toDto(userService.getUser(jwtUser.getId(), userId));
     }

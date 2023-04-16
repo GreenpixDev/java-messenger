@@ -65,7 +65,7 @@ public class UserControllerTest {
     @DisplayName("Успешное получение списка профилей с сортировкой и фильтрами")
     @Test
     public void getUserPageWithSortAndFilterTest() throws Exception {
-        mockMvc.perform(get("/users?page=1&size=10&sort=birth_date:desc&sort=id:asc&filter=city:test&filter=phone:test")
+        mockMvc.perform(get("/users?page=1&size=10&sortBirthDate=DESC&sortId=ASC&filterCity=test&filterPhone=test")
                         .header(HttpHeaders.AUTHORIZATION, token)
                 )
                 .andDo(print())
@@ -96,26 +96,6 @@ public class UserControllerTest {
     @Test
     public void getVeryBigSizeUserPageTest() throws Exception {
         mockMvc.perform(get("/users?page=1&size=" + Integer.MAX_VALUE)
-                        .header(HttpHeaders.AUTHORIZATION, token)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    @DisplayName("Получение списка профилей с несуществующей сортировкой")
-    @Test
-    public void getUserPageWithInvalidSortTest() throws Exception {
-        mockMvc.perform(get("/users?page=1&size=10&sort=invalid:desc")
-                        .header(HttpHeaders.AUTHORIZATION, token)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    @DisplayName("Получение списка профилей с несуществующим фильтром")
-    @Test
-    public void getUserPageWithInvalidFilterTest() throws Exception {
-        mockMvc.perform(get("/users?page=1&size=10&filter=invalid:test")
                         .header(HttpHeaders.AUTHORIZATION, token)
                 )
                 .andDo(print())

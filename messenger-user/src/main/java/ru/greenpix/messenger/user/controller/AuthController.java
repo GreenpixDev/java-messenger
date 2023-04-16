@@ -34,7 +34,10 @@ public class AuthController {
     @ApiResponse(responseCode = "401")
     @PostMapping("signup")
     public UserResponseDto register(
-            @Valid @RequestBody SignUpDto signUpDto,
+            @Valid
+            @RequestBody
+            SignUpDto signUpDto,
+
             HttpServletResponse response
     ) {
         User user = userService.registerUser(signUpDto);
@@ -49,7 +52,10 @@ public class AuthController {
     @ApiResponse(responseCode = "401")
     @PostMapping("signin")
     public UserResponseDto authenticate(
-            @Valid @RequestBody SignInDto signInDto,
+            @Valid
+            @RequestBody
+            SignInDto signInDto,
+
             HttpServletResponse response
     ) {
         User user = userService.authenticateUser(signInDto);

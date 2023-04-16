@@ -72,8 +72,11 @@ public class BlacklistController {
     @ApiResponse(responseCode = "200")
     @GetMapping("{userId}")
     public BlockedUserDetailsDto getBlockedUserDetails(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         return blockedUserMapper.toDetailsDto(blacklistService.getBlockedUser(jwtUser.getId(), userId));
     }
@@ -82,8 +85,11 @@ public class BlacklistController {
     @ApiResponse(responseCode = "200")
     @PostMapping("{userId}")
     public void addBlockedUser(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         blacklistService.addBlockedUser(jwtUser.getId(), userId);
     }
@@ -92,7 +98,8 @@ public class BlacklistController {
     @ApiResponse(responseCode = "200")
     @PutMapping
     public void synchronizeBlockedUser(
-            @AuthenticationPrincipal JwtUser jwtUser
+            @AuthenticationPrincipal
+            JwtUser jwtUser
     ) {
         // TODO
         throw new UnsupportedOperationException("Not implemented");
@@ -102,8 +109,11 @@ public class BlacklistController {
     @ApiResponse(responseCode = "200")
     @DeleteMapping("{userId}")
     public void deleteBlockedUser(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         blacklistService.deleteBlockedUser(jwtUser.getId(), userId);
     }
@@ -140,8 +150,11 @@ public class BlacklistController {
     @ApiResponse(responseCode = "200")
     @GetMapping("{userId}/status")
     public boolean getStatus(
-            @AuthenticationPrincipal JwtUser jwtUser,
-            @PathVariable UUID userId
+            @AuthenticationPrincipal
+            JwtUser jwtUser,
+
+            @PathVariable
+            UUID userId
     ) {
         return blacklistService.isBlockedByUser(jwtUser.getId(), userId);
     }

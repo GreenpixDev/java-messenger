@@ -6,32 +6,31 @@ import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
+import ru.greenpix.messenger.user.dto.UserFilterListDto;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
+import ru.greenpix.messenger.user.dto.UserSortListDto;
 import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.BlacklistUserAccessRestrictionException;
 import ru.greenpix.messenger.user.exception.DuplicateEmailException;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
+import ru.greenpix.messenger.user.mapper.FilterMapper;
+import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
-import ru.greenpix.messenger.user.model.UserAttribute;
-import ru.greenpix.messenger.user.model.UserFilter;
-import ru.greenpix.messenger.user.model.UserSort;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final Clock clock;
     private final FriendsClient friendsClient;
+    private final SortMapper sortMapper;
+    private final FilterMapper filterMapper;
     private final Logger logger;
 
     @Transactional
@@ -84,22 +85,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public @NotNull Page<User> getUsers(int page, int size, @NotNull List<UserSort> sorts, @NotNull List<UserFilter> filters) {
+    public @NotNull Page<User> getUsers(int page, int size, @NotNull UserSortListDto sorts, @NotNull UserFilterListDto filters) {
         logger.trace("Getting user list (page={}, size={}, sorts={}, filters={})", page, size, sorts, filters);
-        List<Sort.Order> orders = sorts.stream()
-                .map(e -> new Sort.Order(
-                        e.isDescending() ? Sort.Direction.DESC : Sort.Direction.ASC,
-                        e.getAttribute().getAttribute().getName()
-                ))
-                .collect(Collectors.toList());
 
-        Map<UserAttribute, Object> filterMap = filters.stream()
-                .collect(Collectors.toMap(UserFilter::getAttribute, UserFilter::getValue));
+        Sort sort = sortMapper.toUserSort(sorts);
+        Specification<User> spec = filterMapper.toUserSpecification(filters);
 
-        return userRepository.findAllWithFilters(
-                PageRequest.of(page, size, Sort.by(orders)),
-                filterMap
-        );
+        return userRepository.findAll(spec, PageRequest.of(page, size, sort));
     }
 
     @Override
