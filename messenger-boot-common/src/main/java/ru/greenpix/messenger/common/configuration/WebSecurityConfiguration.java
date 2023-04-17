@@ -24,7 +24,7 @@ public class WebSecurityConfiguration {
     /**
      * Bean настройки spring web security.
      * В настройке учитываются авторизации по JWT и API-KEY.
-     *
+     * <p>
      * Аннотация {@link Order} нужна для корректной работы.
      */
     @Bean
