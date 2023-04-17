@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class LoggingConfiguration {
 
+    /**
+     * Bean логгера с областью видимости `prototype`
+     */
     @Bean
     @Scope("prototype")
     public Logger produceLogger(InjectionPoint injectionPoint) {

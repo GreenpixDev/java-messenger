@@ -2,7 +2,6 @@ package ru.greenpix.messenger.common.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,8 +20,11 @@ import ru.greenpix.messenger.jwt.security.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class WebSecurityConfiguration {
 
+    /**
+     * Bean настройки spring web security.
+     * В настройке учитываются авторизации по JWT и API-KEY.
+     */
     @Bean
-    @Order(10000)
     public SecurityFilterChain securityWebFilterChain(
             HttpSecurity http,
             JwtAuthenticationConverter jwtConverter,

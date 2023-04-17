@@ -17,18 +17,30 @@ import java.time.LocalDate;
 @Table(name = "blocked_user")
 public class BlockedUser {
 
+    /**
+     * ID целевого пользователя и ID заблокированного пользователя
+     */
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "externalUserId", column = @Column(name = "blocked_user_id"))
     })
     private Relationship relationship;
 
+    /**
+     * ФИО заблокированного пользователя
+     */
     @Column(name = "blocked_user_full_name", nullable = false)
     private String fullName;
 
+    /**
+     * Дата добавления в черный список
+     */
     @Column(name = "addition_date", nullable = false)
     private LocalDate additionDate;
 
+    /**
+     * Дата удаления из черного списка
+     */
     @Column(name = "deletion_date")
     private LocalDate deletionDate;
 

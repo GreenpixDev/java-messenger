@@ -8,6 +8,9 @@ import org.springframework.web.filter.ServletContextRequestLoggingFilter;
 @Configuration
 public class RequestLoggingConfiguration {
 
+    /**
+     * Bean логгера входящих HTTP запросов
+     */
     @Bean
     public AbstractRequestLoggingFilter requestLoggingFilter() {
         ServletContextRequestLoggingFilter filter = new ServletContextRequestLoggingFilter();

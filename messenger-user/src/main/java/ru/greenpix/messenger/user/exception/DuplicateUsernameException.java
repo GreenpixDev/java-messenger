@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Исключение, которое возвращается, когда возникает попытка создать уже
- * существующего в систему пользователя.
+ * существующего в системе пользователя.
  *
  * @see ru.greenpix.messenger.user.service.impl.UserServiceImpl
  */

@@ -1,5 +1,6 @@
 package ru.greenpix.messenger.integration.interceptor;
 
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -8,6 +9,7 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
+@Log
 public class RequestLoggingInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
@@ -16,8 +18,7 @@ public class RequestLoggingInterceptor implements ClientHttpRequestInterceptor {
             byte @NotNull [] body,
             @NotNull ClientHttpRequestExecution execution
     ) throws IOException {
-        // TODO
-        //log.info("Integration request [{} {}]", request.getMethodValue(), request.getURI());
+        log.info("Integration request [" + request.getMethodValue() + " " + request.getURI() + "]");
         return execution.execute(request, body);
     }
 }

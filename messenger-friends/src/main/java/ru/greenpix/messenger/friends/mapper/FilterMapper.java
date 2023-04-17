@@ -8,8 +8,18 @@ import ru.greenpix.messenger.friends.entity.Friend;
 
 public interface FilterMapper {
 
+    /**
+     * Метод конвертации DTO списка фильтров друзей в объект спецификации spring'а
+     * @param dto список параметров сортировки
+     * @return конвертированный {@link Specification} сущностей {@link Friend} для работы с репозиторием
+     */
     Specification<Friend> toFriendSpecification(FriendSearchDto dto);
 
+    /**
+     * Метод конвертации DTO списка фильтров заблокированных пользователей в объект спецификации spring'а
+     * @param dto список параметров сортировки
+     * @return конвертированный {@link Specification} сущностей {@link BlockedUser} для работы с репозиторием
+     */
     Specification<BlockedUser> toBlockedUserSpecification(BlockedUserSearchDto dto);
 
 }

@@ -62,21 +62,18 @@ public class User {
 
     /**
      * Телефон
-     * TODO уточнить, nullable ли
      */
     @Column(name = "phone")
     private String phone;
 
     /**
      * Город
-     * TODO уточнить, nullable ли
      */
     @Column(name = "city")
     private String city;
 
     /**
      * Город
-     * TODO уточнить, nullable ли
      */
     @Column(name = "avatar_id")
     private UUID avatarId;

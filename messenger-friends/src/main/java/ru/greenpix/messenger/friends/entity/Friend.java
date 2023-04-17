@@ -17,18 +17,30 @@ import java.time.LocalDate;
 @Table(name = "friend")
 public class Friend {
 
+    /**
+     * ID целевого пользователя и ID друга
+     */
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "externalUserId", column = @Column(name = "friend_user_id"))
     })
     private Relationship relationship;
 
+    /**
+     * ФИО друга
+     */
     @Column(name = "friend_full_name", nullable = false)
     private String fullName;
 
+    /**
+     * Дата начала дружбы
+     */
     @Column(name = "addition_date", nullable = false)
     private LocalDate additionDate;
 
+    /**
+     * Дата конца дружбы
+     */
     @Column(name = "deletion_date")
     private LocalDate deletionDate;
 

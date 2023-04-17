@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Исключение, которое возвращается, когда возникает попытка создать уже
- * существующего в систему пользователя.
+ * Исключение, которое возвращается, когда возникает попытка создать пользователя
+ * в системе с занятым email'ом.
  *
  * @see ru.greenpix.messenger.user.service.impl.UserServiceImpl
  */

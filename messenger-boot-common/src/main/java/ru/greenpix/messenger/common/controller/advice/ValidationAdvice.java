@@ -13,6 +13,11 @@ import java.util.Map;
 @ControllerAdvice
 public class ValidationAdvice {
 
+    /**
+     * Обработка ошибок валидации
+     * @param e {@link ConstraintViolationException}
+     * @return ResponseEntity, которая содержит поле `message` с сообщением об ошибке
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleFailedValidation(
             ConstraintViolationException e
