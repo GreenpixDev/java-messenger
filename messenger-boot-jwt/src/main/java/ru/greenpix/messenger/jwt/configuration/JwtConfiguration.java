@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.greenpix.messenger.jwt.manager.JwtManager;
 import ru.greenpix.messenger.jwt.manager.impl.JwtManagerImpl;
-import ru.greenpix.messenger.jwt.role.UserRole;
 import ru.greenpix.messenger.jwt.security.JwtAuthenticationConverter;
 import ru.greenpix.messenger.jwt.settings.SecurityJwtSettings;
 
@@ -25,12 +24,8 @@ public class JwtConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public JwtAuthenticationConverter jwtAuthenticationConverter(JwtManager manager, UserRole userRole) {
-        return new JwtAuthenticationConverter(manager, userRole);
+    public JwtAuthenticationConverter jwtAuthenticationConverter(JwtManager manager) {
+        return new JwtAuthenticationConverter(manager);
     }
 
-    @Bean
-    public UserRole userRole() {
-        return new UserRole();
-    }
 }

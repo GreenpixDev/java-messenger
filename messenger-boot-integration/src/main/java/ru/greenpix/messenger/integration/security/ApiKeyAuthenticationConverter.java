@@ -3,13 +3,12 @@ package ru.greenpix.messenger.integration.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.stereotype.Component;
 import ru.greenpix.messenger.integration.ApiKeyConst;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Некоторый код позаимствован с {@link org.springframework.security.web.authentication.www.BasicAuthenticationConverter}
@@ -19,7 +18,6 @@ import java.util.List;
 public class ApiKeyAuthenticationConverter implements AuthenticationConverter {
 
     private final String apiKey;
-    private final GrantedAuthority grantedAuthority;
 
     @Override
     public UsernamePasswordAuthenticationToken convert(HttpServletRequest request) {
@@ -34,6 +32,6 @@ public class ApiKeyAuthenticationConverter implements AuthenticationConverter {
         }
 
         return UsernamePasswordAuthenticationToken
-                .authenticated(apiKey, null, List.of(grantedAuthority));
+                .authenticated(apiKey, null, Collections.emptyList());
     }
 }

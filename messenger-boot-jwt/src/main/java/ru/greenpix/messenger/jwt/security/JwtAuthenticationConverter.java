@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.StringUtils;
 import ru.greenpix.messenger.jwt.manager.JwtManager;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Некоторый код позаимствован с {@link org.springframework.security.web.authentication.www.BasicAuthenticationConverter}
@@ -22,7 +21,6 @@ public class JwtAuthenticationConverter implements AuthenticationConverter {
     private static final String AUTHORIZATION_SCHEME_BEARER = "Bearer";
 
     private final JwtManager jwtManager;
-    private final GrantedAuthority grantedAuthority;
 
     @Override
     public UsernamePasswordAuthenticationToken convert(HttpServletRequest request) {
@@ -47,6 +45,6 @@ public class JwtAuthenticationConverter implements AuthenticationConverter {
         JwtUser user = jwtManager.parseUser(token);
 
         return UsernamePasswordAuthenticationToken
-                .authenticated(user, null, List.of(grantedAuthority));
+                .authenticated(user, null, Collections.emptyList());
     }
 }
