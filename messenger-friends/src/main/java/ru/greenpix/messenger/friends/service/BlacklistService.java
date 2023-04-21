@@ -36,6 +36,7 @@ public interface BlacklistService {
     /**
      * Метод добавления пользователя в черный список
      * @throws ru.greenpix.messenger.friends.exception.AdditionBlockedUserException target пользователь уже заблокировал blockedUser пользователя
+     * @throws ru.greenpix.messenger.friends.exception.AdditionYourselfAsBlockedUserException когда происходит попытка заблокировать себя
      * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя

@@ -13,6 +13,7 @@ import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionFriendException;
+import ru.greenpix.messenger.friends.exception.AdditionYourselfAsFriendException;
 import ru.greenpix.messenger.friends.exception.DeletionFriendException;
 import ru.greenpix.messenger.friends.exception.FriendNotFoundException;
 import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
@@ -60,6 +61,11 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void addFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
         log.debug("User {} is adding friend {}", targetUserId, friendUserId);
+
+        if (targetUserId.equals(friendUserId)) {
+            throw new AdditionYourselfAsFriendException();
+        }
+
         Relationship relationship = new Relationship(targetUserId, friendUserId);
         Friend friend = friendRepository.findById(relationship).orElse(null);
 

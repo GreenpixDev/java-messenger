@@ -36,7 +36,8 @@ public interface FriendService {
     /**
      * Метод добавления пользователя в друзья
      * @throws ru.greenpix.messenger.friends.exception.AdditionFriendException target пользователь уже дружит с friend пользователем
-     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
+     * @throws ru.greenpix.messenger.friends.exception.AdditionYourselfAsFriendException когда происходит попытка добавить себя в друзья
+     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи
      * @param targetUserId ID целевого пользователя
      * @param friendUserId ID пользователя друга
      */

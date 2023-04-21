@@ -13,6 +13,7 @@ import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.entity.Relationship;
 import ru.greenpix.messenger.friends.exception.AdditionBlockedUserException;
+import ru.greenpix.messenger.friends.exception.AdditionYourselfAsBlockedUserException;
 import ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException;
 import ru.greenpix.messenger.friends.exception.DeletionBlockedUserException;
 import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
@@ -60,6 +61,11 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public void addBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId) {
         log.trace("User {} is adding blocked user {}", targetUserId, blockedUserId);
+
+        if (targetUserId.equals(blockedUserId)) {
+            throw new AdditionYourselfAsBlockedUserException();
+        }
+
         Relationship relationship = new Relationship(targetUserId, blockedUserId);
         BlockedUser blockedUser = blacklistRepository.findById(relationship).orElse(null);
 
