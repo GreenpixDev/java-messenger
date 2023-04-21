@@ -55,10 +55,10 @@ public class SpecificationBuilder<E> {
      * @return this
      */
     @NotNull
-    public <T> SpecificationBuilder<E> addGeneric(
+    public <T, V> SpecificationBuilder<E> addGeneric(
             @NotNull SingularAttribute<E, T> attribute,
-            @Nullable T value,
-            @NotNull BiFunction<SingularAttribute<E, T>, T, Specification<E>> specGetter
+            @Nullable V value,
+            @NotNull BiFunction<SingularAttribute<E, T>, V, Specification<E>> specGetter
     ) {
         if (value != null) {
             specifications.add(specGetter.apply(attribute, value));

@@ -3,6 +3,7 @@ package ru.greenpix.messenger.user.mapper.impl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+import ru.greenpix.messenger.common.specification.BaseSpecification;
 import ru.greenpix.messenger.common.util.SpecificationBuilder;
 import ru.greenpix.messenger.user.dto.UserFilterListDto;
 import ru.greenpix.messenger.user.entity.User;
@@ -15,7 +16,7 @@ public class FilterMapperImpl implements FilterMapper {
     @Override
     public @NotNull Specification<User> toUserSpecification(UserFilterListDto dto) {
         return new SpecificationBuilder<User>()
-                .equal(User_.registrationTimestamp, dto.getFilterRegistrationDate()) // TODO
+                .addGeneric(User_.registrationTimestamp, dto.getFilterRegistrationDate(), BaseSpecification::equalDate)
                 .containsIgnoreCase(User_.username, dto.getFilterUsername())
                 .containsIgnoreCase(User_.email, dto.getFilterEmail())
                 .containsIgnoreCase(User_.fullName, dto.getFilterFullName())

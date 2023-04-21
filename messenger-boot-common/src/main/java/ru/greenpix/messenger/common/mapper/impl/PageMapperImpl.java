@@ -9,8 +9,8 @@ public class PageMapperImpl implements PageMapper {
     @Override
     public <T> PageDto<T> toDto(Page<T> page) {
         return new PageDto<>(
-                page.getNumber(),
-                page.getSize() + 1,
+                page.getNumber() + 1,
+                page.getSize(),
                 page.getNumberOfElements(),
                 page.getTotalPages(),
                 page.getTotalElements(),

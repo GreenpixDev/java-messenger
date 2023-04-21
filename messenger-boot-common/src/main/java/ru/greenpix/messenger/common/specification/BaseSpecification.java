@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.metamodel.SingularAttribute;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiFunction;
@@ -154,5 +156,19 @@ public class BaseSpecification {
      */
     public static @NotNull <E> Specification<E> containsIgnoreCase(@NotNull SingularAttribute<E, String> attribute, @NotNull String substring) {
         return likeIgnoreCase(attribute, "%" + substring + "%");
+    }
+
+    /**
+     * Спецификация оператора сравнения EQUAL с проверкой даты
+     * @param attribute аттрибут сущности, который надо сравнить (может быть
+     * @param value дата, с которой надо сравнить
+     * @return Specification, которая будет искать сущности, у которых `DATE(attribute) = value`
+     * @param <E> тип сущности для спецификации
+     */
+    public static @NotNull <E> Specification<E> equalDate(@NotNull SingularAttribute<E, LocalDateTime> attribute, @NotNull LocalDate value) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(
+                criteriaBuilder.function("DATE", LocalDate.class, root.get(attribute)),
+                value
+        );
     }
 }
