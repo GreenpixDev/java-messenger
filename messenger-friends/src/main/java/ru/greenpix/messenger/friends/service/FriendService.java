@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
-import ru.greenpix.messenger.friends.exception.AdditionFriendException;
 
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public interface FriendService {
 
     /**
      * Метод получения информации о друге
-     * @throws ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException target пользователь уже дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.FriendNotFoundException target пользователь не дружит с friend пользователем
      * @param targetUserId ID целевого пользователя
      * @param friendUserId ID пользователя друга
      * @return друг
@@ -36,7 +35,8 @@ public interface FriendService {
 
     /**
      * Метод добавления пользователя в друзья
-     * @throws AdditionFriendException target пользователь уже дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.AdditionFriendException target пользователь уже дружит с friend пользователем
+     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
      * @param targetUserId ID целевого пользователя
      * @param friendUserId ID пользователя друга
      */
@@ -44,11 +44,23 @@ public interface FriendService {
 
     /**
      * Метод удаления пользователя из друзей
-     * @throws ru.greenpix.messenger.friends.exception.FriendNotFoundException target пользователь ещё не дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.DeletionFriendException target пользователь ещё не дружит с friend пользователем
      * @param targetUserId ID целевого пользователя
      * @param friendUserId ID пользователя друга
      */
     void deleteFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId);
+
+    /**
+     * Метод синхронизации данных друга (например, ФИО) с внешними микросервисами.
+     * Позволяет подтянуть изменения из других микросервисов.
+     * Например, если ФИО друга было изменено в микросервисе "Пользователь", то после
+     * вызова данного метода ФИО изменится и в данном микросервисе.
+     * @throws ru.greenpix.messenger.friends.exception.FriendNotFoundException target пользователь не дружит с friend пользователем
+     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
+     * @param targetUserId ID целевого пользователя
+     * @param friendUserId ID пользователя друга
+     */
+    void synchronizeFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId);
 
     /**
      * Метод поиска друзей

@@ -25,7 +25,7 @@ public interface BlacklistService {
 
     /**
      * Метод получения информации о пользователе в черном списке
-     * @throws ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException target пользователь уже дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException target пользователь не заблокировал blockedUser пользователя
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
      * @return заблокированный пользователь
@@ -35,7 +35,8 @@ public interface BlacklistService {
 
     /**
      * Метод добавления пользователя в черный список
-     * @throws ru.greenpix.messenger.friends.exception.AdditionBlockedUserException target пользователь уже дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.AdditionBlockedUserException target пользователь уже заблокировал blockedUser пользователя
+     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
      */
@@ -43,11 +44,23 @@ public interface BlacklistService {
 
     /**
      * Метод удаления пользователя из черного списка
-     * @throws ru.greenpix.messenger.friends.exception.DeletionBlockedUserException target пользователь ещё не дружит с friend пользователем
+     * @throws ru.greenpix.messenger.friends.exception.DeletionBlockedUserException target пользователь ещё не заблокировал blockedUser пользователя
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
      */
     void deleteBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
+
+    /**
+     * Метод синхронизации данных заблокированного пользователя (например, ФИО) с внешними микросервисами.
+     * Позволяет подтянуть изменения из других микросервисов.
+     * Например, если ФИО заблокированного пользователя было изменено в микросервисе "Пользователь", то после
+     * вызова данного метода ФИО изменится и в данном микросервисе.
+     * @throws ru.greenpix.messenger.friends.exception.BlockedUserNotFoundException target пользователь не дружит с friend пользователем
+     * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
+     * @param targetUserId ID целевого пользователя
+     * @param blockedUserId ID заблокированного пользователя
+     */
+    void synchronizeBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
 
     /**
      * Метод поиска пользователей черного списка

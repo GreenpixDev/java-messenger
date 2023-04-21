@@ -41,7 +41,7 @@ public class FriendServiceImpl implements FriendService {
             int size,
             @NotNull String fullNameFilter
     ) {
-        log.trace("User {} requesting friend list (page={}, size={}, fullNameFilter={})", targetUserId, page, size, fullNameFilter);
+        log.trace("User {} is requesting friend list (page={}, size={}, fullNameFilter={})", targetUserId, page, size, fullNameFilter);
         return friendRepository.findAllByDeletionDateNullAndRelationshipTargetUserIdAndFullNameLikeIgnoreCase(
                 PageRequest.of(page, size),
                 targetUserId,
@@ -51,7 +51,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public @NotNull Friend getFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
-        log.trace("User {} requesting details of friend {}", targetUserId, friendUserId);
+        log.trace("User {} is requesting details of friend {}", targetUserId, friendUserId);
         return friendRepository.findById(new Relationship(targetUserId, friendUserId))
                 .orElseThrow(FriendNotFoundException::new);
     }
@@ -59,7 +59,7 @@ public class FriendServiceImpl implements FriendService {
     @Transactional
     @Override
     public void addFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
-        log.debug("User {} adding friend {}", targetUserId, friendUserId);
+        log.debug("User {} is adding friend {}", targetUserId, friendUserId);
         Relationship relationship = new Relationship(targetUserId, friendUserId);
         Friend friend = friendRepository.findById(relationship).orElse(null);
 
@@ -80,13 +80,13 @@ public class FriendServiceImpl implements FriendService {
         friend.setAdditionDate(LocalDate.now(clock));
 
         friendRepository.save(friend);
-        log.trace("User {} has added friend {}", targetUserId, friendUserId);
+        log.trace("User {} added friend {}", targetUserId, friendUserId);
     }
 
     @Transactional
     @Override
     public void deleteFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
-        log.debug("User {} removing friend {}", targetUserId, friendUserId);
+        log.debug("User {} is removing friend {}", targetUserId, friendUserId);
         Friend friend = friendRepository.findById(new Relationship(targetUserId, friendUserId))
                 .orElseThrow(DeletionFriendException::new);
 
@@ -96,12 +96,27 @@ public class FriendServiceImpl implements FriendService {
         friend.setDeletionDate(LocalDate.now(clock));
 
         friendRepository.save(friend);
-        log.trace("User {} has removed friend {}", targetUserId, friendUserId);
+        log.trace("User {} removed friend {}", targetUserId, friendUserId);
+    }
+
+    @Transactional
+    @Override
+    public void synchronizeFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {
+        log.debug("User {} is synchronizing friend {}", targetUserId, friendUserId);
+        Friend friend = getFriend(targetUserId, friendUserId);
+
+        String fullName = usersClient.getUserFullName(friendUserId)
+                .orElseThrow(UserNotFoundException::new);
+
+        friend.setFullName(fullName);
+
+        friendRepository.save(friend);
+        log.trace("User {} synchronized friend {}", targetUserId, friendUserId);
     }
 
     @Override
     public @NotNull Page<Friend> getFriendPage(@NotNull UUID targetUserId, int page, int size, @NotNull FriendSearchDto searchDto) {
-        log.trace("User {} searching friends (page={}, size={}, specs={})", targetUserId, page, size, searchDto);
+        log.trace("User {} is searching friends (page={}, size={}, specs={})", targetUserId, page, size, searchDto);
 
         Specification<Friend> spec = mapper.toFriendSpecification(searchDto);
 
