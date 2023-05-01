@@ -1,0 +1,10 @@
+package ru.greenpix.messenger.chat.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import ru.greenpix.messenger.chat.entity.Chat;
+
+import java.util.UUID;
+
+public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificationExecutor<Chat> {
+}

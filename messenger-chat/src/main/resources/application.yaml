@@ -1,0 +1,35 @@
+server:
+  port: 8012
+  error:
+    include-stacktrace: never
+
+logging:
+  level:
+    ru.greenpix.messenger: ${LOGGING_LEVEL:info}
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:10102}/${DB_NAME:messenger-chat}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    baseline-on-migrate: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==}
+    expiration-minutes: ${JWT_EXPIRATION:1440}
+  api:
+    key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
+
+integration:
+  friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
