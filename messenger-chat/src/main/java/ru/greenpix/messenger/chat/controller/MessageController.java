@@ -35,7 +35,7 @@ public class MessageController {
     private final PageMapper pageMapper;
 
     @Operation(summary = "Отправка сообщения в ЛС")
-    @GetMapping("users/{userId}/messages")
+    @PostMapping("users/{userId}/messages")
     public void sendPrivateMessages(
             @AuthenticationPrincipal
             JwtUser jwtUser,

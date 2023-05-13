@@ -1,0 +1,21 @@
+{
+  "pageNumber": 1,
+  "pageSize": 10,
+  "numberOfElements": 2,
+  "totalPages": 1,
+  "totalElements": 2,
+  "content": [
+    {
+      "chatId": "e5cbbc6a-a5d6-4d68-8eb5-cec6ddd11a42",
+      "chatName": "Test Chat",
+      "text": "Hello",
+      "sendingTimestamp": "2001-01-01T00.00.00.000Z"
+    },
+    {
+      "chatId": "6c2915e5-cd8d-49be-9bbf-57dc7a8d4739",
+      "chatName": "Second Chat",
+      "text": "Hello World!",
+      "sendingTimestamp": "2000-01-01T00.00.00.000Z"
+    }
+  ]
+}

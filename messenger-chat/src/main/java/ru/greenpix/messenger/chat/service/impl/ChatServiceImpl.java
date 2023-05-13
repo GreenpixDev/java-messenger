@@ -33,7 +33,8 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public @NotNull Page<ChatDto> getAccessibleChat(@NotNull UUID userId, int page, int size, String nameFilter) {
-        Specification<GroupChat> spec = BaseSpecification.containsIgnoreCase(GroupChat_.name, nameFilter);
+        Specification<GroupChat> spec = BaseSpecification
+                .containsIgnoreCase(GroupChat_.name, nameFilter);
 
         return groupChatRepository.findAll(spec, PageRequest.of(page, size))
                 .map(mapper::toDto);
