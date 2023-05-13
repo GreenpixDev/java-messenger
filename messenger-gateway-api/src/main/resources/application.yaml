@@ -7,6 +7,10 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: notifications
+          uri: http://localhost:8013/
+          predicates:
+            - Path=/notifications/**
         - id: chat
           uri: http://localhost:8012/
           predicates:

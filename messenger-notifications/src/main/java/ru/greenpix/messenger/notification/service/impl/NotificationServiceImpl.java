@@ -36,6 +36,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void updateNotificationStatus(@NotNull UUID userId, Collection<UUID> notificationsIds, NotificationStatus status) {
-        notificationRepository.updateAllStatusByIds(userId, notificationsIds, status);
+        notificationRepository.updateAllStatusByIds(userId, status, notificationsIds);
     }
 }
