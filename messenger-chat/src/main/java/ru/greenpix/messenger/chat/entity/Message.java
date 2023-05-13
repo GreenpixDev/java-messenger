@@ -30,11 +30,14 @@ public class Message {
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @Column(name = "sender_id", nullable = false)
+    private UUID senderId;
+
     @Column(name = "text", nullable = false, length = 500)
     private String text;
 
     @Column(name = "creation_timestamp", nullable = false)
-    private LocalDateTime creation_timestamp;
+    private LocalDateTime creationTimestamp;
 
     @ManyToOne
     @JoinColumn(name = "chat_id", nullable = false)

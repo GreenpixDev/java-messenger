@@ -32,4 +32,5 @@ security:
     key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
 
 integration:
+  users-service-url: ${USERS_SERVICE_URL:http://localhost:8010}
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}

@@ -12,6 +12,8 @@ import ru.greenpix.messenger.user.entity.User;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -65,6 +67,14 @@ public interface UserService {
      */
     @NotNull
     User getUser(@NotNull UUID userId);
+
+    /**
+     * Получает пользователей по их ID
+     * @param userIds коллекция ID пользователей
+     * @return модель искомого пользователя
+     */
+    @NotNull
+    List<User> getUsers(@NotNull Collection<UUID> userIds);
 
     /**
      * Получает искомого пользователя по его ID от лица пользователя, которые делает запрос

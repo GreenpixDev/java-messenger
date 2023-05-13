@@ -9,13 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.greenpix.messenger.chat.dto.MessageDetailsDto;
 import ru.greenpix.messenger.chat.dto.MessageDto;
 import ru.greenpix.messenger.chat.dto.SendingMessageDto;
+import ru.greenpix.messenger.chat.service.MessageService;
+import ru.greenpix.messenger.common.dto.PageDto;
+import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +31,12 @@ import java.util.UUID;
 @Validated
 public class MessageController {
 
+    private final MessageService messageService;
+    private final PageMapper pageMapper;
+
     @Operation(summary = "Отправка сообщения в ЛС")
     @GetMapping("users/{userId}/messages")
-    public void searchMessages(
+    public void sendPrivateMessages(
             @AuthenticationPrincipal
             JwtUser jwtUser,
 
@@ -38,10 +47,13 @@ public class MessageController {
             @Valid
             SendingMessageDto messageDto
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        messageService.sendPrivateMessage(jwtUser.getId(), userId, messageDto);
     }
 
-    @Operation(summary = "Список сообщений в порядке убывания по дате отправки")
+    @Operation(
+            summary = "Просмотр переписки",
+            description = "Список сообщений переписки в порядке убывания по дате отправки"
+    )
     @GetMapping("chats/{chatId}/messages")
     public List<MessageDetailsDto> getChatMessages(
             @AuthenticationPrincipal
@@ -50,7 +62,7 @@ public class MessageController {
             @PathVariable
             UUID chatId
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        return messageService.getChatMessages(jwtUser.getId(), chatId);
     }
 
     @Operation(summary = "Отправка сообщения в чат")
@@ -66,16 +78,28 @@ public class MessageController {
             @Valid
             SendingMessageDto messageDto
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        messageService.sendGroupMessage(jwtUser.getId(), chatId, messageDto);
     }
 
     @Operation(summary = "Поиск сообщений")
     @GetMapping("chats/messages")
-    public List<MessageDto> searchMessages(
+    public PageDto<MessageDto> searchMessages(
             @AuthenticationPrincipal
-            JwtUser jwtUser
+            JwtUser jwtUser,
+
+            @Positive
+            @RequestParam(name = "page", defaultValue = "1")
+            int pageNumber,
+
+            @Positive
+            @Max(100)
+            @RequestParam(name = "size", defaultValue = "50")
+            int pageSize,
+
+            @RequestParam(defaultValue = "")
+            String textFilter
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        return pageMapper.toDto(messageService.getMessages(jwtUser.getId(), pageNumber, pageSize, textFilter));
     }
 
 }

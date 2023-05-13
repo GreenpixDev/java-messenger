@@ -11,14 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.greenpix.messenger.chat.dto.ChatDetailsDto;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
+import ru.greenpix.messenger.chat.service.ChatService;
 import ru.greenpix.messenger.common.dto.PageDto;
+import ru.greenpix.messenger.common.mapper.PageMapper;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Positive;
 import java.util.UUID;
 
 @Tag(name = "Чаты")
@@ -28,13 +33,30 @@ import java.util.UUID;
 @Validated
 public class ChatController {
 
-    @Operation(summary = "Получение списка переписок")
+    private final ChatService chatService;
+    private final PageMapper pageMapper;
+
+    @Operation(
+            summary = "Получение списка переписок"
+    )
     @GetMapping
     public PageDto<ChatDto> getChatList(
             @AuthenticationPrincipal
-            JwtUser jwtUser
+            JwtUser jwtUser,
+
+            @Positive
+            @RequestParam(name = "page", defaultValue = "1")
+            int pageNumber,
+
+            @Positive
+            @Max(100)
+            @RequestParam(name = "size", defaultValue = "50")
+            int pageSize,
+
+            @RequestParam(defaultValue = "")
+            String nameFilter
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        return pageMapper.toDto(chatService.getAccessibleChat(jwtUser.getId(), pageNumber, pageSize, nameFilter));
     }
 
     @Operation(summary = "Получение информации о чате")
@@ -46,7 +68,7 @@ public class ChatController {
             @PathVariable
             UUID chatId
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        return chatService.getChat(jwtUser.getId(), chatId);
     }
 
     @Operation(summary = "Создать чат")
@@ -59,7 +81,7 @@ public class ChatController {
             @Valid
             ModificationChatDto chatDto
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        chatService.createChat(jwtUser.getId(), chatDto);
     }
 
     @Operation(summary = "Изменить чат")
@@ -75,7 +97,7 @@ public class ChatController {
             @Valid
             ModificationChatDto chatDto
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        chatService.updateChat(jwtUser.getId(), chatId, chatDto);
     }
 
 }

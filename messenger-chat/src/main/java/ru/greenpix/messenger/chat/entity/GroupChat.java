@@ -24,6 +24,6 @@ public class GroupChat extends Chat {
     private UUID avatarId;
 
     @Column(name = "creation_timestamp")
-    private LocalDateTime creation_timestamp;
+    private LocalDateTime creationTimestamp;
 
 }

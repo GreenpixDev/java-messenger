@@ -30,6 +30,8 @@ import ru.greenpix.messenger.user.service.UserService;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -106,6 +108,12 @@ public class UserServiceImpl implements UserService {
         logger.trace("Getting user details for id {}", userId);
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public @NotNull List<User> getUsers(@NotNull Collection<UUID> userIds) {
+        logger.trace("Getting user details for id {}", userIds);
+        return userRepository.findAllById(userIds);
     }
 
     @Override

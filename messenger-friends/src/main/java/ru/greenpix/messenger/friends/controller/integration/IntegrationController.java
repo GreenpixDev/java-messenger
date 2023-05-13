@@ -14,16 +14,26 @@ import java.util.UUID;
 
 @Tag(name = "Интеграционный контроллер пользователей")
 @RestController
-@RequestMapping("api/users/{targetUserId}/blacklist")
+@RequestMapping("api/users/{targetUserId}")
 @RequiredArgsConstructor
-public class BlacklistIntegrationController {
+public class IntegrationController {
 
     private final BlacklistService blacklistService;
 
     @Operation(summary = "Проверить нахождение пользователя в черном списке")
     @ApiResponse(responseCode = "200")
-    @GetMapping("{userId}/status")
-    public boolean getStatus(
+    @GetMapping("blacklist/{userId}/status")
+    public boolean getBlockedStatus(
+            @PathVariable UUID targetUserId,
+            @PathVariable UUID userId
+    ) {
+        return blacklistService.isBlockedByUser(targetUserId, userId);
+    }
+
+    @Operation(summary = "Проверить нахождение пользователя в списке друзей")
+    @ApiResponse(responseCode = "200")
+    @GetMapping("friends/{userId}/status")
+    public boolean getFriendStatus(
             @PathVariable UUID targetUserId,
             @PathVariable UUID userId
     ) {
