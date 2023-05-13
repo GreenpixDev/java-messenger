@@ -15,8 +15,8 @@ public class MessageDetailsDto implements Serializable {
     @Schema(description = "Идентификатор сообщения")
     private final UUID id;
 
-    @Schema(description = "Дата отправки сообщения")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Schema(description = "Дата и время отправки сообщения")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private final LocalDateTime sendingTimestamp;
 
     @Schema(description = "Текст сообщения")

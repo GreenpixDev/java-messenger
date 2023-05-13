@@ -14,7 +14,7 @@ public class MessageDto implements Serializable {
 
     private final String chatName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private final LocalDateTime sendingTimestamp;
 
     private final String text;

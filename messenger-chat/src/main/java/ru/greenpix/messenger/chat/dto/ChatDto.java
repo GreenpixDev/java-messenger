@@ -16,7 +16,7 @@ public class ChatDto implements Serializable {
 
     private final String lastMessageText;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private final LocalDateTime lastMessageSendingTimestamp;
 
     private final UUID lastMessageSenderId;
