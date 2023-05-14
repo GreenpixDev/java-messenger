@@ -20,8 +20,16 @@ spring:
   flyway:
     baseline-on-migrate: true
   rabbitmq:
-    username: ${RABBITMQ_USERNAME:rabbitmq}
-    password: ${RABBITMQ_PASSWORD:rabbitmq}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    host: ${RABBITMQ_HOST:127.0.0.1}
+    port: ${RABBITMQ_PORT:5672}
+  cloud:
+    stream:
+      bindings:
+        notificationConsumer-in-0:
+          destination: ${RABBITMQ_TOPIC:notification-topic}
 
 springdoc:
   swagger-ui:
@@ -33,3 +41,7 @@ security:
     expiration-minutes: ${JWT_EXPIRATION:1440}
   api:
     key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
+
+rabbitmq:
+  queue: ${RABBITMQ_QUEUE:notification_queue}
+  exchange: ${RABBITMQ_QUEUE:notification_exchange}

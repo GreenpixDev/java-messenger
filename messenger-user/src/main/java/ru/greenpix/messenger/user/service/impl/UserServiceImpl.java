@@ -10,6 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
+import ru.greenpix.messenger.amqp.dto.NotificationType;
+import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -27,6 +30,7 @@ import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
+import ru.greenpix.messenger.user.settings.NotificationSettings;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -45,6 +49,8 @@ public class UserServiceImpl implements UserService {
     private final FriendsClient friendsClient;
     private final SortMapper sortMapper;
     private final FilterMapper filterMapper;
+    private final NotificationProducer notificationProducer;
+    private final NotificationSettings notificationSettings;
     private final Logger logger;
 
     @Transactional
@@ -81,8 +87,13 @@ public class UserServiceImpl implements UserService {
             logger.debug("Wrong credentials for user '{}'", signInDto.getUsername());
             throw new WrongCredentialsException();
         }
-
         logger.info("User '{}' with id {} has been authenticated", user.getUsername(), user.getId());
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                user.getId(),
+                NotificationType.LOGIN,
+                notificationSettings.getLogin()
+        ));
         return user;
     }
 

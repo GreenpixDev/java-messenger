@@ -59,7 +59,7 @@ public class NotificationController {
             @ParameterObject
             NotificationFilterListDto filters
     ) {
-        Page<Notification> page = notificationService.getNotifications(jwtUser.getId(), pageNumber, pageSize, filters);
+        Page<Notification> page = notificationService.getNotifications(jwtUser.getId(), pageNumber - 1, pageSize, filters);
         return pageMapper.toDto(page.map(notificationMapper::toDto));
     }
 
@@ -67,7 +67,7 @@ public class NotificationController {
             summary = "Кол-во непрочитанных сообщений",
             description = "Не должны приниматься какие-либо параметры, на выходе метод возвращает только кол-во не прочтённых"
     )
-    @GetMapping
+    @GetMapping("unread/count")
     public int getUnreadNotificationsCount(
             @AuthenticationPrincipal
             JwtUser jwtUser
@@ -77,7 +77,7 @@ public class NotificationController {
 
     @Operation(
             summary = "Пометка уведомлений прочитанными/не прочитанными")
-    @PostMapping
+    @PostMapping("status")
     public void updateNotificationStatus(
             @AuthenticationPrincipal
             JwtUser jwtUser,

@@ -34,3 +34,10 @@ security:
 integration:
   users-service-url: ${USERS_SERVICE_URL:http://localhost:8010}
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
+
+amqp:
+  producer:
+    topic: ${RABBITMQ_TOPIC:notification-topic}
+
+notification:
+  new-private-message: "У вас новое непрочитанное сообщение!"

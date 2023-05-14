@@ -8,6 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
+import ru.greenpix.messenger.amqp.dto.NotificationType;
+import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
@@ -20,6 +23,7 @@ import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
 import ru.greenpix.messenger.friends.mapper.FilterMapper;
 import ru.greenpix.messenger.friends.repository.FriendRepository;
 import ru.greenpix.messenger.friends.service.FriendService;
+import ru.greenpix.messenger.friends.settings.NotificationSettings;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -34,6 +38,8 @@ public class FriendServiceImpl implements FriendService {
     private final Clock clock;
     private final UsersClient usersClient;
     private final FilterMapper mapper;
+    private final NotificationProducer notificationProducer;
+    private final NotificationSettings notificationSettings;
 
     @Override
     public @NotNull Page<Friend> getFriendPage(
@@ -87,6 +93,12 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.save(friend);
         log.trace("User {} added friend {}", targetUserId, friendUserId);
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                friendUserId,
+                NotificationType.NEW_FRIEND,
+                notificationSettings.getAddFriend()
+        ));
     }
 
     @Transactional
@@ -103,6 +115,12 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.save(friend);
         log.trace("User {} removed friend {}", targetUserId, friendUserId);
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                friendUserId,
+                NotificationType.DELETE_FRIEND,
+                notificationSettings.getRemoveFriend()
+        ));
     }
 
     @Transactional

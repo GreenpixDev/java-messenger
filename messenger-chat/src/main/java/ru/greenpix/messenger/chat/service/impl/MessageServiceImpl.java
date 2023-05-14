@@ -7,6 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
+import ru.greenpix.messenger.amqp.dto.NotificationType;
+import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.chat.dto.MessageDetailsDto;
 import ru.greenpix.messenger.chat.dto.MessageDto;
 import ru.greenpix.messenger.chat.dto.SendingMessageDto;
@@ -22,6 +25,7 @@ import ru.greenpix.messenger.chat.repository.ChatRepository;
 import ru.greenpix.messenger.chat.repository.MessageRepository;
 import ru.greenpix.messenger.chat.repository.PrivateChatRepository;
 import ru.greenpix.messenger.chat.service.MessageService;
+import ru.greenpix.messenger.chat.settings.NotificationSettings;
 import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
 import ru.greenpix.messenger.common.specification.BaseSpecification;
 
@@ -43,6 +47,8 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
     private final UsersClient usersClient;
     private final FriendsClient friendsClient;
+    private final NotificationProducer notificationProducer;
+    private final NotificationSettings notificationSettings;
 
     @Override
     public @NotNull Page<MessageDto> getMessages(@NotNull UUID userId, int page, int size, String textFilter) {
@@ -84,6 +90,12 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = createMessage(senderId, chat, dto);
         messageRepository.save(message);
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                receiverId,
+                NotificationType.NEW_PRIVATE_MESSAGE,
+                notificationSettings.getNewPrivateMessage()
+        ));
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package ru.greenpix.messenger.notification.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import ru.greenpix.messenger.amqp.dto.NotificationType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,9 +30,6 @@ public class Notification {
 
     @Column(name = "delivery_timestamp", nullable = false)
     private LocalDateTime deliveryTimestamp;
-
-    @Column(name = "status", nullable = false)
-    private NotificationStatus status;
 
     @Column(name = "type", nullable = false)
     private NotificationType type;

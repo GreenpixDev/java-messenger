@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.notification.entity;
+package ru.greenpix.messenger.notification.dto;
 
 public enum NotificationStatus {
 

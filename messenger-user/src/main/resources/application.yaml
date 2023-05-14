@@ -19,6 +19,12 @@ spring:
       ddl-auto: validate
   flyway:
     baseline-on-migrate: true
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    host: ${RABBITMQ_HOST:127.0.0.1}
+    port: ${RABBITMQ_PORT:5672}
 
 springdoc:
   swagger-ui:
@@ -33,3 +39,10 @@ security:
 
 integration:
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
+
+amqp:
+  producer:
+    topic: ${RABBITMQ_TOPIC:notification-topic}
+
+notification:
+  login: "В Ваш аккаунт был выполнен вход."

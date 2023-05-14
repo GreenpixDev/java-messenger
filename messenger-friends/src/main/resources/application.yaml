@@ -33,3 +33,13 @@ security:
 
 integration:
   users-service-url: ${USERS_SERVICE_URL:http://localhost:8010}
+
+amqp:
+  producer:
+    topic: ${RABBITMQ_TOPIC:notification-topic}
+
+notification:
+  add-friend: "У Вас новый друг!"
+  remove-friend: "С Вами больше не хочет дружить пользователь!"
+  block: "Пользователь добавил Вас в черный список!"
+  unblock: "Пользователь убрал Вас из черного списка!"

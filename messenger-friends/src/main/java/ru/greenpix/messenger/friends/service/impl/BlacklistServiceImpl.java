@@ -8,6 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
+import ru.greenpix.messenger.amqp.dto.NotificationType;
+import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
@@ -20,6 +23,7 @@ import ru.greenpix.messenger.friends.integration.users.client.UsersClient;
 import ru.greenpix.messenger.friends.mapper.FilterMapper;
 import ru.greenpix.messenger.friends.repository.BlacklistRepository;
 import ru.greenpix.messenger.friends.service.BlacklistService;
+import ru.greenpix.messenger.friends.settings.NotificationSettings;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -34,6 +38,8 @@ public class BlacklistServiceImpl implements BlacklistService {
     private final Clock clock;
     private final UsersClient usersClient;
     private final FilterMapper mapper;
+    private final NotificationProducer notificationProducer;
+    private final NotificationSettings notificationSettings;
 
     @Override
     public @NotNull Page<BlockedUser> getBlockedUserPage(
@@ -87,6 +93,12 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         blacklistRepository.save(blockedUser);
         log.trace("User {} added blocked user {}", targetUserId, blockedUserId);
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                blockedUserId,
+                NotificationType.BLOCKED,
+                notificationSettings.getBlock()
+        ));
     }
 
     @Transactional
@@ -103,6 +115,12 @@ public class BlacklistServiceImpl implements BlacklistService {
         blockedUser.setDeletionDate(LocalDate.now(clock));
         blacklistRepository.save(blockedUser);
         log.trace("User {} removed blocked user {}", targetUserId, blockedUserId);
+
+        notificationProducer.sendNotification(new NotificationAmqpDto(
+                blockedUserId,
+                NotificationType.UNBLOCKED,
+                notificationSettings.getBlock()
+        ));
     }
 
     @Override
