@@ -1,0 +1,27 @@
+server:
+  port: 8014
+  error:
+    include-stacktrace: never
+
+logging:
+  level:
+    ru.greenpix.messenger: ${LOGGING_LEVEL:info}
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 8MB
+
+minio:
+  access-key: ${MINIO_ACCESS_KEY:gmCVJn7NfYhelj0ImOsZ}
+  secret-key: ${MINIO_SECRET_KEY:WgsQ9w8GRHiyIykvB2DpUUkdLLiGn71eawV0EDQD}
+  bucket: ${MINIO_BUCKET:messenger}
+  url: ${MINIO_URL:http://localhost:9000}
+
+security:
+  api:
+    key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
