@@ -72,7 +72,18 @@ public class ChatServiceImpl implements ChatService {
             return mapper.toDetailsDto((GroupChat) chat);
         }
         else {
-            throw new UnsupportedOperationException(); // TODO
+            ChatMember member = chat.getMembers()
+                    .stream()
+                    .filter(e -> !e.getId().getUserId().equals(requesterId))
+                    .findAny()
+                    .get();
+
+            return new ChatDetailsDto(
+                    member.getMemberName(),
+                    member.getMemberAvatarId(),
+                    null,
+                    chat.getCreationTimestamp()
+            );
         }
     }
 

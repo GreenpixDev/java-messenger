@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -22,8 +21,5 @@ public class GroupChat extends Chat {
 
     @Column(name = "avatar_id")
     private UUID avatarId;
-
-    @Column(name = "creation_timestamp")
-    private LocalDateTime creationTimestamp;
 
 }
