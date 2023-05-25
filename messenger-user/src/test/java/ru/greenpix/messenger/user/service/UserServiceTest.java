@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
+import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -27,8 +29,10 @@ import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.user.mapper.FilterMapper;
 import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
+import ru.greenpix.messenger.user.producer.UserChangesProducer;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.impl.UserServiceImpl;
+import ru.greenpix.messenger.user.settings.NotificationSettings;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -64,6 +68,7 @@ public class UserServiceTest {
             ZoneId.systemDefault()
     );
     static UUID TEST_UUID = UUID.fromString("4da6f9a6-4547-4769-b33c-06746f396d89");
+    static UserChangesAmqpDto USER_CHANGES_AMQP_DTO_TEST = new UserChangesAmqpDto();
     static UserRequestDto USER_REQUEST_DTO_TEST = new UserRequestDto(
             null, null, null, null, null
     );
@@ -84,6 +89,12 @@ public class UserServiceTest {
     SortMapper sortMapper;
     @Mock
     Logger logger;
+    @Mock
+    NotificationProducer notificationProducer;
+    @Mock
+    NotificationSettings notificationSettings;
+    @Mock
+    UserChangesProducer userChangesProducer;
     @InjectMocks
     UserServiceImpl userService;
 
@@ -117,8 +128,10 @@ public class UserServiceTest {
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(someUser));
         when(passwordEncoder.matches(any(), anyString())).thenReturn(true);
+        when(notificationSettings.getLogin()).thenReturn("");
 
         assertDoesNotThrow(() -> userService.authenticateUser(SIGN_IN_DTO_TEST));
+        verify(notificationProducer, times(1)).sendNotification(any());
     }
 
     @DisplayName("Проверка аутентификации несуществующего пользователя")
@@ -209,8 +222,10 @@ public class UserServiceTest {
     void updateUserTest() {
         when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
         when(userRepository.save(any())).thenReturn(new User());
+        when(userMapper.toAmqpDto(any())).thenReturn(USER_CHANGES_AMQP_DTO_TEST);
 
         assertDoesNotThrow(() -> userService.updateUser(TEST_UUID, USER_REQUEST_DTO_TEST));
         verify(userRepository, times(1)).save(any());
+        verify(userChangesProducer, times(1)).sendChanges(USER_CHANGES_AMQP_DTO_TEST);
     }
 }
