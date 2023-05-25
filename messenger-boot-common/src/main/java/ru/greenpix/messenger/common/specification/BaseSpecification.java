@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.common.specification;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.metamodel.SingularAttribute;
@@ -107,7 +108,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, у которых `attribute = value`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> equal(@NotNull SingularAttribute<E, ?> attribute, @NotNull Object value) {
+    public static @NotNull <E> Specification<E> equal(@Nullable SingularAttribute<E, ?> attribute, @NotNull Object value) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(attribute), value);
     }
 
@@ -118,7 +120,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, у которых `attribute in value`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> in(@NotNull SingularAttribute<E, ?> attribute, @NotNull Collection<?> values) {
+    public static @NotNull <E> Specification<E> in(@Nullable SingularAttribute<E, ?> attribute, @NotNull Collection<?> values) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> root.get(attribute).in(values);
     }
 
@@ -129,7 +132,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, где `attribute LIKE value`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> like(@NotNull SingularAttribute<E, String> attribute, @NotNull String expression) {
+    public static @NotNull <E> Specification<E> like(@Nullable SingularAttribute<E, String> attribute, @NotNull String expression) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(attribute), expression);
     }
 
@@ -140,7 +144,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, где `upper(attribute) LIKE upper(value)`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> likeIgnoreCase(@NotNull SingularAttribute<E, String> attribute, @NotNull String expression) {
+    public static @NotNull <E> Specification<E> likeIgnoreCase(@Nullable SingularAttribute<E, String> attribute, @NotNull String expression) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(
                 criteriaBuilder.upper(root.get(attribute)),
                 expression.toUpperCase()
@@ -154,7 +159,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, где `attribute LIKE '%' + value + '%'`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> contains(@NotNull SingularAttribute<E, String> attribute, @NotNull String substring) {
+    public static @NotNull <E> Specification<E> contains(@Nullable SingularAttribute<E, String> attribute, @NotNull String substring) {
+        if (attribute == null) return empty();
         return like(attribute, "%" + substring + "%");
     }
 
@@ -165,7 +171,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, где `upper(attribute) LIKE upper('%' + value + '%')`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> containsIgnoreCase(@NotNull SingularAttribute<E, String> attribute, @NotNull String substring) {
+    public static @NotNull <E> Specification<E> containsIgnoreCase(@Nullable SingularAttribute<E, String> attribute, @NotNull String substring) {
+        if (attribute == null) return empty();
         return likeIgnoreCase(attribute, "%" + substring + "%");
     }
 
@@ -176,7 +183,8 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, у которых `DATE(attribute) = value`
      * @param <E> тип сущности для спецификации
      */
-    public static @NotNull <E> Specification<E> equalDate(@NotNull SingularAttribute<E, LocalDateTime> attribute, @NotNull LocalDate value) {
+    public static @NotNull <E> Specification<E> equalDate(@Nullable SingularAttribute<E, LocalDateTime> attribute, @NotNull LocalDate value) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(
                 criteriaBuilder.function("DATE", LocalDate.class, root.get(attribute)),
                 value
@@ -193,10 +201,11 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, у которых `attribute BETWEEN from TO to`
      */
     public static @NotNull <E, Y extends Comparable<? super Y>> Specification<E> between(
-            @NotNull SingularAttribute<E, Y> attribute,
+            @Nullable SingularAttribute<E, Y> attribute,
             @NotNull Y from,
             @NotNull Y to
     ) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get(attribute), from, to);
     }
 
@@ -209,13 +218,18 @@ public class BaseSpecification {
      * @return Specification, которая будет искать сущности, у которых `attribute BETWEEN from TO to`
      */
     public static @NotNull <E> Specification<E> betweenData(
-            @NotNull SingularAttribute<E, LocalDateTime> attribute,
+            @Nullable SingularAttribute<E, LocalDateTime> attribute,
             @NotNull LocalDate from,
             @NotNull LocalDate to
     ) {
+        if (attribute == null) return empty();
         return (root, query, criteriaBuilder) -> criteriaBuilder.between(
                 criteriaBuilder.function("DATE", LocalDate.class, root.get(attribute)),
                 from, to
         );
+    }
+
+    public static @NotNull <E> Specification<E> empty() {
+        return (root, query, criteriaBuilder) -> null;
     }
 }

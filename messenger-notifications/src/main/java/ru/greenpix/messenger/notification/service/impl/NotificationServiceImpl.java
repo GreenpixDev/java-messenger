@@ -19,6 +19,7 @@ import ru.greenpix.messenger.notification.mapper.NotificationMapper;
 import ru.greenpix.messenger.notification.repository.NotificationRepository;
 import ru.greenpix.messenger.notification.service.NotificationService;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
@@ -31,6 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationMapper notificationMapper;
     private final FilterMapper filterMapper;
     private final Logger logger;
+    private final Clock clock;
 
     @Override
     public @NotNull Page<Notification> getNotifications(@NotNull UUID userId, int page, int size, @NotNull NotificationFilterListDto filters) {
@@ -55,7 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void updateNotificationStatus(@NotNull UUID userId, Collection<UUID> notificationsIds, NotificationStatus status) {
         LocalDateTime readingTimestamp = status == NotificationStatus.READ
-                ? LocalDateTime.now()
+                ? LocalDateTime.now(clock)
                 : null;
         notificationRepository.updateAllReadingTimestampByIds(userId, readingTimestamp, notificationsIds);
         logger.debug("Status of notifications {} changed to {} for user {}", userId, status, userId);
