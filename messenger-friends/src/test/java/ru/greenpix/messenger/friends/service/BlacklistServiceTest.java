@@ -31,8 +31,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -93,9 +92,9 @@ public class BlacklistServiceTest {
      * Тесты
      */
 
-    @DisplayName("Проверка получения страницы друзей")
+    @DisplayName("Проверка получения страницы заблокированных пользователей")
     @Test
-    void getFriendPageTest() {
+    void getBlockedUserPageTest() {
         when(blacklistRepository.findAllByDeletionDateNullAndRelationshipTargetUserIdAndFullNameLikeIgnoreCase(
                 any(),
                 eq(ID_TEST),
@@ -106,9 +105,9 @@ public class BlacklistServiceTest {
         assertEquals(PAGE_BLOCKED_USER_TEST, page);
     }
 
-    @DisplayName("Проверка получения страницы друзей с расширенными параметрами поиска")
+    @DisplayName("Проверка получения страницы заблокированных пользователей с расширенными параметрами поиска")
     @Test
-    void searchFriendPageTest() {
+    void searchBlockedUserPageTest() {
         when(mapper.toBlockedUserSpecification(BLOCKED_USER_SEARCH_DTO_TEST))
                 .thenReturn(SPEC_TEST);
         when(blacklistRepository.findAll(eq(SPEC_TEST), eq(PageRequest.of(INT_TEST, INT_TEST))))
@@ -118,24 +117,24 @@ public class BlacklistServiceTest {
         assertEquals(PAGE_BLOCKED_USER_TEST, page);
     }
 
-    @DisplayName("Проверка получения информации о друге")
+    @DisplayName("Проверка получения информации о заблокированном пользователе")
     @Test
-    void getFriendTest() {
+    void getBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.of(BLOCKED_USER_TEST));
         BlockedUser result = blacklistService.getBlockedUser(ID_TEST, ID_TEST_2);
         assertEquals(BLOCKED_USER_TEST, result);
     }
 
-    @DisplayName("Проверка получения информации о несуществующем друге")
+    @DisplayName("Проверка получения информации о несуществующем заблокированном пользователе")
     @Test
-    void getNonExistsFriendTest() {
+    void getNonExistsBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.empty());
         assertThrows(BlockedUserNotFoundException.class, () -> blacklistService.getBlockedUser(ID_TEST, ID_TEST_2));
     }
 
-    @DisplayName("Проверка добавления пользователя в друзья")
+    @DisplayName("Проверка добавления пользователя в черный список")
     @Test
-    void addFriendTest() {
+    void addBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.empty());
         when(clock.instant()).thenReturn(FIXED_CLOCK.instant());
         when(clock.getZone()).thenReturn(FIXED_CLOCK.getZone());
@@ -147,18 +146,18 @@ public class BlacklistServiceTest {
         verify(notificationProducer, times(1)).sendNotification(any());
     }
 
-    @DisplayName("Проверка добавления самого себя в друзья")
+    @DisplayName("Проверка добавления самого себя в черный список")
     @Test
-    void addFriendYourselfTest() {
+    void addBlockedUserYourselfTest() {
         assertThrows(AdditionYourselfAsBlockedUserException.class, () -> blacklistService.addBlockedUser(ID_TEST, ID_TEST));
 
         verify(blacklistRepository, never()).save(any());
         verify(notificationProducer, never()).sendNotification(any());
     }
 
-    @DisplayName("Проверка добавления пользователя в друзья, который уже добавлен")
+    @DisplayName("Проверка добавления пользователя в черный список, который уже добавлен")
     @Test
-    void addAdditionFriendTest() {
+    void addAdditionBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.of(BLOCKED_USER_TEST));
 
         assertThrows(AdditionBlockedUserException.class, () -> blacklistService.addBlockedUser(ID_TEST, ID_TEST_2));
@@ -167,9 +166,9 @@ public class BlacklistServiceTest {
         verify(notificationProducer, never()).sendNotification(any());
     }
 
-    @DisplayName("Проверка удаления пользователя из друзей")
+    @DisplayName("Проверка удаления пользователя из черный список")
     @Test
-    void deleteFriendTest() {
+    void deleteBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.of(BLOCKED_USER_TEST));
         when(clock.instant()).thenReturn(FIXED_CLOCK.instant());
         when(clock.getZone()).thenReturn(FIXED_CLOCK.getZone());
@@ -180,14 +179,23 @@ public class BlacklistServiceTest {
         verify(notificationProducer, times(1)).sendNotification(any());
     }
 
-    @DisplayName("Проверка удаления пользователя из друзей, который уже не в друзьях")
+    @DisplayName("Проверка удаления пользователя из черный список, который уже не в черном списке")
     @Test
-    void deleteDeletionFriendTest() {
+    void deleteDeletionBlockedUserTest() {
         when(blacklistRepository.findById(eq(REL_ID_TEST))).thenReturn(Optional.of(DELETED_BLOCKED_USER_TEST));
 
         assertThrows(DeletionBlockedUserException.class, () -> blacklistService.deleteBlockedUser(ID_TEST, ID_TEST_2));
 
         verify(blacklistRepository, never()).save(any());
         verify(notificationProducer, never()).sendNotification(any());
+    }
+
+    @DisplayName("Проверка на присутствие пользователя в черном списке")
+    @Test
+    void isBlockedByUserTest() {
+        when(blacklistRepository.existsByRelationshipAndDeletionDateNull(eq(REL_ID_TEST)))
+                .thenReturn(true);
+
+        assertTrue(blacklistService.isBlockedByUser(ID_TEST, ID_TEST_2));
     }
 }
