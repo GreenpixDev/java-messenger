@@ -1,0 +1,20 @@
+{
+  "pageNumber": 1,
+  "pageSize": 10,
+  "numberOfElements": 2,
+  "totalPages": 1,
+  "totalElements": 2,
+  "content": [
+    {
+      "id": "e5cbbc6a-a5d6-4d68-8eb5-cec6ddd11a42",
+      "name": "Test Chat",
+      "lastMessageText": "Hello",
+      "lastMessageSendingTimestamp": "2000-01-01T00.00.00.000Z",
+      "lastMessageSenderId": "e5cbbc6a-a5d6-4d68-8eb5-cec6ddd11a42"
+    },
+    {
+      "id": "f1d43686-a860-4a75-b6f8-35009f2389de",
+      "name": "Test Some User"
+    }
+  ]
+}
