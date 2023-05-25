@@ -4,6 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 import ru.greenpix.messenger.friends.entity.Relationship;
 
@@ -33,4 +36,8 @@ public interface BlacklistRepository extends JpaRepository<BlockedUser, Relation
      */
     boolean existsByRelationshipAndDeletionDateNull(Relationship relationship);
 
+    @Transactional
+    @Modifying
+    @Query("update BlockedUser b set b.fullName = :fullName where b.relationship.externalUserId = :id")
+    void updateFullName(UUID id, String fullName);
 }

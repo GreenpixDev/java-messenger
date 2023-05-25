@@ -18,7 +18,7 @@ public interface ChatMapper {
 
     ChatDto toDto(Chat chat);
 
-    ChatDetailsDto toDetailsDto(Chat chat);
+    ChatDetailsDto toDetailsDto(GroupChat chat);
 
     @Mapping(source = "members", target = "memberIds")
     GroupChat toGroupChatEntity(ModificationChatDto dto);

@@ -123,6 +123,7 @@ public class BlacklistServiceImpl implements BlacklistService {
         ));
     }
 
+    @Deprecated
     @Override
     public void synchronizeBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId) {
         log.trace("User {} is synchronizing blocked user {}", targetUserId, blockedUserId);

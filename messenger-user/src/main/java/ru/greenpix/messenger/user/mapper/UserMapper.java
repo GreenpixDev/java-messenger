@@ -6,6 +6,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -20,6 +21,8 @@ public interface UserMapper {
     User toEntity(UserRequestDto userRequestDto);
 
     UserResponseDto toDto(User user);
+
+    UserChangesAmqpDto toAmqpDto(User user);
 
     UserIntegrationDto toIntegrationDto(User user);
 

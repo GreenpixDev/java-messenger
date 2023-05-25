@@ -2,6 +2,7 @@ package ru.greenpix.messenger.friends.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 import ru.greenpix.messenger.friends.dto.BlockedUserSearchDto;
 import ru.greenpix.messenger.friends.entity.BlockedUser;
 
@@ -60,7 +61,9 @@ public interface BlacklistService {
      * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
      * @param targetUserId ID целевого пользователя
      * @param blockedUserId ID заблокированного пользователя
+     * @deprecated используйте updateBlockedUser из AMQP
      */
+    @Deprecated
     void synchronizeBlockedUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId);
 
     /**

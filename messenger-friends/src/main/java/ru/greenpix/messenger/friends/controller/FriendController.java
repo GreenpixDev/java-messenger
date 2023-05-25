@@ -94,9 +94,10 @@ public class FriendController {
         friendService.addFriend(jwtUser.getId(), userId);
     }
 
-    @Operation(summary = "Синхронизировать данные")
+    @Operation(summary = "Синхронизировать данные", description = "Устарело, используйте AMQP")
     @ApiResponse(responseCode = "200")
     @PatchMapping("{userId}")
+    @Deprecated
     public void synchronizeFriend(
             @AuthenticationPrincipal
             JwtUser jwtUser,

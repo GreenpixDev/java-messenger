@@ -94,9 +94,10 @@ public class BlacklistController {
         blacklistService.addBlockedUser(jwtUser.getId(), userId);
     }
 
-    @Operation(summary = "Синхронизировать данные")
+    @Operation(summary = "Синхронизировать данные", description = "Устарело, используйте AMQP")
     @ApiResponse(responseCode = "200")
     @PatchMapping("{userId}")
+    @Deprecated
     public void synchronizeBlockedUser(
             @AuthenticationPrincipal
             JwtUser jwtUser,

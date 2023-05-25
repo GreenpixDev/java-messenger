@@ -123,6 +123,7 @@ public class FriendServiceImpl implements FriendService {
         ));
     }
 
+    @Deprecated
     @Transactional
     @Override
     public void synchronizeFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId) {

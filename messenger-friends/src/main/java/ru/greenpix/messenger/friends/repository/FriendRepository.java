@@ -4,6 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.friends.entity.Friend;
 import ru.greenpix.messenger.friends.entity.Relationship;
 
@@ -24,5 +27,10 @@ public interface FriendRepository extends JpaRepository<Friend, Relationship>, J
             UUID relationshipTargetUserId,
             String fullNameExpression
     );
+
+    @Transactional
+    @Modifying
+    @Query("update Friend f set f.fullName = :fullName where f.relationship.externalUserId = :id")
+    void updateFullName(UUID id, String fullName);
 
 }

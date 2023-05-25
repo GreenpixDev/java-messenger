@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
 import ru.greenpix.messenger.amqp.dto.NotificationType;
+import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
@@ -28,6 +29,7 @@ import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.user.mapper.FilterMapper;
 import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
+import ru.greenpix.messenger.user.producer.UserChangesProducer;
 import ru.greenpix.messenger.user.repository.UserRepository;
 import ru.greenpix.messenger.user.service.UserService;
 import ru.greenpix.messenger.user.settings.NotificationSettings;
@@ -51,6 +53,7 @@ public class UserServiceImpl implements UserService {
     private final FilterMapper filterMapper;
     private final NotificationProducer notificationProducer;
     private final NotificationSettings notificationSettings;
+    private final UserChangesProducer userChangesProducer;
     private final Logger logger;
 
     @Transactional
@@ -149,6 +152,8 @@ public class UserServiceImpl implements UserService {
         user.setAvatarId(userRequestDto.getAvatarId());
 
         User updatedUser = userRepository.save(user);
+        userChangesProducer.sendChanges(userMapper.toAmqpDto(updatedUser));
+
         logger.info("User '{}' with id {} has been updated", user.getUsername(), user.getId());
         return updatedUser;
     }

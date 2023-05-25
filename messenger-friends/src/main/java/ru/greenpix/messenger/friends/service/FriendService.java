@@ -2,6 +2,7 @@ package ru.greenpix.messenger.friends.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 import ru.greenpix.messenger.friends.dto.FriendSearchDto;
 import ru.greenpix.messenger.friends.entity.Friend;
 
@@ -60,7 +61,9 @@ public interface FriendService {
      * @throws ru.greenpix.messenger.common.exception.UserNotFoundException пользовать с ID friendUserId не найден в микросервисе "Пользователи"
      * @param targetUserId ID целевого пользователя
      * @param friendUserId ID пользователя друга
+     * @deprecated используйте synchronizeFriend из AMQP
      */
+    @Deprecated
     void synchronizeFriend(@NotNull UUID targetUserId, @NotNull UUID friendUserId);
 
     /**

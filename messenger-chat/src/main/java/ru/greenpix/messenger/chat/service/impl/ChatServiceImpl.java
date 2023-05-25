@@ -70,7 +70,12 @@ public class ChatServiceImpl implements ChatService {
     public @NotNull ChatDetailsDto getChat(@NotNull UUID requesterId, @NotNull UUID chatId) {
         Chat chat = chatRepository.findIdAndMember(chatId, requesterId).orElseThrow(ChatNotFoundException::new);
 
-        return mapper.toDetailsDto(chat);
+        if (chat instanceof GroupChat) {
+            return mapper.toDetailsDto((GroupChat) chat);
+        }
+        else {
+            throw new UnsupportedOperationException(); // TODO
+        }
     }
 
     @Override
