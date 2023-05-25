@@ -67,6 +67,27 @@ public class SpecificationBuilder<E> {
     }
 
     /**
+     * Добавить спецификацию (generic версия)
+     * @param attribute аттрибут
+     * @param value1 значение 1
+     * @param value2 значение 2
+     * @param specGetter функция создания спецификации на основе атрибута и значения
+     * @return this
+     */
+    @NotNull
+    public <T, V1, V2> SpecificationBuilder<E> addGeneric(
+            @NotNull SingularAttribute<E, T> attribute,
+            @Nullable V1 value1,
+            @Nullable V2 value2,
+            @NotNull TerFunction<SingularAttribute<E, T>, V1, V2, Specification<E>> specGetter
+    ) {
+        if (value1 != null && value2 != null) {
+            specifications.add(specGetter.apply(attribute, value1, value2));
+        }
+        return this;
+    }
+
+    /**
      * Добавить спецификацию
      * @param attribute аттрибут
      * @param value значение
@@ -81,6 +102,27 @@ public class SpecificationBuilder<E> {
     ) {
         if (value != null) {
             specifications.add(specGetter.apply(attribute, value));
+        }
+        return this;
+    }
+
+    /**
+     * Добавить спецификацию
+     * @param attribute аттрибут
+     * @param value1 значение 1
+     * @param value2 значение 2
+     * @param specGetter функция создания спецификации на основе атрибута и значения
+     * @return this
+     */
+    @NotNull
+    public SpecificationBuilder<E> add(
+            @NotNull SingularAttribute<E, ?> attribute,
+            @Nullable Object value1,
+            @Nullable Object value2,
+            @NotNull TerFunction<SingularAttribute<E, ?>, Object, Object, Specification<E>> specGetter
+    ) {
+        if (value1 != null && value2 != null) {
+            specifications.add(specGetter.apply(attribute, value1, value2));
         }
         return this;
     }

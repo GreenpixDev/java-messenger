@@ -7,6 +7,10 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: file-storage
+          uri: http://localhost:8014/
+          predicates:
+            - Path=/storage/**
         - id: notifications
           uri: http://localhost:8013/
           predicates:

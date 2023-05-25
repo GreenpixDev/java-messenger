@@ -1,6 +1,7 @@
 package ru.greenpix.messenger.storage.service.impl;
 
 import io.minio.GetObjectArgs;
+import io.minio.GetObjectResponse;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
@@ -14,7 +15,6 @@ import ru.greenpix.messenger.storage.service.FileStorageService;
 import ru.greenpix.messenger.storage.settings.MinioSettings;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -28,12 +28,13 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final Logger logger;
 
     @Override
-    public UUID uploadFile(byte[] content) {
+    public UUID uploadFile(byte[] content, String contentType) {
         UUID id = UUID.randomUUID();
         try {
             client.putObject(PutObjectArgs.builder()
                     .bucket(settings.getBucket())
                     .object(id.toString())
+                    .contentType(contentType)
                     .stream(new ByteArrayInputStream(content), content.length, -1)
                     .build()
             );
@@ -53,7 +54,7 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .build();
         Exception exception;
 
-        try (InputStream in = client.getObject(args)) {
+        try (GetObjectResponse in = client.getObject(args)) {
             return in.readAllBytes();
         }
         catch (ErrorResponseException e) {

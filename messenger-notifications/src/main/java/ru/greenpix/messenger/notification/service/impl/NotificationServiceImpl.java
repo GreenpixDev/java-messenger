@@ -6,12 +6,15 @@ import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
+import ru.greenpix.messenger.common.specification.BaseSpecification;
 import ru.greenpix.messenger.notification.dto.NotificationFilterListDto;
 import ru.greenpix.messenger.notification.dto.NotificationStatus;
 import ru.greenpix.messenger.notification.entity.Notification;
 import ru.greenpix.messenger.notification.entity.Notification_;
+import ru.greenpix.messenger.notification.mapper.FilterMapper;
 import ru.greenpix.messenger.notification.mapper.NotificationMapper;
 import ru.greenpix.messenger.notification.repository.NotificationRepository;
 import ru.greenpix.messenger.notification.service.NotificationService;
@@ -26,12 +29,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
+    private final FilterMapper filterMapper;
     private final Logger logger;
 
     @Override
     public @NotNull Page<Notification> getNotifications(@NotNull UUID userId, int page, int size, @NotNull NotificationFilterListDto filters) {
         logger.trace("Getting notification list (page={}, size={}, filters={}) for user {}", page, size, filters, userId);
-        return notificationRepository.findAll(PageRequest.of(page, size, Sort.by(
+
+        Specification<Notification> spec = BaseSpecification.all(
+                BaseSpecification.equal(Notification_.userId, userId),
+                filterMapper.toNotificationSpecification(filters)
+        );
+
+        return notificationRepository.findAll(spec, PageRequest.of(page, size, Sort.by(
                 Sort.Direction.DESC, Notification_.DELIVERY_TIMESTAMP
         )));
     }

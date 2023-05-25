@@ -56,7 +56,7 @@ public class ChatController {
             @RequestParam(defaultValue = "")
             String nameFilter
     ) {
-        return pageMapper.toDto(chatService.getAccessibleChat(jwtUser.getId(), pageNumber, pageSize, nameFilter));
+        return pageMapper.toDto(chatService.getAccessibleChat(jwtUser.getId(), pageNumber - 1, pageSize, nameFilter));
     }
 
     @Operation(summary = "Получение информации о чате")

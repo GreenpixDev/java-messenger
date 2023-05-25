@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
+import ru.greenpix.messenger.common.dto.integration.UserListIntegrationDto;
 import ru.greenpix.messenger.user.mapper.UserMapper;
 import ru.greenpix.messenger.user.service.UserService;
 
@@ -36,12 +36,12 @@ public class IntegrationController {
 
     @Operation(summary = "Получить пользователей по их ID")
     @PostMapping("search")
-    public List<UserIntegrationDto> getUsers(
+    public UserListIntegrationDto getUsers(
             @RequestBody List<UUID> userIds
     ) {
-        return userService.getUsers(userIds)
+        return new UserListIntegrationDto(userService.getUsers(userIds)
                 .stream()
                 .map(userMapper::toIntegrationDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 }

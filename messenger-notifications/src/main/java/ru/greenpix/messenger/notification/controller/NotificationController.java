@@ -42,7 +42,7 @@ public class NotificationController {
             summary = "Получение списка уведомлений",
             description = "Всегда в порядке убывания по дате получения"
     )
-    @GetMapping
+    @PostMapping
     public PageDto<NotificationDto> getChatList(
             @AuthenticationPrincipal
             JwtUser jwtUser,
@@ -86,6 +86,6 @@ public class NotificationController {
             @Valid
             RequestUpdateNotificationStatusDto dto
     ) {
-        throw new UnsupportedOperationException("Not implemented"); // TODO
+        notificationService.updateNotificationStatus(jwtUser.getId(), dto.getNotificationIds(), dto.getStatus());
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,7 +44,12 @@ public class Message {
     @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;
 
-    @OneToMany(mappedBy = "message", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "message",
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST
+    )
     private Set<Attachment> attachments = new LinkedHashSet<>();
 
     @Override

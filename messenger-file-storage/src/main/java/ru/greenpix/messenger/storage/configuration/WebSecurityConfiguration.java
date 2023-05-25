@@ -51,7 +51,7 @@ public class WebSecurityConfiguration {
                         "/webjars/**",
                         "/v3/api-docs/**"
                 ).permitAll()
-                .antMatchers(HttpMethod.GET, "/storage/file/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/storage/files/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

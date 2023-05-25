@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Tag(name = "Файловое хранилище (интеграционные запросы)")
 @RestController
-@RequestMapping("api/storage/file")
+@RequestMapping("api/files")
 @RequiredArgsConstructor
 public class FileStorageIntegrationController {
 
@@ -32,7 +32,7 @@ public class FileStorageIntegrationController {
             MultipartFile file
     ) {
         try {
-            return fileStorageService.uploadFile(file.getBytes());
+            return fileStorageService.uploadFile(file.getBytes(), file.getContentType());
         }
         catch (IOException e) {
             throw new RuntimeException(e);

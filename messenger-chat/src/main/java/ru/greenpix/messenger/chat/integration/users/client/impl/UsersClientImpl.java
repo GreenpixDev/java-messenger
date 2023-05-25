@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.greenpix.messenger.chat.integration.users.client.UsersClient;
 import ru.greenpix.messenger.chat.settings.IntegrationSettings;
 import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
+import ru.greenpix.messenger.common.dto.integration.UserListIntegrationDto;
 
 import java.net.URI;
 import java.util.Collection;
@@ -27,7 +28,11 @@ public class UsersClientImpl implements UsersClient {
     public @NotNull List<UserIntegrationDto> getUsers(@NotNull Collection<UUID> userIds) {
         String url = integrationSettings.getUsersServiceUrl() + "/api/users/search";
         try {
-            return (List<UserIntegrationDto>) Objects.requireNonNull(restTemplate.getForEntity(URI.create(url), List.class).getBody());
+            return Objects.requireNonNull(restTemplate.postForEntity(
+                    URI.create(url),
+                    userIds,
+                    UserListIntegrationDto.class
+            ).getBody()).getUsers();
         }
         catch (HttpClientErrorException ignored) {
             return Collections.emptyList();

@@ -31,6 +31,9 @@ public class Attachment {
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
+    @Column(name = "file_size", nullable = false)
+    private long fileSize;
+
     @ManyToOne
     @JoinColumn(name = "message_id", nullable = false)
     private Message message;

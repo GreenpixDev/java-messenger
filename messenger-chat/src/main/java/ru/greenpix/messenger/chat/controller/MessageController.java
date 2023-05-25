@@ -8,9 +8,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.chat.dto.MessageDetailsDto;
 import ru.greenpix.messenger.chat.dto.MessageDto;
 import ru.greenpix.messenger.chat.dto.SendingMessageDto;
@@ -35,7 +36,7 @@ public class MessageController {
     private final PageMapper pageMapper;
 
     @Operation(summary = "Отправка сообщения в ЛС")
-    @GetMapping("users/{userId}/messages")
+    @PostMapping("users/{userId}/messages")
     public void sendPrivateMessages(
             @AuthenticationPrincipal
             JwtUser jwtUser,
@@ -43,11 +44,14 @@ public class MessageController {
             @PathVariable
             UUID userId,
 
-            @RequestBody
+            @RequestPart(name = "data")
             @Valid
-            SendingMessageDto messageDto
+            SendingMessageDto messageDto,
+
+            @RequestPart(required = false, name = "file")
+            MultipartFile[] files
     ) {
-        messageService.sendPrivateMessage(jwtUser.getId(), userId, messageDto);
+        messageService.sendPrivateMessage(jwtUser.getId(), userId, messageDto, files);
     }
 
     @Operation(
@@ -74,11 +78,14 @@ public class MessageController {
             @PathVariable
             UUID chatId,
 
-            @RequestBody
+            @RequestPart(name = "data")
             @Valid
-            SendingMessageDto messageDto
+            SendingMessageDto messageDto,
+
+            @RequestPart(required = false, name = "file")
+            MultipartFile[] files
     ) {
-        messageService.sendGroupMessage(jwtUser.getId(), chatId, messageDto);
+        messageService.sendGroupMessage(jwtUser.getId(), chatId, messageDto, files);
     }
 
     @Operation(summary = "Поиск сообщений")
@@ -99,7 +106,7 @@ public class MessageController {
             @RequestParam(defaultValue = "")
             String textFilter
     ) {
-        return pageMapper.toDto(messageService.getMessages(jwtUser.getId(), pageNumber, pageSize, textFilter));
+        return pageMapper.toDto(messageService.getMessages(jwtUser.getId(), pageNumber - 1, pageSize, textFilter));
     }
 
 }

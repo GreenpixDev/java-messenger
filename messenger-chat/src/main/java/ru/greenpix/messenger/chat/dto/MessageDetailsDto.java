@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -28,6 +29,7 @@ public class MessageDetailsDto implements Serializable {
     @Schema(description = "Идентификатор файла аватарки отправителя")
     private final UUID senderAvatarId;
 
-    // TODO вложения
+    @Schema(description = "Приложения")
+    private final List<AttachmentDto> attachments;
 
 }

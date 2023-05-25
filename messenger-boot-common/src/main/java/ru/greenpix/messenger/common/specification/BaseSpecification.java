@@ -112,6 +112,17 @@ public class BaseSpecification {
     }
 
     /**
+     * Спецификация оператора IN
+     * @param attribute аттрибут сущности, который должен быть включен в множество значений
+     * @param values множество значений
+     * @return Specification, которая будет искать сущности, у которых `attribute in value`
+     * @param <E> тип сущности для спецификации
+     */
+    public static @NotNull <E> Specification<E> in(@NotNull SingularAttribute<E, ?> attribute, @NotNull Collection<?> values) {
+        return (root, query, criteriaBuilder) -> root.get(attribute).in(values);
+    }
+
+    /**
      * Спецификация оператора LIKE
      * @param attribute аттрибут сущности
      * @param expression like выражения
@@ -160,7 +171,7 @@ public class BaseSpecification {
 
     /**
      * Спецификация оператора сравнения EQUAL с проверкой даты
-     * @param attribute аттрибут сущности, который надо сравнить (может быть
+     * @param attribute аттрибут сущности, который надо сравнить
      * @param value дата, с которой надо сравнить
      * @return Specification, которая будет искать сущности, у которых `DATE(attribute) = value`
      * @param <E> тип сущности для спецификации
@@ -169,6 +180,42 @@ public class BaseSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(
                 criteriaBuilder.function("DATE", LocalDate.class, root.get(attribute)),
                 value
+        );
+    }
+
+    /**
+     * Спецификация оператора сравнения BETWEEN
+     * @param attribute аттрибут сущности, который надо сравнить
+     * @param from левая граница
+     * @param to правая граница
+     * @param <E> тип сущности для спецификации
+     * @param <Y> тип, который сравнивается
+     * @return Specification, которая будет искать сущности, у которых `attribute BETWEEN from TO to`
+     */
+    public static @NotNull <E, Y extends Comparable<? super Y>> Specification<E> between(
+            @NotNull SingularAttribute<E, Y> attribute,
+            @NotNull Y from,
+            @NotNull Y to
+    ) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get(attribute), from, to);
+    }
+
+    /**
+     * Спецификация оператора сравнения BETWEEN для дат
+     * @param attribute аттрибут сущности, который надо сравнить
+     * @param from левая граница (дата)
+     * @param to правая граница (дата)
+     * @param <E> тип сущности для спецификации
+     * @return Specification, которая будет искать сущности, у которых `attribute BETWEEN from TO to`
+     */
+    public static @NotNull <E> Specification<E> betweenData(
+            @NotNull SingularAttribute<E, LocalDateTime> attribute,
+            @NotNull LocalDate from,
+            @NotNull LocalDate to
+    ) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.between(
+                criteriaBuilder.function("DATE", LocalDate.class, root.get(attribute)),
+                from, to
         );
     }
 }
