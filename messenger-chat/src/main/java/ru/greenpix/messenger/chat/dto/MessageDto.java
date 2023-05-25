@@ -25,6 +25,10 @@ public class MessageDto implements Serializable {
     @Schema(description = "Текст сообщения")
     private final String text;
 
-    // TODO вложения
+    @Schema(description = "Флаг, который указывает, присутствуют ли вложения в сообщении")
+    private final boolean hasAttachments;
+
+    @Schema(description = "Наименование вложения")
+    private final String attachmentName;
 
 }

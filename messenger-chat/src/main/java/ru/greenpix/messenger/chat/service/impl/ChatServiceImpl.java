@@ -12,7 +12,6 @@ import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
 import ru.greenpix.messenger.chat.entity.Chat;
 import ru.greenpix.messenger.chat.entity.ChatMember;
-import ru.greenpix.messenger.chat.entity.ChatMemberId;
 import ru.greenpix.messenger.chat.entity.GroupChat;
 import ru.greenpix.messenger.chat.entity.Message;
 import ru.greenpix.messenger.chat.exception.ChatNotFoundException;
@@ -21,6 +20,7 @@ import ru.greenpix.messenger.chat.exception.UserBlockedException;
 import ru.greenpix.messenger.chat.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.chat.integration.users.client.UsersClient;
 import ru.greenpix.messenger.chat.mapper.ChatMapper;
+import ru.greenpix.messenger.chat.mapper.ChatMemberMapper;
 import ru.greenpix.messenger.chat.repository.ChatRepository;
 import ru.greenpix.messenger.chat.repository.GroupChatRepository;
 import ru.greenpix.messenger.chat.repository.PrivateChatRepository;
@@ -45,7 +45,8 @@ public class ChatServiceImpl implements ChatService {
     private final PrivateChatRepository privateChatRepository;
     private final FriendsClient friendsClient;
     private final UsersClient usersClient;
-    private final ChatMapper mapper;
+    private final ChatMapper chatMapper;
+    private final ChatMemberMapper chatMemberMapper;
     private final Logger logger;
 
     @Override
@@ -53,7 +54,7 @@ public class ChatServiceImpl implements ChatService {
         logger.trace("User {} is requesting accessible chats (page={}, size={}, nameFilter={})", userId, page, size, nameFilter);
 
         String pattern = "%" + (nameFilter == null ? "" : nameFilter) + "%";
-        return chatRepository.findAllWithLastMessage(userId, pattern, PageRequest.of(page, size))
+        return chatRepository.findAllWithLastMessageOrderByLastMessageTime(userId, pattern, PageRequest.of(page, size))
                 .map(tuple -> {
                     String name = tuple.get("name", String.class);
                     Chat chat = tuple.get("chat", Chat.class);
@@ -76,7 +77,7 @@ public class ChatServiceImpl implements ChatService {
 
         if (chat instanceof GroupChat) {
             // TODO решить, че делать с маппером. Лучше сделать не через mapstruct
-            return mapper.toDetailsDto((GroupChat) chat);
+            return chatMapper.toDetailsDto((GroupChat) chat);
         }
         else {
             ChatMember member = chat.getMembers()
@@ -138,16 +139,7 @@ public class ChatServiceImpl implements ChatService {
         chat.setName(dto.getName());
         chat.setAdminUserId(creatorId);
         chat.setCreationTimestamp(LocalDateTime.now(clock));
-        chat.setMembers(dtoList.stream().map(e -> toChatMember(chat, e)).collect(Collectors.toSet()));
+        chat.setMembers(dtoList.stream().map(e -> chatMemberMapper.toChatMember(chat, e)).collect(Collectors.toSet()));
         return chatRepository.save(chat);
-    }
-
-    // TODO вынести в маппер
-    private ChatMember toChatMember(Chat chat, UserIntegrationDto dto) {
-        ChatMember chatMember = new ChatMember();
-        chatMember.setId(new ChatMemberId(chat, dto.getId()));
-        chatMember.setMemberName(dto.getFullName());
-        chatMember.setMemberAvatarId(dto.getAvatarId());
-        return chatMember;
     }
 }

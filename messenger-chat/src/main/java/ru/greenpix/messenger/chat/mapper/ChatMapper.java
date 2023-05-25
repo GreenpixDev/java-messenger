@@ -8,6 +8,7 @@ import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.entity.Chat;
 import ru.greenpix.messenger.chat.entity.GroupChat;
 
+// TODO
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ChatMapper {
 

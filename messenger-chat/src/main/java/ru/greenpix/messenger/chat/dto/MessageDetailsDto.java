@@ -29,7 +29,7 @@ public class MessageDetailsDto implements Serializable {
     @Schema(description = "Идентификатор файла аватарки отправителя")
     private final UUID senderAvatarId;
 
-    @Schema(description = "Приложения")
+    @Schema(description = "Вложение")
     private final List<AttachmentDto> attachments;
 
 }

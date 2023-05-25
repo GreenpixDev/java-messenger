@@ -64,7 +64,7 @@ public class Message {
     private Chat chat;
 
     /**
-     * Множество приложений сообщения
+     * Множество вложений сообщения
      */
     @OneToMany(
             mappedBy = "message",

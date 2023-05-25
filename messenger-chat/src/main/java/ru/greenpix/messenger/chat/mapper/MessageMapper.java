@@ -18,7 +18,8 @@ public interface MessageMapper {
     @Mapping(source = "message.creationTimestamp", target = "sendingTimestamp")
     @Mapping(source = "message.chat.id", target = "chatId")
     @Mapping(source = "chatName", target = "chatName")
-    MessageDto toDto(Message message, String chatName);
+    @Mapping(source = "attachmentName", target = "attachmentName")
+    MessageDto toDto(Message message, String chatName, String attachmentName);
 
     @Mapping(source = "message.id", target = "id")
     @Mapping(source = "message.creationTimestamp", target = "sendingTimestamp")

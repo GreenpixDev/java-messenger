@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
+import ru.greenpix.messenger.chat.entity.ChatMember;
 import ru.greenpix.messenger.chat.entity.GroupChat;
 import ru.greenpix.messenger.chat.entity.PrivateChat;
 import ru.greenpix.messenger.chat.exception.ChatNotFoundException;
@@ -20,6 +21,7 @@ import ru.greenpix.messenger.chat.exception.UserBlockedException;
 import ru.greenpix.messenger.chat.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.chat.integration.users.client.UsersClient;
 import ru.greenpix.messenger.chat.mapper.ChatMapper;
+import ru.greenpix.messenger.chat.mapper.ChatMemberMapper;
 import ru.greenpix.messenger.chat.repository.ChatRepository;
 import ru.greenpix.messenger.chat.repository.GroupChatRepository;
 import ru.greenpix.messenger.chat.repository.PrivateChatRepository;
@@ -56,6 +58,7 @@ public class ChatServiceTest {
     static Page<Tuple> PAGE_TUPLE_TEST = Page.empty();
     static GroupChat GROUP_CHAT_TEST = new GroupChat();
     static PrivateChat PRIVATE_CHAT_TEST = new PrivateChat();
+    static ChatMember CHAT_MEMBER_TEST = new ChatMember();
     static ModificationChatDto MODIFICATION_CHAT_DTO_TEST = new ModificationChatDto(STRING_TEST, List.of(ID_TEST));
     static UserIntegrationDto USER_INTEGRATION_DTO_TEST = new UserIntegrationDto(ID_TEST, STRING_TEST, ID_TEST);
 
@@ -76,7 +79,9 @@ public class ChatServiceTest {
     @Mock
     UsersClient usersClient;
     @Mock
-    ChatMapper mapper;
+    ChatMapper chatMapper;
+    @Mock
+    ChatMemberMapper chatMemberMapper;
     @Mock
     Logger logger;
 
@@ -94,7 +99,7 @@ public class ChatServiceTest {
     @DisplayName("Проверка получения доступных пользователю чатов")
     @Test
     void getAccessibleChatTest() {
-        when(chatRepository.findAllWithLastMessage(
+        when(chatRepository.findAllWithLastMessageOrderByLastMessageTime(
                 eq(ID_TEST),
                 eq("%" + STRING_TEST + "%"),
                 eq(PageRequest.of(INT_TEST, INT_TEST))
@@ -125,6 +130,7 @@ public class ChatServiceTest {
         when(clock.getZone()).thenReturn(FIXED_CLOCK.getZone());
         when(usersClient.getUsers(anyCollection())).thenReturn(List.of(USER_INTEGRATION_DTO_TEST));
         when(friendsClient.isBlockedByUser(any(), eq(ID_TEST))).thenReturn(false);
+        when(chatMemberMapper.toChatMember(any(), any())).thenReturn(CHAT_MEMBER_TEST);
         when(chatRepository.save(any())).thenReturn(GROUP_CHAT_TEST);
 
         assertDoesNotThrow(() -> chatService.createChat(ID_TEST, MODIFICATION_CHAT_DTO_TEST));
@@ -149,6 +155,7 @@ public class ChatServiceTest {
         when(clock.getZone()).thenReturn(FIXED_CLOCK.getZone());
         when(usersClient.getUsers(anyCollection())).thenReturn(List.of(USER_INTEGRATION_DTO_TEST));
         when(friendsClient.isBlockedByUser(any(), eq(ID_TEST))).thenReturn(false);
+        when(chatMemberMapper.toChatMember(any(), any())).thenReturn(CHAT_MEMBER_TEST);
         when(chatRepository.save(any())).thenReturn(GROUP_CHAT_TEST);
 
         assertDoesNotThrow(() -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST));

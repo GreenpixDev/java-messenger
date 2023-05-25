@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,8 +17,6 @@ import ru.greenpix.messenger.chat.dto.MessageDto;
 import ru.greenpix.messenger.chat.dto.SendingMessageDto;
 import ru.greenpix.messenger.chat.entity.Attachment;
 import ru.greenpix.messenger.chat.entity.Chat;
-import ru.greenpix.messenger.chat.entity.ChatMember;
-import ru.greenpix.messenger.chat.entity.ChatMemberId;
 import ru.greenpix.messenger.chat.entity.Message;
 import ru.greenpix.messenger.chat.entity.Message_;
 import ru.greenpix.messenger.chat.entity.PrivateChat;
@@ -30,6 +27,7 @@ import ru.greenpix.messenger.chat.exception.UserNotFriendException;
 import ru.greenpix.messenger.chat.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.chat.integration.storage.client.FileStorageClient;
 import ru.greenpix.messenger.chat.integration.users.client.UsersClient;
+import ru.greenpix.messenger.chat.mapper.ChatMemberMapper;
 import ru.greenpix.messenger.chat.mapper.MessageMapper;
 import ru.greenpix.messenger.chat.repository.ChatRepository;
 import ru.greenpix.messenger.chat.repository.MessageRepository;
@@ -38,7 +36,6 @@ import ru.greenpix.messenger.chat.service.MessageService;
 import ru.greenpix.messenger.chat.settings.NotificationSettings;
 import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
-import ru.greenpix.messenger.common.specification.BaseSpecification;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -59,6 +56,7 @@ public class MessageServiceImpl implements MessageService {
     private final PrivateChatRepository privateChatRepository;
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final ChatMemberMapper chatMemberMapper;
     private final UsersClient usersClient;
     private final FriendsClient friendsClient;
     private final FileStorageClient fileStorageClient;
@@ -70,19 +68,23 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public @NotNull Page<MessageDto> getMessages(@NotNull UUID userId, int page, int size, String textFilter) {
         logger.trace("User {} is requesting all messages (page={}, size={}, textFilter={})", userId, page, size, textFilter);
-        Specification<Message> spec = BaseSpecification.containsIgnoreCase(Message_.text, textFilter);
 
-        // TODO textFilter в приложениях
-
+        String pattern = "%" + textFilter + "%";
         Sort sort = Sort.by(Sort.Direction.DESC, Message_.CREATION_TIMESTAMP);
+        return messageRepository.findAllWithChatNameAndAttachmentNames(userId, pattern, PageRequest.of(page, size, sort))
+                .map(e -> {
+                    Message message = e.get("message", Message.class);
+                    String chatName = e.get("chatName", String.class);
+                    String attachmentName = e.get("attachmentName", String.class);
 
-        return messageRepository.findAll(spec, PageRequest.of(page, size, sort))
-                .map(e -> messageMapper.toDto(e, e.getChat().getId().toString() /*TODO*/));
+                    return messageMapper.toDto(message, chatName, attachmentName);
+                });
     }
 
     @Transactional
     @Override
     public @NotNull List<MessageDetailsDto> getChatMessages(@NotNull UUID requesterId, @NotNull UUID chatId) {
+        // TODO может возвращать страницу, а не список?
         if (!chatRepository.existsIdAndMember(chatId, requesterId)) {
             throw new ChatNotFoundException();
         }
@@ -126,7 +128,7 @@ public class MessageServiceImpl implements MessageService {
             final PrivateChat finalChat = new PrivateChat();
             chat = finalChat;
             chat.setCreationTimestamp(LocalDateTime.now(clock));
-            chat.setMembers(dtoList.stream().map(e -> toChatMember(finalChat, e)).collect(Collectors.toSet()));
+            chat.setMembers(dtoList.stream().map(e -> chatMemberMapper.toChatMember(finalChat, e)).collect(Collectors.toSet()));
             chat = privateChatRepository.save(chat);
         }
 
@@ -192,14 +194,5 @@ public class MessageServiceImpl implements MessageService {
         attachment.setFileSize(file.getSize());
         attachment.setFileId(fileId.get());
         return attachment;
-    }
-
-    // TODO вынести в маппер
-    private ChatMember toChatMember(Chat chat, UserIntegrationDto dto) {
-        ChatMember chatMember = new ChatMember();
-        chatMember.setId(new ChatMemberId(chat, dto.getId()));
-        chatMember.setMemberName(dto.getFullName());
-        chatMember.setMemberAvatarId(dto.getAvatarId());
-        return chatMember;
     }
 }

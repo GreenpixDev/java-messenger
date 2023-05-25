@@ -14,6 +14,24 @@ import java.util.UUID;
 public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificationExecutor<Chat> {
 
     /**
+     * Запрос на проверку того, что пользователь состоит в каком-то чате
+     * @param chatId идентификатор чата
+     * @param memberId идентификатор пользователя
+     * @return true, если пользователь memberId состоит в чате chatId
+     */
+    @Query("select case when (count(c) > 0) then true else false end from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
+    boolean existsIdAndMember(UUID chatId, UUID memberId);
+
+    /**
+     * Запрос на получение конкретного чата при условии, что пользователь в нём состоит
+     * @param chatId идентификатор чата
+     * @param memberId идентификатор пользователя
+     * @return чат chatId, если пользователь memberId в нем состоит
+     */
+    @Query("select distinct c from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
+    Optional<Chat> findIdAndMember(UUID chatId, UUID memberId);
+
+    /**
      * Запрос на поиск чатов, в которых состоит пользователь,
      * в порядке убывания отправки последнего сообщения в чате.
      * <br><br>
@@ -33,8 +51,8 @@ public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificat
             "   else g.name " +
             "end as name, c as chat, mes as message from Chat c " +
             "join c.messages mes " +
+            "join c.members cm " +
             "join GroupChat g on g = c " +
-            "join ChatMember cm on cm.id.chat = c " +
             "where mes.creationTimestamp = (" +
             "   select max(x.creationTimestamp) from Message x where x.chat = c" +
             ") and (" +
@@ -44,26 +62,8 @@ public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificat
             ") and (" +
             "   c in (select cm2.id.chat from ChatMember cm2 where cm2.id.userId = :userId)" +
             ") and (" +
-            "   lower(g.name) LIKE lower(:nameFilter) or lower(cm.memberName) LIKE lower(:nameFilter)" +
+            "   lower(g.name) like lower(:nameFilter) or lower(cm.memberName) like lower(:nameFilter)" +
             ") order by mes.creationTimestamp desc")
-    Page<Tuple> findAllWithLastMessage(UUID userId, String nameFilter, Pageable pageable);
-
-    /**
-     * Запрос на проверку того, что пользователь состоит в каком-то чате
-     * @param chatId идентификатор чата
-     * @param memberId идентификатор пользователя
-     * @return true, если пользователь memberId состоит в чате chatId
-     */
-    @Query("select case when (count(c) > 0) then true else false end from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
-    boolean existsIdAndMember(UUID chatId, UUID memberId);
-
-    /**
-     * Запрос на получение конкретного чата при условии, что пользователь в нём состоит
-     * @param chatId идентификатор чата
-     * @param memberId идентификатор пользователя
-     * @return чат chatId, если пользователь memberId в нем состоит
-     */
-    @Query("select distinct c from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
-    Optional<Chat> findIdAndMember(UUID chatId, UUID memberId);
+    Page<Tuple> findAllWithLastMessageOrderByLastMessageTime(UUID userId, String nameFilter, Pageable pageable);
 
 }

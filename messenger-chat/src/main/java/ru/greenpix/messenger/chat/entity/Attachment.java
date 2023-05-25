@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Сущность приложения
+ * Сущность вложения
  */
 @Getter
 @Setter
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class Attachment {
 
     /**
-     * Идентификатор приложения
+     * Идентификатор вложения
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +51,7 @@ public class Attachment {
     private long fileSize;
 
     /**
-     * Сообщение, которому принадлежит данное приложение
+     * Сообщение, которому принадлежит данное вложение
      */
     @ManyToOne
     @JoinColumn(name = "message_id", nullable = false)
