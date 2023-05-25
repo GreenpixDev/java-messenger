@@ -56,6 +56,7 @@ public class NotificationController {
             @RequestParam(name = "size", defaultValue = "10")
             int pageSize,
 
+            // TODO починить
             @ParameterObject
             NotificationFilterListDto filters
     ) {
