@@ -15,7 +15,7 @@ public class RabbitMQConfiguration {
     private final NotificationService notificationService;
 
     /**
-     * Bean для приёма сообщений из RabbitMQ
+     * Bean для приёма уведомлений из RabbitMQ
      */
     @Bean
     public Consumer<NotificationAmqpDto> notificationConsumer() {

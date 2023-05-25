@@ -13,9 +13,20 @@ import java.util.UUID;
 
 public interface NotificationRepository extends JpaRepository<Notification, UUID>, JpaSpecificationExecutor<Notification> {
 
+    /**
+     * Запрос на подсчёт количества непрочитанных уведомлений у пользователя
+     * @param userId идентификатор пользователя
+     * @return количество неподсчитанных уведомлений
+     */
     @Query("select count(n) from Notification n where n.userId = :userId and n.readingTimestamp is null")
     int countUnreadByUserId(UUID userId);
 
+    /**
+     * Запрос обновления статуса на "прочитано" у уведомлений
+     * @param userId идентификатор пользователя
+     * @param readingTimestamp временная отметка прочтения уведомлений
+     * @param ids коллекция идентификаторов у уведомлений
+     */
     @Transactional
     @Modifying
     @Query("update Notification n set n.readingTimestamp = :readingTimestamp where n.userId = :userId and n.id in :ids")

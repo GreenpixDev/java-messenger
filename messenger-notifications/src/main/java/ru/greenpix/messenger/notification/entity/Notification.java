@@ -15,28 +15,50 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Сущность уведомлений
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "notification")
 public class Notification {
+
+    /**
+     * Идентификатор уведомления
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    /**
+     * Идентификатор пользователя, которому адресовано уведомление
+     */
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    /**
+     * Временная отметка доставки уведомления пользователю
+     */
     @Column(name = "delivery_timestamp", nullable = false)
     private LocalDateTime deliveryTimestamp;
 
+    /**
+     * Тип уведомления
+     */
     @Column(name = "type", nullable = false)
     private NotificationType type;
 
+    /**
+     * Временная отметка прочтения уведомления пользователем
+     */
     @Column(name = "reading_timestamp")
     private LocalDateTime readingTimestamp;
 
+    /**
+     * Текст (сообщение) уведомления
+     */
     @Column(name = "text", nullable = false)
     private String text;
 
