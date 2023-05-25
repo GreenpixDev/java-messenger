@@ -3,6 +3,7 @@ package ru.greenpix.messenger.chat.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -30,7 +31,10 @@ public class Chat {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToMany(mappedBy = "id.chat", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id.chat",
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST)
     private Set<ChatMember> members = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "chat", orphanRemoval = true, fetch = FetchType.LAZY)

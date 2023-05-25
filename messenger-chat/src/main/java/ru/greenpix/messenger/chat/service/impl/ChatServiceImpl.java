@@ -10,6 +10,8 @@ import ru.greenpix.messenger.chat.dto.ChatDetailsDto;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
 import ru.greenpix.messenger.chat.entity.Chat;
+import ru.greenpix.messenger.chat.entity.ChatMember;
+import ru.greenpix.messenger.chat.entity.ChatMemberId;
 import ru.greenpix.messenger.chat.entity.GroupChat;
 import ru.greenpix.messenger.chat.entity.Message;
 import ru.greenpix.messenger.chat.exception.ChatNotFoundException;
@@ -22,11 +24,14 @@ import ru.greenpix.messenger.chat.repository.ChatRepository;
 import ru.greenpix.messenger.chat.repository.GroupChatRepository;
 import ru.greenpix.messenger.chat.repository.PrivateChatRepository;
 import ru.greenpix.messenger.chat.service.ChatService;
+import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,19 +47,12 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public @NotNull Page<ChatDto> getAccessibleChat(@NotNull UUID userId, int page, int size, String nameFilter) {
-        return chatRepository.findAllWithLastMessage(PageRequest.of(page, size))
+        String pattern = "%" + (nameFilter == null ? "" : nameFilter) + "%";
+        return chatRepository.findAllWithLastMessage(userId, pattern, PageRequest.of(page, size))
                 .map(tuple -> {
+                    String name = tuple.get("name", String.class);
                     Chat chat = tuple.get("chat", Chat.class);
                     Message message = tuple.get("message", Message.class);
-
-                    String name;
-
-                    if (chat instanceof GroupChat) {
-                        name = ((GroupChat) chat).getName();
-                    }
-                    else {
-                        name = "Mock";
-                    }
 
                     return new ChatDto(
                             chat.getId(),
@@ -80,26 +78,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void createChat(@NotNull UUID creatorId, @NotNull ModificationChatDto modificationChatDto) {
-        if (!modificationChatDto.getMembers().contains(creatorId)) {
-            if (usersClient.getUsers(modificationChatDto.getMembers()).size()
-                    != modificationChatDto.getMembers().size()) {
-                throw new UserNotFoundException();
-            }
-
-            modificationChatDto.getMembers().add(creatorId);
-
-            // TODO оптимизировать в один запрос
-            for (UUID id : modificationChatDto.getMembers()) {
-                if (friendsClient.isBlockedByUser(id, creatorId)) {
-                    throw new UserBlockedException();
-                }
-            }
-        }
-
-        GroupChat chat = mapper.toGroupChatEntity(modificationChatDto);
-        chat.setAdminUserId(creatorId);
-        chat.setCreationTimestamp(LocalDateTime.now(clock));
-        chatRepository.save(chat);
+        saveChat(new GroupChat(), creatorId, modificationChatDto);
     }
 
     @Transactional
@@ -111,12 +90,42 @@ public class ChatServiceImpl implements ChatService {
             throw new IllegalChatTypeException();
         }
 
-        if (!modificationChatDto.getMembers().contains(creatorId)) {
-            modificationChatDto.getMembers().add(creatorId);
+        saveChat((GroupChat) chat, creatorId, modificationChatDto);
+    }
+
+    private void saveChat(GroupChat chat, UUID creatorId, ModificationChatDto dto) {
+        List<UUID> members = dto.getMembers();
+        if (!members.contains(creatorId)) {
+            members.add(creatorId);
         }
 
-        GroupChat groupChat = mapper.partialUpdateGroupChatEntity(modificationChatDto, (GroupChat) chat);
+        List<UserIntegrationDto> dtoList = usersClient.getUsers(members);
+
+        if (dtoList.size() != members.size()) {
+            throw new UserNotFoundException();
+        }
+
+        // TODO оптимизировать в один запрос
+        for (UUID id : dto.getMembers()) {
+            if (friendsClient.isBlockedByUser(id, creatorId)) {
+                throw new UserBlockedException();
+            }
+        }
+
+
+        chat.setName(dto.getName());
+        chat.setAdminUserId(creatorId);
+        chat.setCreationTimestamp(LocalDateTime.now(clock));
+        chat.setMembers(dtoList.stream().map(e -> toChatMember(chat, e)).collect(Collectors.toSet()));
         chatRepository.save(chat);
     }
 
+    // TODO вынести в маппер
+    private ChatMember toChatMember(Chat chat, UserIntegrationDto dto) {
+        ChatMember chatMember = new ChatMember();
+        chatMember.setId(new ChatMemberId(chat, dto.getId()));
+        chatMember.setMemberName(dto.getFullName());
+        chatMember.setMemberAvatarId(dto.getAvatarId());
+        return chatMember;
+    }
 }
