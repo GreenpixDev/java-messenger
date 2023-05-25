@@ -8,6 +8,4 @@ public interface FileStorageService {
 
     byte[] downloadFile(UUID identifier);
 
-    void deleteFile(UUID identifier);
-
 }

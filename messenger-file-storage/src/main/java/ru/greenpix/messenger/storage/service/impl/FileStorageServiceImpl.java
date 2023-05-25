@@ -4,7 +4,6 @@ import io.minio.GetObjectArgs;
 import io.minio.GetObjectResponse;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -73,31 +72,4 @@ public class FileStorageServiceImpl implements FileStorageService {
         throw new InternalServerException();
     }
 
-    @Override
-    public void deleteFile(UUID identifier) {
-        Exception exception;
-
-        try {
-            client.removeObject(RemoveObjectArgs.builder()
-                    .bucket(settings.getBucket())
-                    .object(identifier.toString())
-                    .build()
-            );
-            return;
-        }
-        catch (ErrorResponseException e) {
-            if (NO_SUCH_KEY_CODE.equals(e.errorResponse().code())) {
-                throw new FileNotFoundException();
-            }
-            else {
-                exception = e;
-            }
-        }
-        catch (Exception e) {
-            exception = e;
-        }
-
-        logger.error("Cannot delete file " + identifier, exception);
-        throw new InternalServerException();
-    }
 }
