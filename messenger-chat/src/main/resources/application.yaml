@@ -19,6 +19,17 @@ spring:
       ddl-auto: validate
   flyway:
     baseline-on-migrate: true
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    host: ${RABBITMQ_HOST:127.0.0.1}
+    port: ${RABBITMQ_PORT:5672}
+  cloud:
+    stream:
+      bindings:
+        userChangesConsumer-in-0:
+          destination: ${RABBITMQ_TOPIC:user-changes-topic}
 
 springdoc:
   swagger-ui:
@@ -38,7 +49,8 @@ integration:
 
 amqp:
   producer:
-    topic: ${RABBITMQ_TOPIC:notification-topic}
+    notification:
+      topic: ${RABBITMQ_TOPIC:notification-topic}
 
 notification:
   new-private-message: "У вас новое непрочитанное сообщение!"

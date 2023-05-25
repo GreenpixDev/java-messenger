@@ -42,7 +42,10 @@ integration:
 
 amqp:
   producer:
-    topic: ${RABBITMQ_TOPIC:notification-topic}
+    notification:
+      topic: ${RABBITMQ_TOPIC:notification-topic}
+    user-changes:
+      topic: ${RABBITMQ_TOPIC:user-changes-topic}
 
 notification:
   login: "В Ваш аккаунт был выполнен вход."

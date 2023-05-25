@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@ConfigurationProperties(prefix = "amqp.producer")
+@ConfigurationProperties(prefix = "amqp.producer.user-changes")
 @ConstructorBinding
 @Validated
 public class AmqpProducerSettings {
