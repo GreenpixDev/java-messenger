@@ -57,13 +57,13 @@ public class FriendController {
             int pageSize,
 
             @RequestParam(defaultValue = "")
-            String fullNameFilter
+            String filterFullName
     ) {
         Page<Friend> page = friendService.getFriendPage(
                 jwtUser.getId(),
                 pageNumber - 1,
                 pageSize,
-                fullNameFilter
+                filterFullName
         );
         return pageMapper.toDto(page.map(friendMapper::toDto));
     }
