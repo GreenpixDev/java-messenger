@@ -2,6 +2,7 @@ package ru.greenpix.messenger.chat.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -64,9 +65,11 @@ public class MessageServiceImpl implements MessageService {
     private final NotificationProducer notificationProducer;
     private final NotificationSettings notificationSettings;
     private final Clock clock;
+    private final Logger logger;
 
     @Override
     public @NotNull Page<MessageDto> getMessages(@NotNull UUID userId, int page, int size, String textFilter) {
+        logger.trace("User {} is requesting all messages (page={}, size={}, textFilter={})", userId, page, size, textFilter);
         Specification<Message> spec = BaseSpecification.containsIgnoreCase(Message_.text, textFilter);
 
         // TODO textFilter в приложениях
@@ -83,6 +86,7 @@ public class MessageServiceImpl implements MessageService {
         if (!chatRepository.existsIdAndMember(chatId, requesterId)) {
             throw new ChatNotFoundException();
         }
+        logger.trace("User {} is requesting messages in chat {}", requesterId, chatId);
 
         Sort sort = Sort.by(Sort.Direction.DESC, Message_.CREATION_TIMESTAMP);
         Page<Message> messages = messageRepository.findAllByChatId(chatId, PageRequest.of(0, 100, sort));
@@ -98,6 +102,9 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendPrivateMessage(@NotNull UUID senderId, @NotNull UUID receiverId,
                                    @NotNull SendingMessageDto dto, @NotNull MultipartFile[] files) {
+        logger.debug("User {} is sending private message to user {} with {} attachments (text = {})",
+                senderId, receiverId, files.length, dto.getText());
+
         PrivateChat chat = privateChatRepository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .orElse(null);
 
@@ -131,15 +138,22 @@ public class MessageServiceImpl implements MessageService {
                 NotificationType.NEW_PRIVATE_MESSAGE,
                 notificationSettings.getNewPrivateMessage()
         ));
+
+        logger.info("User {} sent private message to user {}", senderId, receiverId);
     }
 
     @Transactional
     @Override
     public void sendGroupMessage(@NotNull UUID senderId, @NotNull UUID chatId,
                                  @NotNull SendingMessageDto dto, @NotNull MultipartFile[] files) {
+        logger.debug("User {} is sending group message to chat {} with {} attachments (text = {})",
+                senderId, chatId, files.length, dto.getText());
+
         Chat chat = chatRepository.findIdAndMember(chatId, senderId).orElseThrow(ChatNotFoundException::new);
         Message message = createMessage(senderId, chat, dto, files);
         messageRepository.save(message);
+
+        logger.info("User {} sent group message to chat {}", senderId, chatId);
     }
 
     private Map<Message, UserIntegrationDto> toMessageOwnerMap(List<Message> messages) {

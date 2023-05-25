@@ -2,6 +2,7 @@ package ru.greenpix.messenger.chat.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,12 @@ public class ChatServiceImpl implements ChatService {
     private final FriendsClient friendsClient;
     private final UsersClient usersClient;
     private final ChatMapper mapper;
+    private final Logger logger;
 
     @Override
     public @NotNull Page<ChatDto> getAccessibleChat(@NotNull UUID userId, int page, int size, String nameFilter) {
+        logger.trace("User {} is requesting accessible chats (page={}, size={}, nameFilter={})", userId, page, size, nameFilter);
+
         String pattern = "%" + (nameFilter == null ? "" : nameFilter) + "%";
         return chatRepository.findAllWithLastMessage(userId, pattern, PageRequest.of(page, size))
                 .map(tuple -> {
@@ -66,6 +70,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public @NotNull ChatDetailsDto getChat(@NotNull UUID requesterId, @NotNull UUID chatId) {
+        logger.trace("User {} is requesting chat {}", requesterId, chatId);
         Chat chat = chatRepository.findIdAndMember(chatId, requesterId).orElseThrow(ChatNotFoundException::new);
 
         if (chat instanceof GroupChat) {
@@ -89,12 +94,15 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void createChat(@NotNull UUID creatorId, @NotNull ModificationChatDto modificationChatDto) {
-        saveChat(new GroupChat(), creatorId, modificationChatDto);
+        logger.debug("User {} is creating chat {}", creatorId, modificationChatDto);
+        Chat chat = saveChat(new GroupChat(), creatorId, modificationChatDto);
+        logger.info("User {} created chat {}", creatorId, chat.getId());
     }
 
     @Transactional
     @Override
     public void updateChat(@NotNull UUID creatorId, @NotNull UUID chatId, @NotNull ModificationChatDto modificationChatDto) {
+        logger.debug("User {} is updating chat {} {}", creatorId, chatId, modificationChatDto);
         Chat chat = chatRepository.findIdAndMember(chatId, creatorId).orElseThrow(ChatNotFoundException::new);
 
         if (!(chat instanceof GroupChat)) {
@@ -102,9 +110,10 @@ public class ChatServiceImpl implements ChatService {
         }
 
         saveChat((GroupChat) chat, creatorId, modificationChatDto);
+        logger.info("User {} updated chat {}", creatorId, chat.getId());
     }
 
-    private void saveChat(GroupChat chat, UUID creatorId, ModificationChatDto dto) {
+    private Chat saveChat(GroupChat chat, UUID creatorId, ModificationChatDto dto) {
         List<UUID> members = dto.getMembers();
         if (!members.contains(creatorId)) {
             members.add(creatorId);
@@ -128,7 +137,7 @@ public class ChatServiceImpl implements ChatService {
         chat.setAdminUserId(creatorId);
         chat.setCreationTimestamp(LocalDateTime.now(clock));
         chat.setMembers(dtoList.stream().map(e -> toChatMember(chat, e)).collect(Collectors.toSet()));
-        chatRepository.save(chat);
+        return chatRepository.save(chat);
     }
 
     // TODO вынести в маппер
