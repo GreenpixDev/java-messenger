@@ -105,7 +105,7 @@ public class MessageServiceImpl implements MessageService {
 
         if (chat == null) {
             chat = new PrivateChat();
-            chat.setMemberIds(Set.of(senderId, receiverId));
+            // TODO chat.setMemberIds(Set.of(senderId, receiverId));
             chat = privateChatRepository.save(chat);
         }
 

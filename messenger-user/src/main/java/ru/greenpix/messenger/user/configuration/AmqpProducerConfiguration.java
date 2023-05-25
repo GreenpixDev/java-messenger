@@ -4,20 +4,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
-import ru.greenpix.messenger.amqp.producer.producer.impl.NotificationProducerImpl;
-import ru.greenpix.messenger.amqp.producer.settings.AmqpProducerSettings;
+import ru.greenpix.messenger.user.producer.UserChangesProducer;
+import ru.greenpix.messenger.user.producer.impl.UserChangesProducerImpl;
+import ru.greenpix.messenger.user.settings.UserChangesProducerSettings;
 
 @Configuration
-@EnableConfigurationProperties({AmqpProducerSettings.class})
+@EnableConfigurationProperties({UserChangesProducerSettings.class})
 public class AmqpProducerConfiguration {
 
     @Bean
-    public NotificationProducer notificationProducer(
-            AmqpProducerSettings settings,
+    public UserChangesProducer userChangesProducer(
+            UserChangesProducerSettings settings,
             StreamBridge streamBridge
     ) {
-        return new NotificationProducerImpl(streamBridge, settings.getTopic());
+        return new UserChangesProducerImpl(streamBridge, settings.getTopic());
     }
 
 }

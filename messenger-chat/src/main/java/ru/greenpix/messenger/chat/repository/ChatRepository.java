@@ -23,10 +23,10 @@ public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificat
             ") order by m.creationTimestamp desc")
     Page<Tuple> findAllWithLastMessage(Pageable pageable);
 
-    @Query("select case when (count(c) > 0) then true else false end from Chat c join c.memberIds m where c.id = :chatId and m = :memberId")
+    @Query("select case when (count(c) > 0) then true else false end from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
     boolean existsIdAndMember(UUID chatId, UUID memberId);
 
-    @Query("select distinct c from Chat c join c.memberIds m where c.id = :chatId and m = :memberId")
+    @Query("select distinct c from Chat c join c.members m where c.id = :chatId and m.id.userId = :memberId")
     Optional<Chat> findIdAndMember(UUID chatId, UUID memberId);
 
 }

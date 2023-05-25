@@ -2,7 +2,6 @@ package ru.greenpix.messenger.chat.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -20,7 +19,7 @@ public interface ChatMapper {
 
     ChatDetailsDto toDetailsDto(GroupChat chat);
 
-    @Mapping(source = "members", target = "memberIds")
+    // TODO @Mapping(source = "members", target = "memberIds")
     GroupChat toGroupChatEntity(ModificationChatDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

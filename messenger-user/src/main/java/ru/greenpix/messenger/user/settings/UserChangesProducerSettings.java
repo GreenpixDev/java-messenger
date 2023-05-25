@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @ConfigurationProperties(prefix = "amqp.producer.user-changes")
 @ConstructorBinding
 @Validated
-public class AmqpProducerSettings {
+public class UserChangesProducerSettings {
 
     @NotBlank
     public final String topic;
