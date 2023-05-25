@@ -20,6 +20,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Сущность чата
+ */
 @Getter
 @Setter
 @Entity
@@ -27,20 +30,32 @@ import java.util.UUID;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class Chat {
 
+    /**
+     * Идентификатор чата
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    /**
+     * Дата и время создания чата
+     */
     @Column(name = "creation_timestamp")
     private LocalDateTime creationTimestamp;
 
+    /**
+     * Множество участников чата
+     */
     @OneToMany(mappedBy = "id.chat",
             orphanRemoval = true,
             fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
     private Set<ChatMember> members = new LinkedHashSet<>();
 
+    /**
+     * Множество сообщений в чате
+     */
     @OneToMany(mappedBy = "chat", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Message> messages = new LinkedHashSet<>();
 

@@ -11,6 +11,12 @@ import java.util.UUID;
 
 public interface ChatMemberRepository extends JpaRepository<ChatMember, ChatMemberId> {
 
+    /**
+     * Запрос на обновление имени и ID аватара в чатах у пользователя
+     * @param id идентификатор пользователя
+     * @param name новое имя пользователя
+     * @param avatarId новый ID аватара пользователя
+     */
     @Transactional
     @Modifying
     @Query("update ChatMember m set m.memberName = :name, m.memberAvatarId = :avatarId where m.id.userId = :id")

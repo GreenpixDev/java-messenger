@@ -36,9 +36,7 @@ public class ChatController {
     private final ChatService chatService;
     private final PageMapper pageMapper;
 
-    @Operation(
-            summary = "Получение списка переписок"
-    )
+    @Operation(summary = "Получение списка переписок")
     @GetMapping
     public PageDto<ChatDto> getChatList(
             @AuthenticationPrincipal

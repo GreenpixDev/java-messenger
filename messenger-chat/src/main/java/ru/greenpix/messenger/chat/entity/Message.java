@@ -21,29 +21,51 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Сущность сообщения
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "message")
 public class Message {
+
+    /**
+     * Идентификатор сообщения
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    /**
+     * Идентификатор отправителя
+     */
     @Column(name = "sender_id", nullable = false)
     private UUID senderId;
 
+    /**
+     * Текст сообщения
+     */
     @Column(name = "text", nullable = false, length = 500)
     private String text;
 
+    /**
+     * Дата отправки сообщения
+     */
     @Column(name = "creation_timestamp", nullable = false)
     private LocalDateTime creationTimestamp;
 
+    /**
+     * Чат, которому принадлежит данное сообщений
+     */
     @ManyToOne
     @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;
 
+    /**
+     * Множество приложений сообщения
+     */
     @OneToMany(
             mappedBy = "message",
             orphanRemoval = true,

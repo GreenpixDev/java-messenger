@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Вспомогательный класс для переадресации {@link MultipartFile} на другой микросервис
+ */
 public class MultipartInputStreamFileResource extends InputStreamResource {
 
     private final String filename;

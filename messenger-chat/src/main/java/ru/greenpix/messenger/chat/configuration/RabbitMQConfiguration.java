@@ -15,7 +15,7 @@ public class RabbitMQConfiguration {
     private final UserChangesService userChangesService;
 
     /**
-     * Bean для приёма сообщений из RabbitMQ
+     * Bean для приёма изменений пользователя из RabbitMQ
      */
     @Bean
     public Consumer<UserChangesAmqpDto> userChangesConsumer() {

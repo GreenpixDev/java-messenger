@@ -15,11 +15,4 @@ public interface ChatMapper {
 
     ChatDetailsDto toDetailsDto(GroupChat chat);
 
-    // TODO убрать
- /*   @Deprecated
-    GroupChat toGroupChatEntity(ModificationChatDto dto);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    GroupChat partialUpdateGroupChatEntity(ModificationChatDto dto, @MappingTarget GroupChat entity);*/
-
 }

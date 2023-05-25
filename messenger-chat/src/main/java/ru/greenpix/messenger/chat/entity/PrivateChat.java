@@ -6,6 +6,9 @@ import lombok.Setter;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+/**
+ * Сущность приватного сообщения
+ */
 @Getter
 @Setter
 @Entity

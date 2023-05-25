@@ -15,25 +15,44 @@ import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Сущность приложения
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "attachment")
 public class Attachment {
+
+    /**
+     * Идентификатор приложения
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    /**
+     * Идентификатор файла в файловом хранилище
+     */
     @Column(name = "file_id", nullable = false)
     private UUID fileId;
 
+    /**
+     * Название файла
+     */
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
+    /**
+     * Размер файла
+     */
     @Column(name = "file_size", nullable = false)
     private long fileSize;
 
+    /**
+     * Сообщение, которому принадлежит данное приложение
+     */
     @ManyToOne
     @JoinColumn(name = "message_id", nullable = false)
     private Message message;

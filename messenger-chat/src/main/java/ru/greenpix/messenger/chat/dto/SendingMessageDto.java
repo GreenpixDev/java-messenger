@@ -1,5 +1,6 @@
 package ru.greenpix.messenger.chat.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class SendingMessageDto implements Serializable {
 
-    @Size(min = 1, max = 500)
+    @Schema(description = "Текст сообщения")
+    @Size(max = 500)
     private String text;
 
 }
