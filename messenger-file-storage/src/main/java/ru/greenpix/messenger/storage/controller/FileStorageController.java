@@ -24,9 +24,7 @@ public class FileStorageController {
     private final FileStorageService fileStorageService;
 
     @GetMapping("{id}")
-    @Operation(
-            summary = "Получение файла по идентификатору"
-    )
+    @Operation(summary = "Получение файла по идентификатору")
     public ResponseEntity<Resource> download(
             @PathVariable
             UUID id

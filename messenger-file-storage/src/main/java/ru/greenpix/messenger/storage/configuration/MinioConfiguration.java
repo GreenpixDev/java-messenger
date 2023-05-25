@@ -12,6 +12,9 @@ public class MinioConfiguration {
 
     private final MinioSettings settings;
 
+    /**
+     * Bean настроенного клиента для доступа к MinIO
+     */
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()

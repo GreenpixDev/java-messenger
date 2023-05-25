@@ -20,6 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
 
+    /**
+     * Код ошибки, который возвращает MinIO, когда файл не найден по идентификатору
+     */
     private static final String NO_SUCH_KEY_CODE = "NoSuchKey";
 
     private final MinioSettings settings;
@@ -37,6 +40,7 @@ public class FileStorageServiceImpl implements FileStorageService {
                     .stream(new ByteArrayInputStream(content), content.length, -1)
                     .build()
             );
+            logger.info("Uploaded new file: {}", id);
         }
         catch (Exception e) {
             logger.error("Cannot upload file", e);
@@ -54,6 +58,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         Exception exception;
 
         try (GetObjectResponse in = client.getObject(args)) {
+            logger.trace("Downloading file {}", identifier);
             return in.readAllBytes();
         }
         catch (ErrorResponseException e) {

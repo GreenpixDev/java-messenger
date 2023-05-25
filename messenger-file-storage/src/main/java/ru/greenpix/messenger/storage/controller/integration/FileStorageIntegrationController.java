@@ -22,9 +22,7 @@ public class FileStorageIntegrationController {
     private final FileStorageService fileStorageService;
 
     @PostMapping
-    @Operation(
-            summary = "Загрузка файла в хранилище"
-    )
+    @Operation(summary = "Загрузка файла в хранилище")
     public UUID upload(
             @RequestParam("file")
             MultipartFile file
