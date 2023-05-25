@@ -22,6 +22,8 @@ import ru.greenpix.messenger.chat.entity.Message_;
 import ru.greenpix.messenger.chat.entity.PrivateChat;
 import ru.greenpix.messenger.chat.exception.ChatNotFoundException;
 import ru.greenpix.messenger.chat.exception.UploadFileFailedException;
+import ru.greenpix.messenger.chat.exception.UserBlockedException;
+import ru.greenpix.messenger.chat.exception.UserNotFriendException;
 import ru.greenpix.messenger.chat.integration.friends.client.FriendsClient;
 import ru.greenpix.messenger.chat.integration.storage.client.FileStorageClient;
 import ru.greenpix.messenger.chat.integration.users.client.UsersClient;
@@ -93,6 +95,13 @@ public class MessageServiceImpl implements MessageService {
                                    @NotNull SendingMessageDto dto, @NotNull MultipartFile[] files) {
         PrivateChat chat = privateChatRepository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .orElse(null);
+
+        if (friendsClient.isBlockedByUser(receiverId, senderId)) {
+            throw new UserBlockedException();
+        }
+        if (!friendsClient.isFriend(senderId, receiverId)) {
+            throw new UserNotFriendException();
+        }
 
         if (chat == null) {
             chat = new PrivateChat();
