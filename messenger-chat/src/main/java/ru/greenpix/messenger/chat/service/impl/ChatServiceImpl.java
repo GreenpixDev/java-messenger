@@ -30,6 +30,7 @@ import ru.greenpix.messenger.common.exception.UserNotFoundException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -74,6 +75,7 @@ public class ChatServiceImpl implements ChatService {
         Chat chat = chatRepository.findIdAndMember(chatId, requesterId).orElseThrow(ChatNotFoundException::new);
 
         if (chat instanceof GroupChat) {
+            // TODO решить, че делать с маппером. Лучше сделать не через mapstruct
             return mapper.toDetailsDto((GroupChat) chat);
         }
         else {
@@ -114,7 +116,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private Chat saveChat(GroupChat chat, UUID creatorId, ModificationChatDto dto) {
-        List<UUID> members = dto.getMembers();
+        List<UUID> members = new ArrayList<>(dto.getMembers());
         if (!members.contains(creatorId)) {
             members.add(creatorId);
         }

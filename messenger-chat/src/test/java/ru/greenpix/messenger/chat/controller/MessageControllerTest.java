@@ -19,7 +19,6 @@ import ru.greenpix.messenger.jwt.manager.JwtManager;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,7 +58,7 @@ public class MessageControllerTest {
 
         GroupChat groupChat = new GroupChat();
         groupChat.setId(UUID.fromString("e5cbbc6a-a5d6-4d68-8eb5-cec6ddd11a42"));
-        groupChat.setMemberIds(Set.of(uuid));
+        // TODO groupChat.setMemberIds(Set.of(uuid));
         groupChat.setAdminUserId(uuid);
         groupChat.setAvatarId(UUID.fromString("52a6477f-ad81-4a16-9eb9-77d0bcdc0cc0"));
         groupChat.setName("Test Chat");
@@ -68,7 +67,7 @@ public class MessageControllerTest {
 
         GroupChat groupChat2 = new GroupChat();
         groupChat2.setId(UUID.fromString("6c2915e5-cd8d-49be-9bbf-57dc7a8d4739"));
-        groupChat2.setMemberIds(Set.of(uuid));
+        // TODO groupChat2.setMemberIds(Set.of(uuid));
         groupChat2.setAdminUserId(uuid);
         groupChat2.setName("Second Chat");
         groupChat2.setCreationTimestamp(LocalDateTime.of(2000, 1, 1, 0, 0));
