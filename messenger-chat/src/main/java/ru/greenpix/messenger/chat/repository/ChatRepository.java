@@ -50,11 +50,13 @@ public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificat
             "   then cm.memberName " +
             "   else g.name " +
             "end as name, c as chat, mes as message from Chat c " +
-            "join c.messages mes " +
+            "left join c.messages mes " +
             "join c.members cm " +
             "join GroupChat g on g = c " +
-            "where mes.creationTimestamp = (" +
-            "   select max(x.creationTimestamp) from Message x where x.chat = c" +
+            "where (" +
+            "   mes.creationTimestamp = (" +
+            "       select max(x.creationTimestamp) from Message x where x.chat = c" +
+            "   ) or mes.creationTimestamp is null" +
             ") and (" +
             "   g.name is null and cm.id.userId <> :userId " +
             "   or " +
