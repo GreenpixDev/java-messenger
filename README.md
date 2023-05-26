@@ -31,9 +31,11 @@
   * 8013 - микросервис уведомлений
   * 8014 - микросервис файлового хранилища
 * Вызывать методы можно как через swagger, так и через Postman (предпочтительнее).
+  
   ![swagger.png](materials/swagger.png)
 * Также через Postman можно вызывать методы всех микросервисов через прокси (gateway),
 которое будет доступно по url `http://localhost:8080`
+  
   ![postman.png](materials/postman.png)
 
 ## Что реализовано?
@@ -85,7 +87,8 @@ user через HTTP.
 
 **Тестирование**:
 * Покрытие сервисов unit тестами более чем на 80%
-![unit-test.png](materials/unit-test.png)
+
+  ![unit-test.png](materials/unit-test.png)
 * Полное покрытие api тестами сервиса messenger-user
 * Частичное покрытие api тестами сервисов messenger-friends и messenger-chat
 
@@ -95,7 +98,8 @@ user через HTTP.
 
 **Документация**
 * Покрыта большая часть кода JavaDoc
-![javadoc.png](materials/javadoc.png)
+
+  ![javadoc.png](materials/javadoc.png)
 * Написана документация под swagger (с помощью аннотаций)
 
 **Миграции БД**
