@@ -256,18 +256,11 @@
 				},
 				{
 					"name": "users/search",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Аникушин Роман Евгеньевич\",\r\n    \"birthDate\": \"2003-06-15\",\r\n    \"phone\": \"89005553535\",\r\n    \"city\": \"Томск\"\r\n}"
-						},
 						"url": {
-							"raw": "{{root}}/users/me/friends/search?page=1&size=10&fullName=st",
+							"raw": "{{root}}/users/me/friends/search?page=1&size=10",
 							"host": [
 								"{{root}}"
 							],
@@ -288,7 +281,8 @@
 								},
 								{
 									"key": "fullName",
-									"value": "st"
+									"value": "st",
+									"disabled": true
 								},
 								{
 									"key": "additionDate",
@@ -820,8 +814,21 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Боброта\",\r\n    \"members\": []\r\n}",
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "data",
+											"value": "{\n    \"name\": \"Боброта\",\n    \"members\": []\n}",
+											"contentType": "application/json",
+											"type": "default"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/C:/Users/Рома/Desktop/icon/Слой 1.png",
+											"disabled": true
+										}
+									],
 									"options": {
 										"raw": {
 											"language": "json"
@@ -922,7 +929,7 @@
 											"type": "default"
 										},
 										{
-											"key": "file",
+											"key": "attachment",
 											"contentType": "multipart/form-data",
 											"type": "file",
 											"src": "/C:/Users/Рома/Desktop/icon/Слой 1.png"
@@ -1004,8 +1011,19 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"text\": \"Ау\"\r\n}",
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "data",
+											"value": "{\"text\": \"Привет всем!\"}",
+											"type": "default"
+										},
+										{
+											"key": "attachment",
+											"type": "file",
+											"src": "/C:/Users/Рома/Desktop/icon/Слой 3.png"
+										}
+									],
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1042,8 +1060,8 @@
 									],
 									"query": [
 										{
-											"key": "additionDate",
-											"value": "2023-04-16",
+											"key": "textFilter",
+											"value": "ай",
 											"disabled": true
 										}
 									]
@@ -1159,16 +1177,6 @@
 			]
 		}
 	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOGIxNTE4Zi02OGU2LTRhYTQtYjI1ZS1jMTQyYmNmZmQwZTYiLCJleHAiOjE2ODUxODc1MzEsInVzZXJuYW1lIjoic3RyaW5nNSJ9.mk8hFpU8-YoN4BPBXJLwAzsPSoQ7SICMj7fCIxnbPE8",
-				"type": "string"
-			}
-		]
-	},
 	"event": [
 		{
 			"listen": "prerequest",
