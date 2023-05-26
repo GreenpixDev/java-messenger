@@ -90,7 +90,7 @@ user через HTTP.
 
   ![unit-test.png](materials/unit-test.png)
 * Полное покрытие api тестами сервиса messenger-user
-* Частичное покрытие api тестами сервисов messenger-friends и messenger-chat
+* Частичное покрытие api тестами сервисов messenger-friends и messenger-chat. Некоторые тесты там не будут корректно работать.
 
 **Логирование**
 * Везде в сервисах (и не только) добавлено логирование на разных уровнях (ERROR / INFO / DEBUG / TRACE)
