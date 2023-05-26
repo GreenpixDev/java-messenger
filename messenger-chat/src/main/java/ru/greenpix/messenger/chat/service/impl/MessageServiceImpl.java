@@ -159,6 +159,9 @@ public class MessageServiceImpl implements MessageService {
         logger.info("User {} sent group message to chat {}", senderId, chatId);
     }
 
+    // Этот метод был написан на момент, когда информация об аватарке и имени пользователей не хранилась
+    // в БД этого сервиса. Поэтому этот метод устарел, а новый метод я не успел реализовать.
+    @Deprecated
     private Map<Message, UserIntegrationDto> toMessageOwnerMap(List<Message> messages) {
         Set<UUID> senderIds = messages.stream().map(Message::getSenderId).collect(Collectors.toSet());
         Map<UUID, UserIntegrationDto> users = usersClient.getUsers(senderIds)

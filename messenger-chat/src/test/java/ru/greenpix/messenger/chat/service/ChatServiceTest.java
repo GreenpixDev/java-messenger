@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import ru.greenpix.messenger.chat.dto.ChatDetailsDto;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
 import ru.greenpix.messenger.chat.entity.ChatMember;
@@ -31,6 +32,7 @@ import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
 import javax.persistence.Tuple;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
@@ -55,10 +57,12 @@ public class ChatServiceTest {
     static UUID ID_TEST = UUID.fromString("4da6f9a6-4547-4769-b33c-06746f396d89");
     static String STRING_TEST = "Test";
     static int INT_TEST = 25;
+    static LocalDateTime LOCAL_DATE_TIME_TEST = LocalDate.of(2000, 1, 1).atStartOfDay();
     static Page<Tuple> PAGE_TUPLE_TEST = Page.empty();
     static GroupChat GROUP_CHAT_TEST = new GroupChat();
     static PrivateChat PRIVATE_CHAT_TEST = new PrivateChat();
     static ChatMember CHAT_MEMBER_TEST = new ChatMember();
+    static ChatDetailsDto CHAT_DETAILS_DTO_TEST = new ChatDetailsDto(STRING_TEST, ID_TEST, ID_TEST, LOCAL_DATE_TIME_TEST);
     static ModificationChatDto MODIFICATION_CHAT_DTO_TEST = new ModificationChatDto(STRING_TEST, List.of(ID_TEST));
     static UserIntegrationDto USER_INTEGRATION_DTO_TEST = new UserIntegrationDto(ID_TEST, STRING_TEST, ID_TEST);
 
@@ -112,15 +116,13 @@ public class ChatServiceTest {
     @DisplayName("Проверка получения детальной информации о чате")
     @Test
     void getChatTest() {
-        /*when(chatRepository.findAllWithLastMessage(
-                eq(ID_TEST),
-                eq(STRING_TEST),
-                eq(PageRequest.of(INT_TEST, INT_TEST))
-        )).thenReturn(PAGE_TUPLE_TEST);
+        when(chatRepository.findIdAndMember(eq(ID_TEST), eq(ID_TEST)))
+                .thenReturn(Optional.of(GROUP_CHAT_TEST));
+        when(chatMapper.toDetailsDto(eq(GROUP_CHAT_TEST), any(), any(), any()))
+                .thenReturn(CHAT_DETAILS_DTO_TEST);
 
         ChatDetailsDto dto = chatService.getChat(ID_TEST, ID_TEST);
-        assertEquals(Page.empty(), page);*/
-        // TODO
+        assertEquals(CHAT_DETAILS_DTO_TEST, dto);
     }
 
     @DisplayName("Проверка создания чата")

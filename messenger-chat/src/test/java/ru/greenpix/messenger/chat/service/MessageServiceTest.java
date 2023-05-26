@@ -124,20 +124,6 @@ public class MessageServiceTest {
         assertEquals(PAGE_MESSAGE_DTO_TEST, page);
     }
 
-    @DisplayName("Проверка получения сообщений в переписке")
-    @Test
-    void getChatMessagesTest() {
-        /*when(chatRepository.existsIdAndMember(eq(ID_TEST), eq(ID_TEST)))
-                .thenReturn(true);
-        when(messageRepository.findAllByChatId(eq(ID_TEST), any(Pageable.class)))
-                .thenReturn(PAGE_MESSAGE_TEST);
-
-        List<MessageDetailsDto> list = messageService.getChatMessages(ID_TEST, ID_TEST);
-        assertEquals(PAGE_MESSAGE_DTO_TEST, page);*/
-
-        // TODO
-    }
-
     @DisplayName("Проверка отправки сообщения в личные сообщения")
     @Test
     void sendPrivateMessageTest() {
