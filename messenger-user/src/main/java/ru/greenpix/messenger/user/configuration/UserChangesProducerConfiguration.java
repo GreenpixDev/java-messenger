@@ -10,7 +10,7 @@ import ru.greenpix.messenger.user.settings.UserChangesProducerSettings;
 
 @Configuration
 @EnableConfigurationProperties({UserChangesProducerSettings.class})
-public class AmqpProducerConfiguration {
+public class UserChangesProducerConfiguration {
 
     @Bean
     public UserChangesProducer userChangesProducer(

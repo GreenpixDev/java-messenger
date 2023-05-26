@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @ConfigurationProperties(prefix = "amqp.producer.notification")
 @ConstructorBinding
 @Validated
-public class AmqpProducerSettings {
+public class NotificationProducerSettings {
 
     @NotBlank
     public final String topic;

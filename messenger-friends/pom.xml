@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>ru.greenpix.messenger</groupId>
-            <artifactId>messenger-boot-amqp-producer</artifactId>
+            <artifactId>messenger-boot-notification-producer</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
