@@ -17,7 +17,6 @@ public class FriendsClientImpl implements FriendsClient {
     private final RestTemplate restTemplate;
     private final IntegrationSettings integrationSettings;
 
-    // TODO норм вынести URL в конфиг
     @Override
     public boolean isBlockedByUser(@NotNull UUID targetUserId, @NotNull UUID blockedUserId) {
         String url = integrationSettings.getFriendsServiceUrl() + "/api/users/" + targetUserId + "/blacklist/" + blockedUserId + "/status";

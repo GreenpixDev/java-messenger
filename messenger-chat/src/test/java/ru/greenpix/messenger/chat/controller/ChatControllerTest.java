@@ -55,12 +55,12 @@ public class ChatControllerTest {
 
         PrivateChat privateChat = new PrivateChat();
         privateChat.setId(UUID.fromString("f1d43686-a860-4a75-b6f8-35009f2389de"));
-        // TODO privateChat.setMemberIds(Set.of(uuid, UUID.fromString("272d9bee-9d89-4635-b721-79e55ade20a1")));
+        // privateChat.setMemberIds(Set.of(uuid, UUID.fromString("272d9bee-9d89-4635-b721-79e55ade20a1")));
         chatRepository.save(privateChat);
 
         GroupChat groupChat = new GroupChat();
         groupChat.setId(UUID.fromString("e5cbbc6a-a5d6-4d68-8eb5-cec6ddd11a42"));
-        // TODO groupChat.setMemberIds(Set.of(uuid));
+        // groupChat.setMemberIds(Set.of(uuid));
         groupChat.setAdminUserId(uuid);
         groupChat.setAvatarId(UUID.fromString("52a6477f-ad81-4a16-9eb9-77d0bcdc0cc0"));
         groupChat.setName("Test Chat");
@@ -69,7 +69,7 @@ public class ChatControllerTest {
 
         GroupChat groupChat2 = new GroupChat();
         groupChat2.setId(UUID.fromString("3d781101-d083-4b9c-9d59-95fda9af1701"));
-        // TODO groupChat2.setMemberIds(Set.of(uuid));
+        // groupChat2.setMemberIds(Set.of(uuid));
         groupChat2.setAdminUserId(uuid);
         groupChat2.setName("Common chat");
         groupChat2.setCreationTimestamp(LocalDateTime.of(2001, 1, 1, 0, 0));
@@ -163,7 +163,7 @@ public class ChatControllerTest {
         GroupChat chat = new GroupChat();
         chat.setId(UUID.fromString("5a38146b-0bc4-44f9-9695-55691eda300a"));
         chat.setAdminUserId(uuid);
-        // TODO chat.setMemberIds(Set.of(uuid));
+        // chat.setMemberIds(Set.of(uuid));
         chat.setName("Old Name Of Chat");
         chat.setCreationTimestamp(LocalDateTime.of(2000, 1, 1, 0, 0));
         chatRepository.save(chat);
@@ -200,7 +200,7 @@ public class ChatControllerTest {
         GroupChat chat = new GroupChat();
         chat.setId(UUID.fromString("5a38146b-0bc4-44f9-9695-55691eda300a"));
         chat.setAdminUserId(UUID.fromString("76fcb29f-8462-45de-b589-9ca19a3a818b"));
-        // TODO chat.setMemberIds(Set.of(uuid));
+        // chat.setMemberIds(Set.of(uuid));
         chat.setName("Old Name Of Chat");
         chat.setCreationTimestamp(LocalDateTime.of(2000, 1, 1, 0, 0));
         chatRepository.save(chat);
