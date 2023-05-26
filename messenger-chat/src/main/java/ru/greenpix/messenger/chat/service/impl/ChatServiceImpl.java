@@ -137,7 +137,8 @@ public class ChatServiceImpl implements ChatService {
         chat.setName(dto.getName());
         chat.setAdminUserId(creatorId);
         chat.setCreationTimestamp(LocalDateTime.now(clock));
-        chat.setMembers(dtoList.stream().map(e -> chatMemberMapper.toChatMember(chat, e)).collect(Collectors.toSet()));
+        chat.getMembers().clear();
+        chat.getMembers().addAll(dtoList.stream().map(e -> chatMemberMapper.toChatMember(chat, e)).collect(Collectors.toSet()));
         return chatRepository.save(chat);
     }
 }

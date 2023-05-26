@@ -50,7 +50,7 @@ public class Chat {
     @OneToMany(mappedBy = "id.chat",
             orphanRemoval = true,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST)
+            cascade = CascadeType.ALL)
     private Set<ChatMember> members = new LinkedHashSet<>();
 
     /**
