@@ -14,6 +14,7 @@
 * messenger-boot-common - базовый модуль с настройкой JWT и интеграций. Содержит много общих классов: DTO, Exception'ы и прочее.
 * messenger-boot-notification-producer - модуль с конфигурациями RabbitMQ для отправки сообщений сервису уведомлений
 * messenger-boot-user-changes-producer - модуль с конфигурациями RabbitMQ для отправки сообщений об изменении пользователя с сервиса messenger-user
+
 **Вспомогательные свои библиотеки:**
 * messenger-amqp-common - базовые DTO для передачи через AMQP и некоторые интерфейсы сервисов
 
