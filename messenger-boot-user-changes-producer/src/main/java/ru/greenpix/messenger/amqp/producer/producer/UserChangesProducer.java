@@ -1,6 +1,5 @@
-package ru.greenpix.messenger.user.producer;
+package ru.greenpix.messenger.amqp.producer.producer;
 
-import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
 import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 
 public interface UserChangesProducer {

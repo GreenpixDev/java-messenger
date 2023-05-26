@@ -1,12 +1,12 @@
-package ru.greenpix.messenger.user.configuration;
+package ru.greenpix.messenger.amqp.producer.configuration;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.greenpix.messenger.user.producer.UserChangesProducer;
-import ru.greenpix.messenger.user.producer.impl.UserChangesProducerImpl;
-import ru.greenpix.messenger.user.settings.UserChangesProducerSettings;
+import ru.greenpix.messenger.amqp.producer.producer.UserChangesProducer;
+import ru.greenpix.messenger.amqp.producer.producer.impl.UserChangesProducerImpl;
+import ru.greenpix.messenger.amqp.producer.settings.UserChangesProducerSettings;
 
 @Configuration
 @EnableConfigurationProperties({UserChangesProducerSettings.class})

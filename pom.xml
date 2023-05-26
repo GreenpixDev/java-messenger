@@ -27,6 +27,7 @@
         <module>messenger-boot-jwt</module>
         <module>messenger-boot-integration</module>
         <module>messenger-boot-notification-producer</module>
+        <module>messenger-boot-user-changes-producer</module>
         <module>messenger-amqp-common</module>
     </modules>
 

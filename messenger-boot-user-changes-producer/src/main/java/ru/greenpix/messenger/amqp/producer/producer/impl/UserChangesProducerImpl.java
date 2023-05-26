@@ -1,10 +1,9 @@
-package ru.greenpix.messenger.user.producer.impl;
+package ru.greenpix.messenger.amqp.producer.producer.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
-import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
 import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
-import ru.greenpix.messenger.user.producer.UserChangesProducer;
+import ru.greenpix.messenger.amqp.producer.producer.UserChangesProducer;
 
 @RequiredArgsConstructor
 public class UserChangesProducerImpl implements UserChangesProducer {
