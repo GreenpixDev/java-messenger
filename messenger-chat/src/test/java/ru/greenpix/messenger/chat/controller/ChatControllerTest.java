@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.greenpix.messenger.chat.util.ResourceUtil.getJson;
 import static ru.greenpix.messenger.chat.util.ResourceUtil.getResource;
 
+// НЕ ДОДЕЛАНЫ
+// Не были переписаны под изменившееся API
 @Tag("api")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -167,8 +169,8 @@ public class ChatControllerTest {
         chatRepository.save(chat);
 
         mockMvc.perform(put("/chats/5a38146b-0bc4-44f9-9695-55691eda300a")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(getResource("/request/POST/chats/modify_chat.json"))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content("/request/POST/chats/modify_chat.json")
                         .header(HttpHeaders.AUTHORIZATION, token)
                 )
                 .andExpect(status().isOk());

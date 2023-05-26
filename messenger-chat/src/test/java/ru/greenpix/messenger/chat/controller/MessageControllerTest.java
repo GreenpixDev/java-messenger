@@ -28,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.greenpix.messenger.chat.util.ResourceUtil.getJson;
 import static ru.greenpix.messenger.chat.util.ResourceUtil.getResource;
 
+// НЕ ДОДЕЛАНЫ
+// Не были переписаны под изменившееся API
 @Tag("api")
 @SpringBootTest
 @AutoConfigureMockMvc
