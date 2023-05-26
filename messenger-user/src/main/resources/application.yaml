@@ -5,6 +5,7 @@ server:
 
 logging:
   level:
+    # Уровень логирования
     ru.greenpix.messenger: ${LOGGING_LEVEL:info}
 
 spring:
@@ -30,6 +31,7 @@ springdoc:
   swagger-ui:
     path: /swagger
 
+# Настройки безопасности по JWT и API-KEY
 security:
   jwt:
     secret: ${JWT_SECRET:VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==}
@@ -37,6 +39,7 @@ security:
   api:
     key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
 
+# URL к интеграционным запросам другим микросервисов
 integration:
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
   file-storage-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8014}
@@ -44,9 +47,12 @@ integration:
 amqp:
   producer:
     notification:
+      # Название топика для уведомлений
       topic: ${RABBITMQ_TOPIC:notification-topic}
     user-changes:
+      # Название топика для изменений в микросервисе пользователей
       topic: ${RABBITMQ_TOPIC:user-changes-topic}
 
+# Локализация текста уведомлений
 notification:
   login: "В Ваш аккаунт был выполнен вход."

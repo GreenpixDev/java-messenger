@@ -5,9 +5,13 @@ server:
 
 logging:
   level:
+    # Уровень логирования
     ru.greenpix.messenger: ${LOGGING_LEVEL:info}
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:8MB}
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:10102}/${DB_NAME:messenger-chat}
     username: ${DB_USERNAME:postgres}
@@ -35,6 +39,7 @@ springdoc:
   swagger-ui:
     path: /swagger
 
+# Настройки безопасности по JWT и API-KEY
 security:
   jwt:
     secret: ${JWT_SECRET:VGhpcyBpcyB0ZXN0IHNlY3JldCBrZXkgZm9yIEpXVCB0b2tlbg==}
@@ -42,6 +47,7 @@ security:
   api:
     key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
 
+# URL к интеграционным запросам другим микросервисов
 integration:
   users-service-url: ${USERS_SERVICE_URL:http://localhost:8010}
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
@@ -49,8 +55,10 @@ integration:
 
 amqp:
   producer:
+    # Название топика для уведомлений
     notification:
       topic: ${RABBITMQ_TOPIC:notification-topic}
 
+# Локализация текста уведомлений
 notification:
   new-private-message: "У вас новое непрочитанное сообщение!"

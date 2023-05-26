@@ -5,6 +5,7 @@ server:
 
 logging:
   level:
+    # Уровень логирования
     ru.greenpix.messenger: ${LOGGING_LEVEL:info}
 
 springdoc:
@@ -14,14 +15,16 @@ springdoc:
 spring:
   servlet:
     multipart:
-      max-file-size: 8MB
+      max-file-size: ${MAX_FILE_SIZE:8MB}
 
+# Настройки доступа к MinIO
 minio:
   access-key: ${MINIO_ACCESS_KEY:gmCVJn7NfYhelj0ImOsZ}
   secret-key: ${MINIO_SECRET_KEY:WgsQ9w8GRHiyIykvB2DpUUkdLLiGn71eawV0EDQD}
   bucket: ${MINIO_BUCKET:messenger}
   url: ${MINIO_URL:http://localhost:9000}
 
+# Настройки безопасности к интеграционным запросам по API-KEY
 security:
   api:
     key: ${API_KEY:vRY80yTw6FttK16HFPi9rpkIvTN4HgNb}
