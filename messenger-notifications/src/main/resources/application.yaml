@@ -1,6 +1,7 @@
 server:
   port: 8013
   error:
+    # Не включаем stacktrace в http ответ ошибки
     include-stacktrace: never
 
 logging:

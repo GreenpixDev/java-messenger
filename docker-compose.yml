@@ -33,14 +33,6 @@ services:
       POSTGRES_DB: messenger-notifications
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-  postgres-file-storage:
-    image: postgres:latest
-    ports:
-      - "10104:5432"
-    environment:
-      POSTGRES_DB: messenger-file-storage
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
   minio:
     image: bitnami/minio:2023.5.18
     ports:
