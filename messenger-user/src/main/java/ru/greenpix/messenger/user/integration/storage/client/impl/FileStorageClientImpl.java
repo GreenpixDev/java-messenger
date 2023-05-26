@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.chat.integration.storage.client.impl;
+package ru.greenpix.messenger.user.integration.storage.client.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -10,9 +10,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import ru.greenpix.messenger.chat.integration.storage.client.FileStorageClient;
-import ru.greenpix.messenger.chat.settings.IntegrationSettings;
 import ru.greenpix.messenger.common.util.MultipartInputStreamFileResource;
+import ru.greenpix.messenger.user.integration.storage.client.FileStorageClient;
+import ru.greenpix.messenger.user.settings.IntegrationSettings;
 
 import java.io.IOException;
 import java.net.URI;

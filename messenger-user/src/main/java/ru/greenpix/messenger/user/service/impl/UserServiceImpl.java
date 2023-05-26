@@ -2,6 +2,7 @@ package ru.greenpix.messenger.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,10 +11,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.amqp.dto.NotificationAmqpDto;
 import ru.greenpix.messenger.amqp.dto.NotificationType;
-import ru.greenpix.messenger.amqp.dto.UserChangesAmqpDto;
 import ru.greenpix.messenger.amqp.producer.producer.NotificationProducer;
+import ru.greenpix.messenger.common.exception.UploadFileFailedException;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -26,6 +28,7 @@ import ru.greenpix.messenger.user.exception.DuplicateEmailException;
 import ru.greenpix.messenger.user.exception.DuplicateUsernameException;
 import ru.greenpix.messenger.user.exception.WrongCredentialsException;
 import ru.greenpix.messenger.user.integration.friends.client.FriendsClient;
+import ru.greenpix.messenger.user.integration.storage.client.FileStorageClient;
 import ru.greenpix.messenger.user.mapper.FilterMapper;
 import ru.greenpix.messenger.user.mapper.SortMapper;
 import ru.greenpix.messenger.user.mapper.UserMapper;
@@ -38,6 +41,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final Clock clock;
     private final FriendsClient friendsClient;
+    private final FileStorageClient fileStorageClient;
     private final SortMapper sortMapper;
     private final FilterMapper filterMapper;
     private final NotificationProducer notificationProducer;
@@ -149,12 +154,32 @@ public class UserServiceImpl implements UserService {
         user.setBirthDate(userRequestDto.getBirthDate());
         user.setPhone(userRequestDto.getPhone());
         user.setCity(userRequestDto.getCity());
-        user.setAvatarId(userRequestDto.getAvatarId());
 
         User updatedUser = userRepository.save(user);
         userChangesProducer.sendChanges(userMapper.toAmqpDto(updatedUser));
 
         logger.info("User '{}' with id {} has been updated", user.getUsername(), user.getId());
         return updatedUser;
+    }
+
+    @Override
+    public void updateUserAvatar(@NotNull UUID userId, @Nullable MultipartFile avatarFile) {
+        User user = getUser(userId);
+        logger.debug("Updating avatar for user {}", userId);
+
+        UUID avatarId = null;
+        if (avatarFile != null) {
+            Optional<UUID> fileId = fileStorageClient.uploadFile(avatarFile);
+            if (fileId.isEmpty()) {
+                throw new UploadFileFailedException();
+            }
+            avatarId = fileId.get();
+        }
+        user.setAvatarId(avatarId);
+
+        User updatedUser = userRepository.save(user);
+        userChangesProducer.sendChanges(userMapper.toAmqpDto(updatedUser));
+
+        logger.info("Avatar of user '{}' with id {} has been updated", user.getUsername(), user.getId());
     }
 }

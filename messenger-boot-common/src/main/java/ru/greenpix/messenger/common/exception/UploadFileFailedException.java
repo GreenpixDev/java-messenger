@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.chat.exception;
+package ru.greenpix.messenger.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

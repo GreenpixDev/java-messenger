@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 public class UserRequestDto {
@@ -21,7 +20,5 @@ public class UserRequestDto {
     private final String phone;
 
     private final String city;
-
-    private final UUID avatarId;
 
 }

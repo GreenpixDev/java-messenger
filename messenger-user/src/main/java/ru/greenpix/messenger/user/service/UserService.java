@@ -1,7 +1,9 @@
 package ru.greenpix.messenger.user.service;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 import ru.greenpix.messenger.user.dto.SignInDto;
 import ru.greenpix.messenger.user.dto.SignUpDto;
@@ -96,5 +98,13 @@ public interface UserService {
      */
     @NotNull
     User updateUser(@NotNull UUID userId, @NotNull UserRequestDto userRequestDto);
+
+    /**
+     * Обновляет аватарку пользователя
+     * @throws UserNotFoundException пользователь не найден
+     * @param userId ID пользователя
+     * @param avatarFile файл аватарки
+     */
+    void updateUserAvatar(@NotNull UUID userId, @Nullable MultipartFile avatarFile);
 
 }

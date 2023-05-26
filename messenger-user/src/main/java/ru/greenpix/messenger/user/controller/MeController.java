@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.jwt.model.JwtUser;
 import ru.greenpix.messenger.user.dto.UserRequestDto;
 import ru.greenpix.messenger.user.dto.UserResponseDto;
@@ -53,5 +55,20 @@ public class MeController {
             UserRequestDto userRequestDto
     ) {
         return userMapper.toDto(userService.updateUser(user.getId(), userRequestDto));
+    }
+
+    @Operation(summary = "Обновить свою аватарку")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "400")
+    @ApiResponse(responseCode = "401")
+    @PutMapping("avatar")
+    public void updateUserAvatar(
+            @AuthenticationPrincipal
+            JwtUser user,
+
+            @RequestPart(required = false, name = "avatar")
+            MultipartFile avatar
+    ) {
+        userService.updateUserAvatar(user.getId(), avatar);
     }
 }

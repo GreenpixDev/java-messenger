@@ -39,6 +39,7 @@ security:
 
 integration:
   friends-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8011}
+  file-storage-service-url: ${FRIENDS_SERVICE_URL:http://localhost:8014}
 
 amqp:
   producer:

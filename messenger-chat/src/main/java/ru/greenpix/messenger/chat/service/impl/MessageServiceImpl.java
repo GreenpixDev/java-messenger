@@ -22,7 +22,6 @@ import ru.greenpix.messenger.chat.entity.Message;
 import ru.greenpix.messenger.chat.entity.Message_;
 import ru.greenpix.messenger.chat.entity.PrivateChat;
 import ru.greenpix.messenger.chat.exception.ChatNotFoundException;
-import ru.greenpix.messenger.chat.exception.UploadFileFailedException;
 import ru.greenpix.messenger.chat.exception.UserBlockedException;
 import ru.greenpix.messenger.chat.exception.UserNotFriendException;
 import ru.greenpix.messenger.chat.integration.friends.client.FriendsClient;
@@ -36,6 +35,7 @@ import ru.greenpix.messenger.chat.repository.PrivateChatRepository;
 import ru.greenpix.messenger.chat.service.MessageService;
 import ru.greenpix.messenger.chat.settings.NotificationSettings;
 import ru.greenpix.messenger.common.dto.integration.UserIntegrationDto;
+import ru.greenpix.messenger.common.exception.UploadFileFailedException;
 import ru.greenpix.messenger.common.exception.UserNotFoundException;
 
 import java.time.Clock;

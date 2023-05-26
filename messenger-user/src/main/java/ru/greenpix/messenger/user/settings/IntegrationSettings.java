@@ -19,4 +19,10 @@ public class IntegrationSettings {
     @NotBlank
     private final String friendsServiceUrl;
 
+    /**
+     * URL микросервиса "Файловое хранилище"
+     */
+    @NotBlank
+    private final String fileStorageServiceUrl;
+
 }

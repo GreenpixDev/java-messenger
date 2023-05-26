@@ -1,4 +1,4 @@
-package ru.greenpix.messenger.chat.util;
+package ru.greenpix.messenger.common.util;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
