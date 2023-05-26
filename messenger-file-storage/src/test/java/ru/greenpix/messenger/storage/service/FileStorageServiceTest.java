@@ -61,7 +61,7 @@ public class FileStorageServiceTest {
     void uploadFileTest() {
         when(settings.getBucket()).thenReturn("test");
         when(client.putObject(any())).thenReturn(null);
-        assertDoesNotThrow(() -> fileStorageService.uploadFile(new byte[0], "application/json"));
+        assertDoesNotThrow(() -> fileStorageService.uploadFile(new byte[0]));
         verify(client, times(1))
                 .putObject(any());
     }

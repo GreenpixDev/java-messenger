@@ -70,7 +70,7 @@ public class UserServiceTest {
     static UUID TEST_UUID = UUID.fromString("4da6f9a6-4547-4769-b33c-06746f396d89");
     static UserChangesAmqpDto USER_CHANGES_AMQP_DTO_TEST = new UserChangesAmqpDto();
     static UserRequestDto USER_REQUEST_DTO_TEST = new UserRequestDto(
-            null, null, null, null, null
+            null, null, null, null
     );
 
     @Mock

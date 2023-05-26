@@ -133,7 +133,7 @@ public class ChatServiceTest {
         when(chatMemberMapper.toChatMember(any(), any())).thenReturn(CHAT_MEMBER_TEST);
         when(chatRepository.save(any())).thenReturn(GROUP_CHAT_TEST);
 
-        assertDoesNotThrow(() -> chatService.createChat(ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertDoesNotThrow(() -> chatService.createChat(ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, times(1)).save(any());
     }
 
@@ -143,7 +143,7 @@ public class ChatServiceTest {
         when(usersClient.getUsers(anyCollection())).thenReturn(List.of(USER_INTEGRATION_DTO_TEST));
         when(friendsClient.isBlockedByUser(any(), eq(ID_TEST))).thenReturn(true);
 
-        assertThrows(UserBlockedException.class, () -> chatService.createChat(ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertThrows(UserBlockedException.class, () -> chatService.createChat(ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, never()).save(any());
     }
 
@@ -158,7 +158,7 @@ public class ChatServiceTest {
         when(chatMemberMapper.toChatMember(any(), any())).thenReturn(CHAT_MEMBER_TEST);
         when(chatRepository.save(any())).thenReturn(GROUP_CHAT_TEST);
 
-        assertDoesNotThrow(() -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertDoesNotThrow(() -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, times(1)).save(any());
     }
 
@@ -167,7 +167,7 @@ public class ChatServiceTest {
     void updateNonExistsChatTest() {
         when(chatRepository.findIdAndMember(eq(ID_TEST), eq(ID_TEST))).thenReturn(Optional.empty());
 
-        assertThrows(ChatNotFoundException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertThrows(ChatNotFoundException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, never()).save(any());
     }
 
@@ -176,7 +176,7 @@ public class ChatServiceTest {
     void updatePrivateChatTest() {
         when(chatRepository.findIdAndMember(eq(ID_TEST), eq(ID_TEST))).thenReturn(Optional.of(PRIVATE_CHAT_TEST));
 
-        assertThrows(IllegalChatTypeException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertThrows(IllegalChatTypeException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, never()).save(any());
     }
 
@@ -187,7 +187,7 @@ public class ChatServiceTest {
         when(usersClient.getUsers(anyCollection())).thenReturn(List.of(USER_INTEGRATION_DTO_TEST));
         when(friendsClient.isBlockedByUser(any(), eq(ID_TEST))).thenReturn(true);
 
-        assertThrows(UserBlockedException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST));
+        assertThrows(UserBlockedException.class, () -> chatService.updateChat(ID_TEST, ID_TEST, MODIFICATION_CHAT_DTO_TEST, null));
         verify(chatRepository, never()).save(any());
     }
 }

@@ -28,7 +28,7 @@ public class FileStorageIntegrationController {
             MultipartFile file
     ) {
         try {
-            return fileStorageService.uploadFile(file.getBytes(), file.getContentType());
+            return fileStorageService.uploadFile(file.getBytes());
         }
         catch (IOException e) {
             throw new RuntimeException(e);
