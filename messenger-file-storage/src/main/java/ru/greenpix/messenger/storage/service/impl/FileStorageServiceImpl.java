@@ -30,13 +30,12 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final Logger logger;
 
     @Override
-    public UUID uploadFile(byte[] content, String contentType) {
+    public UUID uploadFile(byte[] content) {
         UUID id = UUID.randomUUID();
         try {
             client.putObject(PutObjectArgs.builder()
                     .bucket(settings.getBucket())
                     .object(id.toString())
-                    .contentType(contentType)
                     .stream(new ByteArrayInputStream(content), content.length, -1)
                     .build()
             );

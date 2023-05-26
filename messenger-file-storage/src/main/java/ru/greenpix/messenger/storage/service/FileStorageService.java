@@ -10,10 +10,9 @@ public interface FileStorageService {
     /**
      * Метод загрузки файла в хранилище
      * @param content контент файла в байтах
-     * @param contentType тип файла
      * @return идентификатор файла в хранилище
      */
-    UUID uploadFile(byte[] content, String contentType);
+    UUID uploadFile(byte[] content);
 
     /**
      * Метод скачивания файла с хранилища

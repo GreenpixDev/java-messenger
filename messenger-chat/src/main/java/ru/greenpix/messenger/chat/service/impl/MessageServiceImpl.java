@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,17 +82,17 @@ public class MessageServiceImpl implements MessageService {
                 });
     }
 
+    // Подумал, что лучше возвращать страницу, а не список, но не хватило времени переделать
     @Transactional
     @Override
     public @NotNull List<MessageDetailsDto> getChatMessages(@NotNull UUID requesterId, @NotNull UUID chatId) {
-        // TODO может возвращать страницу, а не список?
         if (!chatRepository.existsIdAndMember(chatId, requesterId)) {
             throw new ChatNotFoundException();
         }
         logger.trace("User {} is requesting messages in chat {}", requesterId, chatId);
 
         Sort sort = Sort.by(Sort.Direction.DESC, Message_.CREATION_TIMESTAMP);
-        Page<Message> messages = messageRepository.findAllByChatId(chatId, PageRequest.of(0, 100, sort));
+        Page<Message> messages = messageRepository.findAllByChatId(chatId, Pageable.unpaged());
         Map<Message, UserIntegrationDto> messageOwnerMap = toMessageOwnerMap(messages.getContent());
 
         return messageOwnerMap.entrySet()

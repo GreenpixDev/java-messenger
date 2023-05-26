@@ -3,7 +3,6 @@ package ru.greenpix.messenger.notification.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -56,8 +55,8 @@ public class NotificationController {
             @RequestParam(name = "size", defaultValue = "10")
             int pageSize,
 
-            // TODO починить
-            @ParameterObject
+            @RequestBody
+            @Valid
             NotificationFilterListDto filters
     ) {
         Page<Notification> page = notificationService.getNotifications(jwtUser.getId(), pageNumber - 1, pageSize, filters);

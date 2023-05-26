@@ -23,7 +23,6 @@ public class FileStorageController {
 
     private final FileStorageService fileStorageService;
 
-    // TODO хранить и отдавать content-type
     @GetMapping("{id}")
     @Operation(summary = "Получение файла по идентификатору")
     public ResponseEntity<Resource> download(

@@ -60,13 +60,7 @@ public class ChatServiceImpl implements ChatService {
                     Chat chat = tuple.get("chat", Chat.class);
                     Message message = tuple.get("message", Message.class);
 
-                    return new ChatDto(
-                            chat.getId(),
-                            name,
-                            message.getText(),
-                            message.getCreationTimestamp(),
-                            message.getSenderId()
-                    );
+                    return chatMapper.toDto(chat, name, message);
                 });
     }
 
@@ -75,24 +69,29 @@ public class ChatServiceImpl implements ChatService {
         logger.trace("User {} is requesting chat {}", requesterId, chatId);
         Chat chat = chatRepository.findIdAndMember(chatId, requesterId).orElseThrow(ChatNotFoundException::new);
 
+        String chatName;
+        UUID chatAvatarId;
+        UUID chatAdminId;
+
         if (chat instanceof GroupChat) {
-            // TODO решить, че делать с маппером. Лучше сделать не через mapstruct
-            return chatMapper.toDetailsDto((GroupChat) chat);
+            chatName = ((GroupChat) chat).getName();
+            chatAvatarId = ((GroupChat) chat).getAvatarId();
+            chatAdminId = ((GroupChat) chat).getAdminUserId();
         }
         else {
             ChatMember member = chat.getMembers()
                     .stream()
                     .filter(e -> !e.getId().getUserId().equals(requesterId))
                     .findAny()
-                    .get();
+                    // Эта ошибка не должна появляться, т.к. в приватном чате всегда 2 участника.
+                    // Однако на всякий случай пусть будет orElseThrow() вместе get()
+                    .orElseThrow(() -> new RuntimeException("Cannot find interlocutor"));
 
-            return new ChatDetailsDto(
-                    member.getMemberName(),
-                    member.getMemberAvatarId(),
-                    null,
-                    chat.getCreationTimestamp()
-            );
+            chatName = member.getMemberName();
+            chatAvatarId = member.getMemberAvatarId();
+            chatAdminId = null;
         }
+        return chatMapper.toDetailsDto(chat, chatName, chatAvatarId, chatAdminId);
     }
 
     @Override
@@ -128,13 +127,12 @@ public class ChatServiceImpl implements ChatService {
             throw new UserNotFoundException();
         }
 
-        // TODO оптимизировать в один запрос
+        // Тут бы в один запрос оптимизировать, но я не успел
         for (UUID id : dto.getMembers()) {
             if (friendsClient.isBlockedByUser(id, creatorId)) {
                 throw new UserBlockedException();
             }
         }
-
 
         chat.setName(dto.getName());
         chat.setAdminUserId(creatorId);

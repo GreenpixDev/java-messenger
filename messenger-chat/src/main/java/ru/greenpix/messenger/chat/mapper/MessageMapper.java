@@ -3,6 +3,7 @@ package ru.greenpix.messenger.chat.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import ru.greenpix.messenger.chat.dto.MessageDetailsDto;
 import ru.greenpix.messenger.chat.dto.MessageDto;
@@ -19,6 +20,7 @@ public interface MessageMapper {
     @Mapping(source = "message.chat.id", target = "chatId")
     @Mapping(source = "chatName", target = "chatName")
     @Mapping(source = "attachmentName", target = "attachmentName")
+    @Mapping(source = "attachmentName", target = "hasAttachments", qualifiedByName = "hasAttachments")
     MessageDto toDto(Message message, String chatName, String attachmentName);
 
     @Mapping(source = "message.id", target = "id")
@@ -30,5 +32,10 @@ public interface MessageMapper {
     MessageDetailsDto toDetailsDto(Message message, UserIntegrationDto user);
 
     Message toMessageEntity(SendingMessageDto dto);
+
+    @Named("hasAttachments")
+    static boolean hasAttachments(String attachmentName) {
+        return attachmentName != null;
+    }
 
 }
