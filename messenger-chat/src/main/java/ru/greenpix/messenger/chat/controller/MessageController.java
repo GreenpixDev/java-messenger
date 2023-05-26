@@ -48,10 +48,10 @@ public class MessageController {
             @Valid
             SendingMessageDto messageDto,
 
-            @RequestPart(required = false, name = "file")
-            MultipartFile[] files
+            @RequestPart(required = false, name = "attachment")
+            MultipartFile[] attachments
     ) {
-        messageService.sendPrivateMessage(jwtUser.getId(), userId, messageDto, files);
+        messageService.sendPrivateMessage(jwtUser.getId(), userId, messageDto, attachments);
     }
 
     @Operation(
@@ -82,10 +82,10 @@ public class MessageController {
             @Valid
             SendingMessageDto messageDto,
 
-            @RequestPart(required = false, name = "file")
-            MultipartFile[] files
+            @RequestPart(required = false, name = "attachment")
+            MultipartFile[] attachments
     ) {
-        messageService.sendGroupMessage(jwtUser.getId(), chatId, messageDto, files);
+        messageService.sendGroupMessage(jwtUser.getId(), chatId, messageDto, attachments);
     }
 
     @Operation(summary = "Поиск сообщений")

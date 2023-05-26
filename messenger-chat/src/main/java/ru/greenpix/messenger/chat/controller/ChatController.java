@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.chat.dto.ChatDetailsDto;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
@@ -75,11 +76,14 @@ public class ChatController {
             @AuthenticationPrincipal
             JwtUser jwtUser,
 
-            @RequestBody
+            @RequestPart(name = "data")
             @Valid
-            ModificationChatDto chatDto
+            ModificationChatDto chatDto,
+
+            @RequestPart(required = false, name = "avatar")
+            MultipartFile avatar
     ) {
-        chatService.createChat(jwtUser.getId(), chatDto);
+        chatService.createChat(jwtUser.getId(), chatDto, avatar);
     }
 
     @Operation(summary = "Изменить чат")
@@ -91,11 +95,14 @@ public class ChatController {
             @PathVariable
             UUID chatId,
 
-            @RequestBody
+            @RequestPart(name = "data")
             @Valid
-            ModificationChatDto chatDto
+            ModificationChatDto chatDto,
+
+            @RequestPart(required = false, name = "avatar")
+            MultipartFile avatar
     ) {
-        chatService.updateChat(jwtUser.getId(), chatId, chatDto);
+        chatService.updateChat(jwtUser.getId(), chatId, chatDto, avatar);
     }
 
 }

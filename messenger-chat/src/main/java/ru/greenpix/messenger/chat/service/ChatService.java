@@ -1,7 +1,9 @@
 package ru.greenpix.messenger.chat.service;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 import ru.greenpix.messenger.chat.dto.ChatDetailsDto;
 import ru.greenpix.messenger.chat.dto.ChatDto;
 import ru.greenpix.messenger.chat.dto.ModificationChatDto;
@@ -37,15 +39,17 @@ public interface ChatService {
      * Метод создания нового группового чата
      * @param creatorId идентификатор пользователя, который создаёт чат
      * @param modificationChatDto DTO с информацией о чате, который нужно создать
+     * @param avatar файл аватарки чата
      */
-    void createChat(@NotNull UUID creatorId, @NotNull ModificationChatDto modificationChatDto);
+    void createChat(@NotNull UUID creatorId, @NotNull ModificationChatDto modificationChatDto, @Nullable MultipartFile avatar);
 
     /**
      * Метод обновления группового чата
      * @param creatorId идентификатор пользователя, который создал чат
      * @param chatId идентификатор чата
      * @param modificationChatDto DTO с информацией о чате, который нужно обновить
+     * @param avatar новый файл аватарки чата
      */
-    void updateChat(@NotNull UUID creatorId, @NotNull UUID chatId, @NotNull ModificationChatDto modificationChatDto);
+    void updateChat(@NotNull UUID creatorId, @NotNull UUID chatId, @NotNull ModificationChatDto modificationChatDto, @Nullable MultipartFile avatar);
 
 }
