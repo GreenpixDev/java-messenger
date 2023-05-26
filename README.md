@@ -38,6 +38,9 @@
 которое будет доступно по url `http://localhost:8080`
   
   ![postman.png](materials/postman.png)
+* Экспортированный файл Postman при надобности 
+(там не все методы, их нужно настраивать, но может помочь при проверке)
+[postman-export.json](materials/Messenger.postman_collection.json)
 
 ## Что реализовано?
 **Функционал**

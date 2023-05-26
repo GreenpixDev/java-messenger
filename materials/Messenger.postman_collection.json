@@ -1,0 +1,1250 @@
+{
+	"info": {
+		"_postman_id": "b96bab79-cd21-49d3-8079-1e7c20afdc39",
+		"name": "Messenger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"string5\",\r\n    \"email\": \"string5@mail.ru\",\r\n    \"fullName\": \"Roman\",\r\n    \"birthDate\": \"2000-01-05\",\r\n    \"password\": \"qwerty\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/signup",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"roman\",\r\n    \"password\": \"sample\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/signin",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users?size=10&page=1",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "filterRegistrationDate",
+									"value": "2023-04-17",
+									"disabled": true
+								},
+								{
+									"key": "filterCity",
+									"value": "то",
+									"disabled": true
+								},
+								{
+									"key": "sortUsername",
+									"value": "ASC",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"1e2e062d-f0d2-443e-a64e-97a7ad953773\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"87873d15-88d2-4892-87aa-2e958b3ac281\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"87873d15-88d2-4892-87aa-2e958b3ac281\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Аникушин Роман Евгеньевич\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/users/me",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/avatar",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"87873d15-88d2-4892-87aa-2e958b3ac281\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/Рома/Desktop/icon/Shields_BuyCraft_Icons_Pack_2.webp"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/users/me/avatar",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/search",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Аникушин Роман Евгеньевич\",\r\n    \"birthDate\": \"2003-06-15\",\r\n    \"phone\": \"89005553535\",\r\n    \"city\": \"Томск\"\r\n}"
+						},
+						"url": {
+							"raw": "{{root}}/users/me/friends/search?page=1&size=10&fullName=st",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "fullName",
+									"value": "st"
+								},
+								{
+									"key": "additionDate",
+									"value": "2023-04-16",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Friends",
+			"item": [
+				{
+					"name": "users/me/friends",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"1e2e062d-f0d2-443e-a64e-97a7ad953773\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends?page=1&size=5",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "fullNameFilter",
+									"value": "Te",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/friends/search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends/search?page=1&size=10",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "fullName",
+									"value": "st",
+									"disabled": true
+								},
+								{
+									"key": "additionDate",
+									"value": "2023-04-16",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/friends/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/friends/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/friends/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/friends/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/friends/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"friends",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blacklist",
+			"item": [
+				{
+					"name": "users/me/blacklist",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/blacklist/search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist/search?page=1&size=10&fullName=st",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "fullName",
+									"value": "st"
+								},
+								{
+									"key": "additionDate",
+									"value": "2023-04-16",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/blacklist/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"1e2e062d-f0d2-443e-a64e-97a7ad953772\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/blacklist/{userId}/status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist/{{userId}}/status",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist",
+								"{{userId}}",
+								"status"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/blacklist/{userId}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"1e2e062d-f0d2-443e-a64e-97a7ad953772\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/me/blacklist/{userId}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"userId\", \"1e2e062d-f0d2-443e-a64e-97a7ad953772\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/users/me/blacklist/{{userId}}",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"blacklist",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat",
+			"item": [
+				{
+					"name": "chats",
+					"item": [
+						{
+							"name": "chats",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{root}}/chats?page=1&size=100",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats"
+									],
+									"query": [
+										{
+											"key": "nameFilter",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats/{id}",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"chatId\", \"8a5dff5e-b29c-4cf8-a0c3-4ae0cc62e7f8\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{root}}/chats/{{chatId}}",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats",
+										"{{chatId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Боброта\",\r\n    \"members\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{root}}/chats",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"chatId\", \"8a5dff5e-b29c-4cf8-a0c3-4ae0cc62e7f8\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "data",
+											"value": "{\n    \"name\": \"Бобры\",\n    \"members\": [\n        \"b6b7ca9b-4823-4c7f-8260-dcb1a43fce68\"\n    ]\n}",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"contentType": "image/png",
+											"type": "file",
+											"src": "/C:/Users/Рома/Desktop/icon/Слой 3.png"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{root}}/chats/{{chatId}}",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats",
+										"{{chatId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "messages",
+					"item": [
+						{
+							"name": "users/{userId}/messages",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"userId\", \"b0bcd8b2-68cb-42d9-bb9d-72bf9b9c9875\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "data",
+											"value": "{\"text\": \"Хай\"}",
+											"contentType": "application/json",
+											"type": "default"
+										},
+										{
+											"key": "file",
+											"contentType": "multipart/form-data",
+											"type": "file",
+											"src": "/C:/Users/Рома/Desktop/icon/Слой 1.png"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{root}}/users/{{userId}}/messages",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"users",
+										"{{userId}}",
+										"messages"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats/{chatId}/messages",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"chatId\", \"1d6b2d89-8f4f-4184-8582-9393cb3d57b9\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{root}}/chats/{{chatId}}/messages",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats",
+										"{{chatId}}",
+										"messages"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats/{chatId}/messages",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"chatId\", \"21f380b7-b2f4-4950-b384-97a0f309f7aa\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"text\": \"Ау\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{root}}/chats/{{chatId}}/messages",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats",
+										"{{chatId}}",
+										"messages"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "chats/messages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{root}}/chats/messages",
+									"host": [
+										"{{root}}"
+									],
+									"path": [
+										"chats",
+										"messages"
+									],
+									"query": [
+										{
+											"key": "additionDate",
+											"value": "2023-04-16",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filterTimestampFrom\": \"2010-01-01\",\r\n    \"filterTimestampTo\": \"2030-01-01\",\r\n    \"filterType\": [\r\n        \"NEW_PRIVATE_MESSAGE\",\r\n        \"LOGIN\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/notifications?size=2",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "filterText",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "filterTimestampFrom",
+									"value": "2023-05-24 00:00",
+									"disabled": true
+								},
+								{
+									"key": "filterTimestampTo",
+									"value": "2023-05-26 10:00",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications/unread/count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root}}/notifications/unread/count",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"notifications",
+								"unread",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications/status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"READ\",\r\n    \"notificationIds\": [\r\n        \"20f61193-0651-4b5d-a807-b44e31a22e5d\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{root}}/notifications/status",
+							"host": [
+								"{{root}}"
+							],
+							"path": [
+								"notifications",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Integration Test",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", \"87873d15-88d2-4892-87aa-2e958b3ac281\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "vRY80yTw6FttK16HFPi9rpkIvTN4HgNb",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api-key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8010/api/users/{{userId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMWE2ODY3ZS0xZDZiLTRmZGItODdmNC1mMDkzMDZjMWM5NDMiLCJleHAiOjE2ODUxNzUwOTEsInVzZXJuYW1lIjoicm9tYW4ifQ.Pj6nW0i3lQYigFWASufE3oNtxE8mMfSo6xGMko6bc7E",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "root",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}
