@@ -52,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"roman\",\r\n    \"password\": \"sample\"\r\n}",
+							"raw": "{\r\n    \"username\": \"string5\",\r\n    \"password\": \"qwerty\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1157,57 +1157,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Integration Test",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"pm.environment.set(\"userId\", \"87873d15-88d2-4892-87aa-2e958b3ac281\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "vRY80yTw6FttK16HFPi9rpkIvTN4HgNb",
-							"type": "string"
-						},
-						{
-							"key": "in",
-							"value": "query",
-							"type": "string"
-						},
-						{
-							"key": "key",
-							"value": "api-key",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8010/api/users/{{userId}}",
-					"host": [
-						"localhost"
-					],
-					"port": "8010",
-					"path": [
-						"api",
-						"users",
-						"{{userId}}"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {
@@ -1215,7 +1164,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMWE2ODY3ZS0xZDZiLTRmZGItODdmNC1mMDkzMDZjMWM5NDMiLCJleHAiOjE2ODUxNzUwOTEsInVzZXJuYW1lIjoicm9tYW4ifQ.Pj6nW0i3lQYigFWASufE3oNtxE8mMfSo6xGMko6bc7E",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOGIxNTE4Zi02OGU2LTRhYTQtYjI1ZS1jMTQyYmNmZmQwZTYiLCJleHAiOjE2ODUxODc1MzEsInVzZXJuYW1lIjoic3RyaW5nNSJ9.mk8hFpU8-YoN4BPBXJLwAzsPSoQ7SICMj7fCIxnbPE8",
 				"type": "string"
 			}
 		]
